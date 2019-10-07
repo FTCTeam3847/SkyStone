@@ -1,0 +1,15 @@
+dependencies {
+    implementation (name:'Inspection-release', ext: 'aar')
+    implementation (name:'Blocks-release', ext: 'aar')
+    implementation (name:'RobotServer-release', ext: 'aar')
+    implementation (name:'OnBotJava-release', ext: 'aar')
+    implementation (name:'Hardware-release', ext: 'aar')
+    implementation (name:'FtcCommon-release', ext: 'aar')
+    implementation (name:'WirelessP2p-release', ext:'aar')
+    implementation 'com.android.support:support-compat:28.0.0'
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation (name: 'tensorflow-lite-0.0.0-nightly', ext:'aar')
+    implementation (name: 'tfod-release', ext:'aar')
+    implementation files('../libs/Vuforia.jar')
+    implementation 'org.slf4j:slf4j-api:1.7.25'
+}

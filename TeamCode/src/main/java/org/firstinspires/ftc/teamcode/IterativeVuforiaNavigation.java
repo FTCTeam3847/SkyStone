@@ -131,5 +131,4 @@ public class IterativeVuforiaNavigation extends BasicOpMode_Iterative {
         derpy.deInit(vuforiaLocalizer);
     }
 
-
 }

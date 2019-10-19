@@ -8,6 +8,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.Hardware.AngularPController;
 
 import java.util.ArrayList;
+import java.util.function.Supplier;
+
+import static java.lang.Math.pow;
+import static org.firstinspires.ftc.teamcode.Hardware.AngularPController.addAngle;
 
 public class ChasisObject {
 
@@ -15,6 +19,8 @@ public class ChasisObject {
     private BNO055IMU imu;
     private AngularPController headingController;
     private double targetAngle;
+    private  double last_x;
+
 
     public ChasisObject(BNO055IMU imu) {
         initImu(imu);
@@ -35,10 +41,10 @@ public class ChasisObject {
         headingController.setDesired(targetAngle);
         double correction = headingController.getControlValue();
         left_y = -left_y;
-        double rad = Math.sqrt(Math.pow(left_x, 2) + Math.pow(left_y, 2));
+        double rad = Math.sqrt(pow(left_x, 2) + pow(left_y, 2));
         double theta = Math.atan2(left_y, left_x);
         int sensitivity = 3;
-        double magnitute = Math.pow(rad, sensitivity);
+        double magnitute = pow(rad, sensitivity);
 
         rightFor = Math.sin(theta - 45) * magnitute+correction;
         leftBack = Math.sin(theta - 45) * magnitute-correction;
@@ -47,28 +53,32 @@ public class ChasisObject {
     }
 
     public void tempCalculate(double left_x, double left_y, double right_x) {
-        if (right_x != 0) {
-                if (right_x > 0) {
-                    targetAngle -= 10;
-                } else {
-                    targetAngle += 10;
-                }
-            if (targetAngle < -180) targetAngle = 180;
-            if (targetAngle > 180) targetAngle = -180;
+        int sensitivity = 3;
+        double angle = headingController.update();
+        if (right_x != 0) //turn
+        {
+            targetAngle = addAngle(angle,pow(-right_x, sensitivity) * 90.0);
         }
-        headingController.update();
+        else if (last_x != 0) //stop turning and hold angle
+        {
+            targetAngle = angle;
+        }
+
+
         headingController.setDesired(targetAngle);
         double correction = headingController.getControlValue();
+
         left_y = -left_y;
-        double rad = Math.sqrt(Math.pow(left_x, 2) + Math.pow(left_y, 2));
+        double rad = Math.sqrt(pow(left_x, 2) + pow(left_y, 2));
         double theta = Math.atan2(left_y, left_x);
-        int sensitivity = 3;
-        double magnitute = Math.pow(rad, sensitivity);
+        double magnitute = pow(rad, sensitivity);
 
         rightFor = Math.sin(theta - 45) * magnitute+correction;
         leftBack = Math.sin(theta - 45) * magnitute-correction;
         leftFor = Math.sin(theta + 45) * magnitute-correction;
         rightBack = Math.sin(theta + 45) * magnitute+correction;
+
+        last_x = right_x;
     }
 
     private void initImu(BNO055IMU imu) {
@@ -83,6 +93,7 @@ public class ChasisObject {
     }
 
     private AngularPController initAngularP() {
+
         return new AngularPController(
                 () -> (double) imu.getAngularOrientation().firstAngle,
                 2.0d,

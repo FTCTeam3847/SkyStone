@@ -44,5 +44,6 @@ public class LocalizerTestOp extends OpMode {
     @Override
     public void stop() {
         super.stop();
+        skyStoneLocalizer.stop();
     }
 }

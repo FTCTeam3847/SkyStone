@@ -1,7 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
@@ -17,78 +18,77 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 
-public class VuforiaUtils {
+public class SkyStoneLocalizer {
+    private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
+    private static final boolean PHONE_IS_PORTRAIT = true;
+    private VuforiaLocalizer vuforiaLocalizer;
 
-    public static class VuforiaReturnType
-    {
-        VuforiaLocalizer localizer;
-        List<VuforiaTrackable> allTrackables;
-        VuforiaTrackables targetsSkyStone;
-    }
+    // Since ImageTarget trackables use mm to specifiy their dimensions, we must use mm for all the physical dimension.
+    // We will define some constants and conversions here
+    private static final float mmPerInch = 25.4f;
+    private static final float mmTargetHeight = (6) * mmPerInch;          // the height of the center of the target image above the floor
 
-    public static VuforiaReturnType initVuforia(VuforiaLocalizer.Parameters parameters, VuforiaLocalizer.CameraDirection cameraChoice, boolean phoneIsPortrait)
-    {
-        VuforiaReturnType ret = new VuforiaReturnType();
+    // Constant for Stone Target
+    private static final float stoneZ = 2.00f * mmPerInch;
 
-        float phoneXRotate    = 0;
-        float phoneYRotate    = 0;
-        float phoneZRotate    = 0;
+    // Constants for the center support targets
+    private static final float bridgeZ = 6.42f * mmPerInch;
+    private static final float bridgeY = 23 * mmPerInch;
+    private static final float bridgeX = 5.18f * mmPerInch;
+    private static final float bridgeRotY = 59;                                 // Units are degrees
+    private static final float bridgeRotZ = 180;
 
-        // Since ImageTarget trackables use mm to specifiy their dimensions, we must use mm for all the physical dimension.
-        // We will define some constants and conversions here
-        final float mmPerInch        = 25.4f;
-        final float mmTargetHeight   = (6) * mmPerInch;          // the height of the center of the target image above the floor
+    // Constants for perimeter targets
+    private static final float halfField = 72 * mmPerInch;
+    private static final float quadField = 36 * mmPerInch;
 
-        // Constant for Stone Target
-        final float stoneZ = 2.00f * mmPerInch;
+    // Class Members
+    private OpenGLMatrix lastLocation = null;
+    private boolean targetVisible = false;
+    private float phoneXRotate = 0;
+    private float phoneYRotate = 0;
+    private float phoneZRotate = 0;
 
-        // Constants for the center support targets
-        final float bridgeZ = 6.42f * mmPerInch;
-        final float bridgeY = 23 * mmPerInch;
-        final float bridgeX = 5.18f * mmPerInch;
-        final float bridgeRotY = 59;                                 // Units are degrees
-        final float bridgeRotZ = 180;
-
-        // Constants for perimeter targets
-        final float halfField = 72 * mmPerInch;
-        final float quadField  = 36 * mmPerInch;
+    VuforiaTrackables targetsSkyStone;
+    List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
 
 
-        ret.localizer = ClassFactory.getInstance().createVuforia(parameters);
+    public void init(VuforiaLocalizer vuforiaLocalizer) {
+        this.vuforiaLocalizer = vuforiaLocalizer;
+
         // Load the data sets for the trackable objects. These particular data
         // sets are stored in the 'assets' part of our application.
-        ret.targetsSkyStone = ret.localizer.loadTrackablesFromAsset("Skystone");
+        targetsSkyStone = this.vuforiaLocalizer.loadTrackablesFromAsset("Skystone");
 
-        VuforiaTrackable stoneTarget = ret.targetsSkyStone.get(0);
+        VuforiaTrackable stoneTarget = targetsSkyStone.get(0);
         stoneTarget.setName("Stone Target");
-        VuforiaTrackable blueRearBridge = ret.targetsSkyStone.get(1);
+        VuforiaTrackable blueRearBridge = targetsSkyStone.get(1);
         blueRearBridge.setName("Blue Rear Bridge");
-        VuforiaTrackable redRearBridge = ret.targetsSkyStone.get(2);
+        VuforiaTrackable redRearBridge = targetsSkyStone.get(2);
         redRearBridge.setName("Red Rear Bridge");
-        VuforiaTrackable redFrontBridge = ret.targetsSkyStone.get(3);
+        VuforiaTrackable redFrontBridge = targetsSkyStone.get(3);
         redFrontBridge.setName("Red Front Bridge");
-        VuforiaTrackable blueFrontBridge = ret.targetsSkyStone.get(4);
+        VuforiaTrackable blueFrontBridge = targetsSkyStone.get(4);
         blueFrontBridge.setName("Blue Front Bridge");
-        VuforiaTrackable red1 = ret.targetsSkyStone.get(5);
+        VuforiaTrackable red1 = targetsSkyStone.get(5);
         red1.setName("Red Perimeter 1");
-        VuforiaTrackable red2 = ret.targetsSkyStone.get(6);
+        VuforiaTrackable red2 = targetsSkyStone.get(6);
         red2.setName("Red Perimeter 2");
-        VuforiaTrackable front1 = ret.targetsSkyStone.get(7);
+        VuforiaTrackable front1 = targetsSkyStone.get(7);
         front1.setName("Front Perimeter 1");
-        VuforiaTrackable front2 = ret.targetsSkyStone.get(8);
+        VuforiaTrackable front2 = targetsSkyStone.get(8);
         front2.setName("Front Perimeter 2");
-        VuforiaTrackable blue1 = ret.targetsSkyStone.get(9);
+        VuforiaTrackable blue1 = targetsSkyStone.get(9);
         blue1.setName("Blue Perimeter 1");
-        VuforiaTrackable blue2 = ret.targetsSkyStone.get(10);
+        VuforiaTrackable blue2 = targetsSkyStone.get(10);
         blue2.setName("Blue Perimeter 2");
-        VuforiaTrackable rear1 = ret.targetsSkyStone.get(11);
+        VuforiaTrackable rear1 = targetsSkyStone.get(11);
         rear1.setName("Rear Perimeter 1");
-        VuforiaTrackable rear2 = ret.targetsSkyStone.get(12);
+        VuforiaTrackable rear2 = targetsSkyStone.get(12);
         rear2.setName("Rear Perimeter 2");
 
         // For convenience, gather together all the trackable objects in one easily-iterable collection */
-        ret.allTrackables = new ArrayList<VuforiaTrackable>();
-        ret.allTrackables.addAll(ret.targetsSkyStone);
+        allTrackables.addAll(targetsSkyStone);
 
         /**
          * In order for localization to work, we need to tell the system where each target is on the field, and
@@ -143,7 +143,7 @@ public class VuforiaUtils {
 
         front1.setLocation(OpenGLMatrix
                 .translation(-halfField, -quadField, mmTargetHeight)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0 , 90)));
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 90)));
 
         front2.setLocation(OpenGLMatrix
                 .translation(-halfField, quadField, mmTargetHeight)
@@ -159,55 +159,94 @@ public class VuforiaUtils {
 
         rear1.setLocation(OpenGLMatrix
                 .translation(halfField, quadField, mmTargetHeight)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0 , -90)));
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90)));
 
         rear2.setLocation(OpenGLMatrix
                 .translation(halfField, -quadField, mmTargetHeight)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90)));
 
+        //
+        // Create a transformation matrix describing where the phone is on the robot.
+        //
+        // NOTE !!!!  It's very important that you turn OFF your phone's Auto-Screen-Rotation option.
+        // Lock it into Portrait for these numbers to work.
+        //
+        // Info:  The coordinate frame for the robot looks the same as the field.
+        // The robot's "forward" direction is facing out along X axis, with the LEFT side facing out along the Y axis.
+        // Z is UP on the robot.  This equates to a bearing angle of Zero degrees.
+        //
+        // The phone starts out lying flat, with the screen facing Up and with the physical top of the phone
+        // pointing to the LEFT side of the Robot.
+        // The two examples below assume that the camera is facing forward out the front of the robot.
 
         // We need to rotate the camera around it's long axis to bring the correct camera forward.
-        if (cameraChoice == BACK) {
+        if (CAMERA_CHOICE == BACK) {
             phoneYRotate = -90;
         } else {
             phoneYRotate = 90;
         }
 
         // Rotate the phone vertical about the X axis if it's in portrait mode
-        if (phoneIsPortrait) {
-            phoneXRotate = 90 ;
+        if (PHONE_IS_PORTRAIT) {
+            phoneXRotate = 90;
         }
 
-
-        /**
-        /Camera's location on the robot, relative to center
-         */
-        final float CAMERA_FORWARD_DISPLACEMENT  = 4.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot-center
+        // Next, translate the camera lens to where it is on the robot.
+        // In this example, it is centered (left to right), but forward of the middle of the robot, and above ground level.
+        final float CAMERA_FORWARD_DISPLACEMENT = 4.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot center
         final float CAMERA_VERTICAL_DISPLACEMENT = 8.0f * mmPerInch;   // eg: Camera is 8 Inches above ground
-        final float CAMERA_LEFT_DISPLACEMENT     = 0;     // eg: Camera is ON the robot's center line
+        final float CAMERA_LEFT_DISPLACEMENT = 0;     // eg: Camera is ON the robot's center line
 
         OpenGLMatrix robotFromCamera = OpenGLMatrix
                 .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES, phoneYRotate, phoneZRotate, phoneXRotate));
 
-        for (VuforiaTrackable trackable : ret.allTrackables)
-        {
-            ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(robotFromCamera, parameters.cameraDirection);
-        }
-
         /**  Let all the trackable listeners know where the phone is.  */
-        for (VuforiaTrackable trackable : ret.allTrackables) {
-            ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(robotFromCamera, parameters.cameraDirection);
+        for (VuforiaTrackable trackable : allTrackables) {
+            ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(robotFromCamera, CAMERA_CHOICE);
         }
 
-        return ret;
+        targetsSkyStone.activate();
 
     }
 
+    public void loop(Telemetry telemetry) {
+        // check all the trackable targets to see which one (if any) is visible.
+        targetVisible = false;
+        for (VuforiaTrackable trackable : allTrackables) {
+            if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
+                telemetry.addData("Visible Target", trackable.getName());
+                targetVisible = true;
 
+                // getUpdatedRobotLocation() will return null if no new information is available since
+                // the last time that call was made, or if the trackable is not currently visible.
+                OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
+                if (robotLocationTransform != null) {
+                    lastLocation = robotLocationTransform;
+                }
+                break;
+            }
+        }
 
-    public static void deInit(VuforiaLocalizer vuforia)
-    {
-        vuforia.getCamera().close();
+        // Provide feedback as to where the robot is located (if we know).
+        if (targetVisible) {
+            // express position (translation) of robot in inches.
+            VectorF translation = lastLocation.getTranslation();
+            telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
+                    translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
+
+            // express the rotation of the robot in degrees.
+            Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
+            telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+        } else {
+            telemetry.addData("Visible Target", "none");
+        }
     }
+
+    public void stop() {
+        targetsSkyStone.deactivate();
+
+    }
+
+    // getLocation()
 }

@@ -12,26 +12,13 @@ import java.util.ArrayList;
 public class ChasisObject {
 
     private double leftFor, leftBack, rightFor, rightBack;
-    private Orientation lastAngles = new Orientation();
     private BNO055IMU imu;
     private AngularPController headingController;
     private double targetAngle;
 
     public ChasisObject(BNO055IMU imu) {
-        this.imu = imu;
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.mode = BNO055IMU.SensorMode.IMU;
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.loggingEnabled = false;
-        targetAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
-        imu.initialize(parameters);
-        headingController = new AngularPController(
-                () -> (double) imu.getAngularOrientation().firstAngle,
-                2.0d,
-                1.0d,
-                0.1d
-        );
+        initImu(imu);
+        headingController = initAngularP();
     }
 
     public void calculate(double left_x, double left_y, double right_x) {
@@ -47,17 +34,16 @@ public class ChasisObject {
         headingController.update();
         headingController.setDesired(targetAngle);
         double correction = headingController.getControlValue();
-        correction = -correction;
         left_y = -left_y;
         double rad = Math.sqrt(Math.pow(left_x, 2) + Math.pow(left_y, 2));
         double theta = Math.atan2(left_y, left_x);
         int sensitivity = 3;
         double magnitute = Math.pow(rad, sensitivity);
 
-        rightFor = Math.sin(theta - 45) * magnitute-correction;
-        leftBack = Math.sin(theta - 45) * magnitute+correction;
-        leftFor = Math.sin(theta + 45) * magnitute+correction;
-        rightBack = Math.sin(theta + 45) * magnitute-correction;
+        rightFor = Math.sin(theta - 45) * magnitute+correction;
+        leftBack = Math.sin(theta - 45) * magnitute-correction;
+        leftFor = Math.sin(theta + 45) * magnitute-correction;
+        rightBack = Math.sin(theta + 45) * magnitute+correction;
     }
 
     public void tempCalculate(double left_x, double left_y, double right_x) {
@@ -73,17 +59,36 @@ public class ChasisObject {
         headingController.update();
         headingController.setDesired(targetAngle);
         double correction = headingController.getControlValue();
-        correction = -correction;
         left_y = -left_y;
         double rad = Math.sqrt(Math.pow(left_x, 2) + Math.pow(left_y, 2));
         double theta = Math.atan2(left_y, left_x);
         int sensitivity = 3;
         double magnitute = Math.pow(rad, sensitivity);
 
-        rightFor = Math.sin(theta - 45) * magnitute-correction;
-        leftBack = Math.sin(theta - 45) * magnitute+correction;
-        leftFor = Math.sin(theta + 45) * magnitute+correction;
-        rightBack = Math.sin(theta + 45) * magnitute-correction;
+        rightFor = Math.sin(theta - 45) * magnitute+correction;
+        leftBack = Math.sin(theta - 45) * magnitute-correction;
+        leftFor = Math.sin(theta + 45) * magnitute-correction;
+        rightBack = Math.sin(theta + 45) * magnitute+correction;
+    }
+
+    private void initImu(BNO055IMU imu) {
+        this.imu = imu;
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.mode = BNO055IMU.SensorMode.IMU;
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.loggingEnabled = false;
+        targetAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+        imu.initialize(parameters);
+    }
+
+    private AngularPController initAngularP() {
+        return new AngularPController(
+                () -> (double) imu.getAngularOrientation().firstAngle,
+                2.0d,
+                1.0d,
+                0.1d
+        );
     }
 
     public double getCurrentAngle() {

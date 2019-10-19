@@ -23,8 +23,9 @@ public class ChasisObject {
 
 
     public ChasisObject(BNO055IMU imu) {
-        initImu(imu);
+        this.imu = initImu(imu);
         headingController = initAngularP();
+        targetAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
     }
 
     public void calculate(double left_x, double left_y, double right_x) {
@@ -81,15 +82,14 @@ public class ChasisObject {
         last_x = right_x;
     }
 
-    private void initImu(BNO055IMU imu) {
-        this.imu = imu;
+    private BNO055IMU initImu(BNO055IMU imu) {
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.mode = BNO055IMU.SensorMode.IMU;
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.loggingEnabled = false;
-        targetAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
         imu.initialize(parameters);
+        return imu;
     }
 
     private AngularPController initAngularP() {

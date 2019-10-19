@@ -18,10 +18,12 @@ public class DerpyOp extends BaseOp {
 
     @Override
     public void loop() {
-            if (testMode) drive.tempCalculate(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
-            else drive.calculate(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
+            if (testMode)
+                drive.tempCalculate(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
+            else
+                drive.calculate(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
             if (slowmode)
-                move4(drive.getLeftFor()/2, drive.getLeftBack()/2, drive.getRightFor()/2, drive.getRightBack()/2);
+                move4(drive.getLeftFor() / 2, drive.getLeftBack() / 2, drive.getRightFor() / 2, drive.getRightBack() / 2);
             else
                 move4(drive.getLeftFor(), drive.getLeftBack(), drive.getRightFor(), drive.getRightBack());
         if (gamepad1.b) {

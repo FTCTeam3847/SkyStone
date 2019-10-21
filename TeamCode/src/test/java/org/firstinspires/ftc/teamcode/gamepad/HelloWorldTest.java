@@ -45,7 +45,7 @@ public class HelloWorldTest {
     @Test
     public void failingHelloTest() {
         String expected = "Hello World!";
-        String actual = "hello" + " " + "world" + "?";
+        String actual = "Hello" + " " + "World" + "!";
         assertEquals(expected, actual);
     }
 }

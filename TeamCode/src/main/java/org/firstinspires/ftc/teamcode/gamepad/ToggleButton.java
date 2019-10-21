@@ -30,6 +30,8 @@ import java.util.function.Supplier;
  */
 public class ToggleButton {
     private Supplier<Boolean> readButtonState;
+    boolean buttonIsToggled = false;
+    boolean wasSwitched = false;
 
     /**
      * Advanced Question: Why do we use the Supplier type here? Why not
@@ -51,8 +53,13 @@ public class ToggleButton {
         // Read the state of the button from the gamepad.
         boolean buttonStateNow = readButtonState.get();
 
+        if(buttonStateNow && !wasSwitched)
+        {
+            buttonIsToggled = !buttonIsToggled;
+        }
+        wasSwitched = !wasSwitched;
+        return buttonIsToggled;
         // We must return a value to satisfy the compiler so the tests can execute.
         // When you write the code, remember to modify this return statement.
-        return false;
     }
 }

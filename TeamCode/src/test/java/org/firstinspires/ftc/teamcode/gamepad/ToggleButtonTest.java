@@ -72,6 +72,8 @@ class ToggleButtonTest {
         assertFalse(derpyOp.testMode);
         derpyOp.loop();
         assertFalse(derpyOp.testMode);
+        derpyOp.loop();
+        assertFalse(derpyOp.testMode);
 
         // pushing the button for the first time - testMode should flip to true
         derpyOp.gamepad1.a = true;
@@ -79,9 +81,13 @@ class ToggleButtonTest {
         assertTrue(derpyOp.testMode); // <---- the test should fail here - that is, until you write ToggleButton's logic. Off you go. Best of luck. You got this.
         derpyOp.loop();
         assertTrue(derpyOp.testMode);
+        derpyOp.loop();
+        assertTrue(derpyOp.testMode);
 
         // release the button - testMode should remain true
         derpyOp.gamepad1.a = false;
+        derpyOp.loop();
+        assertTrue(derpyOp.testMode);
         derpyOp.loop();
         assertTrue(derpyOp.testMode);
         derpyOp.loop();
@@ -93,9 +99,13 @@ class ToggleButtonTest {
         assertFalse(derpyOp.testMode);
         derpyOp.loop();
         assertFalse(derpyOp.testMode);
+        derpyOp.loop();
+        assertFalse(derpyOp.testMode);
 
         // release the button again - testMode should remain set to false
         derpyOp.gamepad1.a = false;
+        derpyOp.loop();
+        assertFalse(derpyOp.testMode);
         derpyOp.loop();
         assertFalse(derpyOp.testMode);
         derpyOp.loop();
@@ -107,9 +117,13 @@ class ToggleButtonTest {
         assertTrue(derpyOp.testMode);
         derpyOp.loop();
         assertTrue(derpyOp.testMode);
+        derpyOp.loop();
+        assertTrue(derpyOp.testMode);
 
         // release the button again - toggle should remain be set to true
         derpyOp.gamepad1.a = false;
+        derpyOp.loop();
+        assertTrue(derpyOp.testMode);
         derpyOp.loop();
         assertTrue(derpyOp.testMode);
         derpyOp.loop();

@@ -70,9 +70,9 @@ public class BaseOp extends OpMode {
 
     public void lift() {
         if (gamepad1.x){
-            liftingServo.setPower(0.2);
+            liftingServo.setPower(0.5);
         } else if (gamepad1.y) {
-            liftingServo.setPower(-0.2);
+            liftingServo.setPower(-0.5);
         } else {
             liftingServo.setPower(0.0);
         }

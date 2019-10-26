@@ -38,6 +38,7 @@ public class MecanumDriveController {
 
         if (left_x == 0 && left_y == 0 && right_x == 0) {
             drivePower = new DrivePower(0,0,0,0);
+            targetAngle = angle;
         } else {
             double correction = headingController.getControlValue();
 

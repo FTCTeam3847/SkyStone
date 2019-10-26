@@ -17,7 +17,7 @@ import java.util.function.Supplier;
  *
  * This timeline depicts 27 iterations through an OpMode's `loop()` calling
  * `get()`, and so the button is checked 27 times and is wither unpressed
- * (U) or pressed (P). The user has only pressed the button 5 times, and so
+ * (F) or pressed (T). The user has only pressed the button 5 times, and so
  * the toggle should only flip 5 times.
  *
  * Assuming the starting toggle value is false (F), then the final toggle
@@ -46,7 +46,7 @@ public class ToggleButton {
      *
      * Things to think about:
      *   How do you know when to flip the toggle? What are the conditions?
-     *   What stateful variable do you need to track?
+     *   What stateful variables do you need to track?
      *   Where does a Java class store its stateful variables?
      */
     public Boolean get() {

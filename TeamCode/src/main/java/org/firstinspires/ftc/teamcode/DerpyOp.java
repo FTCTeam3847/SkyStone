@@ -5,12 +5,12 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.teamcode.gamepad.ToggleButton;
 
 @TeleOp(name = "DerpyOp", group = "1")
 public class DerpyOp extends BaseOp {
-    public boolean slowmode = false;
-    public boolean testMode = false;
-    public boolean prevState = true;
+    ToggleButton toggleButtonA = new ToggleButton(() -> gamepad1.a);
+    ToggleButton toggleButtonB = new ToggleButton(() -> gamepad1.b);
     public long lastTime = System.currentTimeMillis();
     public BNO055IMU imu;
     public ChasisObject drive;
@@ -47,29 +47,26 @@ public class DerpyOp extends BaseOp {
     public void loop() {
         super.loop();
         long currentTime = System.currentTimeMillis();
-        boolean buttonAPressed = gamepad1.a;
+        boolean slowMode = toggleButtonA.get();
+        boolean testMode = toggleButtonB.get();
+
         if (testMode)
             drive.tempCalculate(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
         else
             drive.calculate(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
-        if (slowmode)
+
+        if (slowMode)
             move4(drive.getLeftFor() / 2, drive.getLeftBack() / 2, drive.getRightFor() / 2, drive.getRightBack() / 2);
         else
             move4(drive.getLeftFor(), drive.getLeftBack(), drive.getRightFor(), drive.getRightBack());
-        if (gamepad1.b) {
-            slowmode = !slowmode;
-        }
-        if (prevState == false && buttonAPressed == true) {
-            testMode = !testMode;
-        }
+
         skyStoneLocalizer.loop(telemetry);
         telemetry.addData("Target Angle", drive.getTargetAngle());
         telemetry.addData("Current Angle", drive.getCurrentAngle());
-        telemetry.addData("Slow Mode", slowmode);
+        telemetry.addData("Slow Mode", slowMode);
         telemetry.addData("Test Mode", testMode);
         telemetry.addData("loopMS:", currentTime - lastTime);
         telemetry.update();
-        prevState = buttonAPressed;
         lastTime = currentTime;
     }
 

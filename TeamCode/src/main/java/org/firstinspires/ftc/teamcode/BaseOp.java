@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
@@ -24,6 +25,8 @@ public class BaseOp extends OpMode {
     public DcMotor rightFrontMotor;
     public DcMotor rightBackMotor;
 
+    public CRServo liftingServo;
+
     @Override
     public void init() {
         leftFrontMotor = hardwareMap.get(DcMotor.class, "motor-left-front");
@@ -35,6 +38,8 @@ public class BaseOp extends OpMode {
         rightFrontMotor = hardwareMap.get(DcMotor.class, "motor-right-front");
 
         rightBackMotor = hardwareMap.get(DcMotor.class, "motor-right-back");
+
+        liftingServo = hardwareMap.crservo.get("lservo");
         //working on accelerating DcMotor, but it ain't working yet. The motor stays at a constant rate instead of
         //accelerating.
 //        leftFrontMotor = new AcceleratingDcMotor(new ClampingDcMotor(hardwareMap.dcMotor.get("motor-left-front")));
@@ -63,6 +68,15 @@ public class BaseOp extends OpMode {
         rightBackMotor.setPower(rightBack);
     }
 
+    public void lift() {
+        if (gamepad1.x){
+            liftingServo.setPower(0.2);
+        } else if (gamepad1.y) {
+            liftingServo.setPower(-0.2);
+        } else {
+            liftingServo.setPower(0.0);
+        }
+    }
 //    private void moveLR(double left, double right) {
 //        move4(left, left, right, right);
 //    }

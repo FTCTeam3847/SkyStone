@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.teamcode.Hardware.AngularPController;
+import org.firstinspires.ftc.teamcode.MecanumDriveController.DrivePower;
 import org.firstinspires.ftc.teamcode.gamepad.ToggleButton;
 
 @TeleOp(name = "DerpyOp", group = "1")
@@ -13,7 +15,7 @@ public class DerpyOp extends BaseOp {
     ToggleButton toggleButtonB = new ToggleButton(() -> gamepad1.b);
     public long lastTime = System.currentTimeMillis();
     public BNO055IMU imu;
-    public ChasisObject drive;
+    public MecanumDriveController driverController;
 
     SkyStoneLocalizer skyStoneLocalizer = new SkyStoneLocalizer();
     VuforiaLocalizer vuforiaLocalizer;
@@ -21,9 +23,14 @@ public class DerpyOp extends BaseOp {
     @Override
     public void init() {
         super.init();
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        drive = new ChasisObject(imu);
-        //super.init();
+        imu = initImu(hardwareMap.get(BNO055IMU.class, "imu"));
+        AngularPController headingController = new AngularPController(
+                () -> (double) imu.getAngularOrientation().firstAngle,
+                2.0d,
+                1.0d,
+                0.1d);
+        driverController = new MecanumDriveController(headingController);
+
         int cameraMonitorViewId =
                 hardwareMap
                         .appContext
@@ -41,30 +48,47 @@ public class DerpyOp extends BaseOp {
         this.vuforiaLocalizer = ClassFactory.getInstance().createVuforia(parameters);
         skyStoneLocalizer.init(vuforiaLocalizer);
 
+
+    }
+
+    private BNO055IMU initImu(BNO055IMU imu) {
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.mode = BNO055IMU.SensorMode.IMU;
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.loggingEnabled = false;
+        imu.initialize(parameters);
+        return imu;
     }
 
     @Override
     public void loop() {
         super.loop();
         long currentTime = System.currentTimeMillis();
-        boolean slowMode = toggleButtonA.get();
-        boolean testMode = toggleButtonB.get();
+        boolean slowMode = toggleButtonB.get();
 
-        if (testMode)
-            drive.tempCalculate(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
+        DrivePower drivePower;
+
+        if (gamepad1.dpad_up)
+            drivePower = driverController.update(0, -1, 0);
+        else if (gamepad1.dpad_down)
+            drivePower = driverController.update(0, 1, 0);
+        else if (gamepad1.dpad_left)
+            drivePower = driverController.update(-1, 0, 0);
+        else if (gamepad1.dpad_right)
+            drivePower = driverController.update(1, 0, 0);
         else
-            drive.calculate(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
+            drivePower = driverController.update(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
 
         if (slowMode)
-            move4(drive.getLeftFor() / 2, drive.getLeftBack() / 2, drive.getRightFor() / 2, drive.getRightBack() / 2);
+            move4(drivePower.leftFor / 2, drivePower.leftBack / 2, drivePower.rightFor / 2, drivePower.rightBack / 2);
         else
-            move4(drive.getLeftFor(), drive.getLeftBack(), drive.getRightFor(), drive.getRightBack());
+            move4(drivePower.leftFor, drivePower.leftBack, drivePower.rightFor, drivePower.rightBack);
 
         skyStoneLocalizer.loop(telemetry);
-        telemetry.addData("Target Angle", drive.getTargetAngle());
-        telemetry.addData("Current Angle", drive.getCurrentAngle());
+        telemetry.addData("Target Angle", driverController.getTargetAngle());
+        telemetry.addData("Current Angle", driverController.getCurrentAngle());
         telemetry.addData("Slow Mode", slowMode);
-        telemetry.addData("Test Mode", testMode);
         telemetry.addData("loopMS:", currentTime - lastTime);
         telemetry.update();
         lastTime = currentTime;

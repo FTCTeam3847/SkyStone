@@ -247,6 +247,10 @@ public class AngularPController {
     //   - package-visible to allow for unit-testing the algorithms
     //   - static since they are stateless logic only
 
+
+    /**
+     * Adds two angles expressed in degrees and returns a new angle between -180.0 and 180.0 degrees.
+     */
     public static double addAngle(double a, double b) {
         double tmp = (a + b + 180.0f) % 360.0f;
         if (tmp < 0.0f) tmp = 360.0f + tmp;

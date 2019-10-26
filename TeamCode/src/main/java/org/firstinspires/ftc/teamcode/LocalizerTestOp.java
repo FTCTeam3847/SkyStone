@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 
-@TeleOp(name="Localizer Test Op", group ="1")
+@TeleOp(name = "Localizer Test Op", group = "1")
 public class LocalizerTestOp extends OpMode {
     SkyStoneLocalizer skyStoneLocalizer = new SkyStoneLocalizer();
     VuforiaLocalizer vuforiaLocalizer;
@@ -14,11 +14,19 @@ public class LocalizerTestOp extends OpMode {
     @Override
     public void init() {
         //super.init();
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        int cameraMonitorViewId =
+                hardwareMap
+                        .appContext
+                        .getResources()
+                        .getIdentifier(
+                                "cameraMonitorViewId",
+                                "id",
+                                hardwareMap.appContext.getPackageName()
+                        );
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
         parameters.vuforiaLicenseKey = GameConstants.VUFORIA_KEY;
-        parameters.cameraDirection   = VuforiaLocalizer.CameraDirection.BACK;
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
 
         this.vuforiaLocalizer = ClassFactory.getInstance().createVuforia(parameters);
         skyStoneLocalizer.init(vuforiaLocalizer);

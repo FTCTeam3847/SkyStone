@@ -3,7 +3,9 @@ package org.firstinspires.ftc.teamcode;
 import org.firstinspires.ftc.teamcode.Hardware.AngularPController;
 import org.junit.jupiter.api.Test;
 
+import static java.lang.Math.round;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
@@ -31,7 +33,7 @@ import static org.hamcrest.Matchers.is;
  */
 class MecanumDriveControllerTest {
     final AngularPController FIXED_HEADING =
-            new AngularPController(() -> 0.0, 2.0d, 1.0d, 0.1d);
+            new AngularPController(() -> 0.0, 2.0d, 2.0d, 0.1d);
 
     final double LEFT = -1.0d;
     final double RIGHT = 1.0d;
@@ -41,6 +43,21 @@ class MecanumDriveControllerTest {
     final double FORWARD = 1.0d;
     final double BACKWARD = -1.0d;
 
+    final double ERR = 0.0001;
+
+    double round2(double d) {
+        return round(d * 100.0d) / 100.0d;
+    }
+
+    DrivePower round2(DrivePower drivePower) {
+        return new DrivePower(
+                round2(drivePower.rightFor),
+                round2(drivePower.rightBack),
+                round2(drivePower.leftFor),
+                round2(drivePower.leftBack)
+        );
+    }
+
     @Test
     void driveForwardFull() {
         MecanumDriveController driveController = new MecanumDriveController(FIXED_HEADING);
@@ -48,7 +65,7 @@ class MecanumDriveControllerTest {
 
         assertThat(
                 "Forward should power all wheels forward at full power",
-                driveController.update(ZERO, UP, ZERO),
+                round2(driveController.update(ZERO, UP, ZERO)),
                 is(equalTo(forward))
         );
     }
@@ -60,7 +77,7 @@ class MecanumDriveControllerTest {
 
         assertThat(
                 "Backward should power all wheels backward at negative full power",
-                driveController.update(ZERO, DOWN, ZERO),
+                round2(driveController.update(ZERO, DOWN, ZERO)),
                 is(equalTo(backward))
         );
     }
@@ -72,7 +89,7 @@ class MecanumDriveControllerTest {
 
         assertThat(
                 "Left should provide full power to RF and LB, and negative full power to LF and RB.",
-                driveController.update(LEFT, ZERO, ZERO),
+                round2(driveController.update(LEFT, ZERO, ZERO)),
                 is(equalTo(left))
         );
     }
@@ -84,7 +101,7 @@ class MecanumDriveControllerTest {
 
         assertThat(
                 "Left should provide full power to LF and RB, and negative full power to RF and LB.",
-                driveController.update(RIGHT, UP, ZERO),
+                round2(driveController.update(RIGHT, ZERO, ZERO)),
                 is(equalTo(right))
         );
     }
@@ -96,7 +113,7 @@ class MecanumDriveControllerTest {
 
         assertThat(
                 "Turn left should provide full power to the right wheels, and negative full power to the left wheels.",
-                driveController.update(ZERO, ZERO, LEFT),
+                round2(driveController.update(ZERO, ZERO, LEFT)),
                 is(equalTo(turnLeft))
         );
     }
@@ -108,7 +125,7 @@ class MecanumDriveControllerTest {
 
         assertThat(
                 "Turn left should provide full power to the left wheels, and negative full power to the right wheels.",
-                driveController.update(ZERO, ZERO, LEFT),
+                round2(driveController.update(ZERO, ZERO, RIGHT)),
                 is(equalTo(turnRight))
         );
     }

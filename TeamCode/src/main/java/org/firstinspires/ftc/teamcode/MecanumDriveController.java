@@ -58,16 +58,5 @@ public class MecanumDriveController {
 
     }
 
-    public class DrivePower {
-        public final double rightFor, rightBack, leftFor, leftBack;
-
-        public DrivePower(double rightFor, double rightBack, double leftFor, double leftBack) {
-            this.rightFor = rightFor;
-            this.rightBack = rightBack;
-            this.leftFor = leftFor;
-            this.leftBack = leftBack;
-        }
-    }
-
 
 }

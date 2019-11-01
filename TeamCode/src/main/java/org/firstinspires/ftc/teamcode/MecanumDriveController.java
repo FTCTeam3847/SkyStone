@@ -45,13 +45,13 @@ public class MecanumDriveController {
             left_y = -left_y;
             double rad = Math.sqrt(pow(left_x, 2) + pow(left_y, 2));
             double theta = Math.atan2(left_y, left_x);
-            double magnitute = pow(rad, sensitivity);
+            double magnitude = pow(rad, sensitivity);
 
             drivePower = new DrivePower(
-                    Math.sin(theta - 45) * magnitute + correction,
-                    Math.sin(theta + 45) * magnitute + correction,
-                    Math.sin(theta + 45) * magnitute - correction,
-                    Math.sin(theta - 45) * magnitute - correction);
+                    (Math.sin(theta - 45) * magnitude + correction)/Math.abs((Math.sin(theta - 45) * magnitude + correction)),
+                    (Math.sin(theta + 45) * magnitude + correction)/Math.abs((Math.sin(theta - 45) * magnitude + correction)),
+                    (Math.sin(theta + 45) * magnitude - correction)/Math.abs((Math.sin(theta - 45) * magnitude + correction)),
+                    (Math.sin(theta - 45) * magnitude - correction)/Math.abs((Math.sin(theta - 45) * magnitude + correction)));
         }
         last_x = right_x;
         return drivePower;

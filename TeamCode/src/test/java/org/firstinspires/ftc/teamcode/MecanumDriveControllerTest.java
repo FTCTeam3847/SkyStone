@@ -129,4 +129,52 @@ class MecanumDriveControllerTest {
                 is(equalTo(turnRight))
         );
     }
+
+    @Test
+    void strafeRightFullAndTurnRightFull() {
+        MecanumDriveController driveController = new MecanumDriveController(FIXED_HEADING);
+        DrivePower strafeRightAndTurnRight = new DrivePower(BACKWARD, ZERO, FORWARD, ZERO);
+
+        assertThat(
+                "...",
+                round2(driveController.update(RIGHT, ZERO, RIGHT)),
+                is(equalTo(strafeRightAndTurnRight))
+        );
+    }
+
+    @Test
+    void strafeRightFullAndTurnLeftFull() {
+        MecanumDriveController driveController = new MecanumDriveController(FIXED_HEADING);
+        DrivePower strafeRightAndTurnRight = new DrivePower(ZERO, FORWARD, ZERO, BACKWARD);
+
+        assertThat(
+                "...",
+                round2(driveController.update(RIGHT, ZERO, LEFT)),
+                is(equalTo(strafeRightAndTurnRight))
+        );
+    }
+
+    @Test
+    void strafeLeftFullAndTurnRightFull() {
+        MecanumDriveController driveController = new MecanumDriveController(FIXED_HEADING);
+        DrivePower strafeRightAndTurnRight = new DrivePower(ZERO, BACKWARD, ZERO, FORWARD);
+
+        assertThat(
+                "...",
+                round2(driveController.update(LEFT, ZERO, RIGHT)),
+                is(equalTo(strafeRightAndTurnRight))
+        );
+    }
+
+    @Test
+    void strafeLeftFullAndTurnLeftFull() {
+        MecanumDriveController driveController = new MecanumDriveController(FIXED_HEADING);
+        DrivePower strafeRightAndTurnRight = new DrivePower(FORWARD, ZERO, BACKWARD, ZERO);
+
+        assertThat(
+                "...",
+                round2(driveController.update(LEFT, ZERO, LEFT)),
+                is(equalTo(strafeRightAndTurnRight))
+        );
+    }
 }

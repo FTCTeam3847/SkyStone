@@ -80,7 +80,12 @@ public class DerpyOp extends BaseOp {
             drivePower = driverController.update(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
 
         if (slowMode)
-            move4(drivePower.leftFor / 2, drivePower.leftBack / 2, drivePower.rightFor / 2, drivePower.rightBack / 2);
+            move4(
+                    drivePower.leftFor / 2,
+                    drivePower.leftBack / 2,
+                    drivePower.rightFor / 2,
+                    drivePower.rightBack / 2
+            );
         else
             move4(drivePower.leftFor, drivePower.leftBack, drivePower.rightFor, drivePower.rightBack);
 

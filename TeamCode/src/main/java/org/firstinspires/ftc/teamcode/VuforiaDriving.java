@@ -1,16 +1,19 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.location.Location;
+
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 
-@TeleOp(name = "Localizer Test Op", group = "1")
-public class LocalizerTestOp extends OpMode {
+@Autonomous(name = "Vuforia Driving", group = "1")
+public class VuforiaDriving extends OpMode {
     SkyStoneLocalizer skyStoneLocalizer = new SkyStoneLocalizer();
     VuforiaLocalizer vuforiaLocalizer;
+
 
     @Override
     public void init() {
@@ -41,8 +44,19 @@ public class LocalizerTestOp extends OpMode {
     @Override
     public void loop() {
         //super.loop();
-        skyStoneLocalizer.loop(telemetry);
+        LocationRotation locrot = skyStoneLocalizer.loop(telemetry);
         telemetry.update();
+
+    }
+
+    public boolean driveTo(LocationRotation current, LocationRotation destination)
+    {
+        if(Math.abs(destination.getX()-current.getX()) < 10 && Math.abs(destination.getY()-current.getY()) > 10)
+        {
+            return true;
+        }
+        double driveAngle = Math.atan2(destination.getY()-current.getY(), destination.getX()-current.getX());
+        return false;
     }
 
     @Override

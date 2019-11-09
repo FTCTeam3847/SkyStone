@@ -251,7 +251,7 @@ public class SkyStoneLocalizer {
         return null;
     }
 
-    public LocationRotation get()
+    public LocationRotation get(LocationRotation current, LocationRotation destination)
     {
         return null;
     }

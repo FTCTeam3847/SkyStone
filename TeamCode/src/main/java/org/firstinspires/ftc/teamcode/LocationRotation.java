@@ -10,14 +10,11 @@ public class LocationRotation
     private double p;
     private double h;
 
-    public LocationRotation(double x, double y, double z, double r, double p, double h)
+    public LocationRotation(double x, double y, double h)
     {
         this.x = x;
         this.y = y;
-        this.z = z;
 
-        this.r = r;
-        this.p = p;
         this.h = h;
     }
 
@@ -27,18 +24,6 @@ public class LocationRotation
 
     public double getY() {
         return y;
-    }
-
-    public double getZ() {
-        return z;
-    }
-
-    public double getR() {
-        return r;
-    }
-
-    public double getP() {
-        return p;
     }
 
     public double getH() {

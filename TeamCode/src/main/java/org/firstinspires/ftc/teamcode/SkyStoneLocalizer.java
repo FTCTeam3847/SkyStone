@@ -243,7 +243,7 @@ public class SkyStoneLocalizer {
             Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
             telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
 
-            return new LocationRotation(translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch, rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+            return new LocationRotation(translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, rotation.thirdAngle);
         }
         else {
             telemetry.addData("Visible Target", "none");
@@ -251,10 +251,13 @@ public class SkyStoneLocalizer {
         return null;
     }
 
-    public void stop() {
-        targetsSkyStone.deactivate();
-
+    public LocationRotation get()
+    {
+        return null;
     }
 
-    // getLocation()
+    public void stop() {
+        targetsSkyStone.deactivate();
+    }
+
 }

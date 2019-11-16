@@ -33,7 +33,7 @@ class PolarUtilTest {
             return equalRound2(aMinusB.radius, 0.0d);
         } else {
             return equalRound2(aMinusB.radius-bMinusA.radius, PI);
-            return equalRound2(bMinusA.radius-aMinusB.radius, PI);
+            //return equalRound2(bMinusA.radius-aMinusB.radius, PI);
         }
     }
 

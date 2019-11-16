@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode;
 
 import java.util.Objects;
 
+import static java.lang.Math.*;
+
 class PolarCoord
 {
     public final double theta;
@@ -12,11 +14,17 @@ class PolarCoord
         this.radius = radius;
     }
 
+    public static PolarCoord fromXY(double x, double y) {
+        double radius = sqrt(x*x+y*y);
+        double theta = PolarUtil.normalize(atan2(y, x));
+        return new PolarCoord(radius, theta);
+    }
+
     @Override
     public String toString() {
         return "PolarCoord{" +
-                "theta=" + theta +
-                ", radius=" + radius +
+                "radius=" + radius +
+                ", theta=" + theta +
                 '}';
     }
 

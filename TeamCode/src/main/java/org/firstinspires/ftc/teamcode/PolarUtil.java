@@ -5,8 +5,13 @@ import static java.lang.Math.*;
 public class PolarUtil {
     public static PolarCoord ORIGIN = new PolarCoord(0.0d, 0.0d);
 
+    public static double normalize(double t1)
+    {
+        return (t1 + 2*PI) % (2*PI);
+    }
+
     public static double addRadians(double t1, double t2) {
-        return (t1 + t2 + (2 * PI)) % (2 * PI);
+        return normalize(t1+t2);
     }
 
     public static double subtractRadians(double t1, double t2) {
@@ -40,7 +45,7 @@ public class PolarUtil {
         double toY = to.radius * sin(to.theta);
 
         double distance = sqrt( pow(toY-fromY, 2) + pow(toX-fromX, 2));
-        double theta = atan2(toY-fromY, toX-fromX) % (2*PI);
+        double theta = PolarUtil.normalize(atan2(toY-fromY, toX-fromX));
 
         return new PolarCoord(distance, theta);
 

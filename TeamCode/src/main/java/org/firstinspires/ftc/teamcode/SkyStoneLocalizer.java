@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
+import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.RADIANS;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
@@ -240,19 +241,15 @@ public class SkyStoneLocalizer {
                     translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
 
             // express the rotation of the robot in degrees.
-            Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
+            Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, RADIANS);
+            double heading = PolarUtil.normalize(rotation.thirdAngle);
             telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
 
-            return new LocationRotation(translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, rotation.thirdAngle);
+            return new LocationRotation(translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, heading);
         }
         else {
             telemetry.addData("Visible Target", "none");
         }
-        return null;
-    }
-
-    public LocationRotation get(LocationRotation current, LocationRotation destination)
-    {
         return null;
     }
 

@@ -2,7 +2,12 @@ package org.firstinspires.ftc.teamcode;
 
 import java.util.Objects;
 
+import static java.lang.Math.abs;
+import static java.lang.Math.max;
+
 public class DrivePower {
+    public static final DrivePower ZERO = new DrivePower(0, 0, 0, 0);
+
     public final double rightFor, rightBack, leftFor, leftBack;
 
     public DrivePower(double rightFor, double rightBack, double leftFor, double leftBack) {
@@ -10,6 +15,35 @@ public class DrivePower {
         this.rightBack = rightBack;
         this.leftFor = leftFor;
         this.leftBack = leftBack;
+    }
+
+    public static DrivePower scale(DrivePower drivePower, double scalar) {
+        return new DrivePower(drivePower.rightFor * scalar, drivePower.rightBack * scalar, drivePower.leftFor * scalar, drivePower.leftBack * scalar);
+    }
+
+    public static DrivePower combine(DrivePower... drivePowers) {
+        double rf = 0, rb = 0, lf = 0, lb = 0;
+        for (DrivePower drivePower : drivePowers) {
+            rf += drivePower.rightFor;
+            rb += drivePower.rightBack;
+            lf += drivePower.leftFor;
+            lb += drivePower.leftBack;
+        }
+        return normalize(new DrivePower(rf, rb, lf, lb));
+    }
+
+    public static DrivePower normalize(DrivePower drivePower) {
+        double scalar = 1.0 / maxAbs(drivePower.rightFor, drivePower.rightBack, drivePower.leftFor, drivePower.leftBack, 1.0d);
+        return scale(drivePower, scalar);
+    }
+
+    private static double maxAbs(double... doubles) {
+        double max = 0.0;
+        for (int i = 0; i < doubles.length; i++) {
+            max = max(abs(doubles[i]), max);
+        }
+
+        return max;
     }
 
     /**

@@ -2,87 +2,84 @@ package org.firstinspires.ftc.teamcode;
 
 import org.firstinspires.ftc.teamcode.Hardware.AngularPController;
 
+import static java.lang.Math.PI;
+import static java.lang.Math.abs;
 import static java.lang.Math.pow;
-import static org.firstinspires.ftc.teamcode.Hardware.AngularPController.addAngle;
+import static java.lang.Math.signum;
+import static java.lang.Math.sin;
+import static org.firstinspires.ftc.teamcode.DrivePower.ZERO;
+import static org.firstinspires.ftc.teamcode.PolarUtil.addRadians;
+import static org.firstinspires.ftc.teamcode.PolarUtil.subtractRadians;
 
 public class MecanumDriveController {
     private final AngularPController headingController;
-    private double targetAngle;
-
-    public double getTargetAngle() {
-        return targetAngle;
-    }
-
-    public double getCurrentAngle() {
-        return headingController.getCurrent();
-    }
-
-    private double last_x;
-
 
     public MecanumDriveController(AngularPController headingController) {
         this.headingController = headingController;
     }
 
+    private static double QTR_PI = PI / 4;
+    private static double ROOT_2_OVER_2 = sin(QTR_PI);
+    private double lastTurn;
+
+    public double getCurrentAngle() {
+        return headingController.getCurrent();
+    }
+
+    private static double powSign(double base, double exp) {
+        return signum(base) * pow(abs(base), exp);
+    }
+
+    private static DrivePower turnPower(double turn, int sensitivity) {
+        double scaled = powSign(turn, sensitivity);
+        return new DrivePower(-scaled, -scaled, scaled, scaled);
+    }
+
+    private static DrivePower strafePower(PolarCoord strafe, int sensitivity) {
+        double magnitude = powSign(strafe.radius, sensitivity);
+
+        double rblf = magnitude * sin(addRadians(strafe.theta, QTR_PI)) / ROOT_2_OVER_2;
+        double rflb = magnitude * sin(subtractRadians(strafe.theta, QTR_PI)) / ROOT_2_OVER_2;
+
+        return new DrivePower(rflb, rblf, rblf, rflb);
+    }
+
+
     public DrivePower update(double left_x, double left_y, double right_x) {
+        PolarCoord strafe = PolarCoord.fromXY(left_x, left_y);
         int sensitivity = 3;
-        final DrivePower drivePower;
-        double angle = headingController.update();
-        if (right_x != 0) { //Turn
-            targetAngle = addAngle(angle, pow(-right_x, sensitivity) * 90.0);
-        } else if (last_x != 0) { //stop turning and hold angle
-            targetAngle = angle;
-        }
+        return update(strafe, right_x, sensitivity);
+    }
 
-        headingController.setDesired(targetAngle);
+    public DrivePower update(PolarCoord strafe, double turn, int sensitivity) {
+        double currentAngle = headingController.update();
 
-        if (left_x == 0 && left_y == 0 && right_x == 0) {
-            drivePower = new DrivePower(0,0,0,0);
-            targetAngle = angle;
+        DrivePower drivePower;
+
+        if (strafe.radius == 0.0d && turn == 0.0d) {
+            // we're stopped
+            headingController.setDesired(currentAngle);
+            drivePower = ZERO;
         } else {
-            double correction = headingController.getControlValue();
-
-            left_y = -left_y;
-            double rad = Math.sqrt(pow(left_x, 2) + pow(left_y, 2));
-            double theta = Math.atan2(left_y, left_x);
-            double magnitude = pow(rad, sensitivity);
-            double rightFor = (Math.sin(theta - 45) * magnitude + correction)/Math.abs((Math.sin(theta - 45)));
-            double rightBack = (Math.sin(theta + 45) * magnitude + correction)/Math.abs((Math.sin(theta - 45)));
-            double leftFor = (Math.sin(theta + 45) * magnitude - correction)/Math.abs((Math.sin(theta - 45)));
-            double leftBack = (Math.sin(theta - 45) * magnitude - correction)/Math.abs((Math.sin(theta - 45)));
-
-
-            double maxOffset = maxAbs(rightFor, rightBack, leftFor, leftBack, 1.0);
-            rightFor = rightFor/maxOffset;
-            rightBack = rightBack/maxOffset;
-            leftFor = leftFor/maxOffset;
-            leftBack = leftBack/maxOffset;
-            double[] wheels = new double[]{rightFor, rightBack, leftFor, leftBack};
-            for (int i = 0; i < wheels.length; i++) {
-                if (Math.abs(wheels[i]) < 0.09) {
-                    wheels[i] = 0.0;
-                }
+            // we're moving
+            if (turn == 0.0d && lastTurn != 0) {
+                // the user just stopped turning, so hold this angle
+                headingController.setDesired(currentAngle);
             }
-            rightFor = wheels[0];
-            rightBack = wheels[1];
-            leftFor = wheels[2];
-            leftBack = wheels[3];
 
+            DrivePower strafePower = strafePower(strafe, sensitivity);
+            DrivePower turnPower;
+            if (turn == 0.0d) {
+                // the user isn't asking to turn, so get a
+                // correction value to hold our desired heading
+                turnPower = turnPower(headingController.getControlValue(), 1);
+            } else {
+                turnPower = turnPower(turn, sensitivity);
+            }
 
-            drivePower = new DrivePower(
-                    rightFor, rightBack, leftFor, leftBack);
+            drivePower = DrivePower.combine(strafePower, turnPower);
         }
-        last_x = right_x;
+        lastTurn = turn;
         return drivePower;
-
     }
-    private static double maxAbs(double... wheels) {
-        double max = 0.0;
-        for (int i = 0; i < wheels.length; i++) {
-            max = Math.max(Math.abs(wheels[i]), max);
-        }
-
-        return max;
-    }
-
 }

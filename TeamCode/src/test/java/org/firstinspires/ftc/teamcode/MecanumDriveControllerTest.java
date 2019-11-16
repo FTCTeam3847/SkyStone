@@ -37,8 +37,8 @@ class MecanumDriveControllerTest {
 
     final double LEFT = -1.0d;
     final double RIGHT = 1.0d;
-    final double UP = -1.0d;
-    final double DOWN = 1.0d;
+    final double UP = 1.0d;
+    final double DOWN = -1.0d;
     final double ZERO = 0.0d;
     final double FORWARD = 1.0d;
     final double BACKWARD = -1.0d;

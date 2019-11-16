@@ -69,15 +69,15 @@ public class DerpyOp extends BaseOp {
         DrivePower drivePower;
 
         if (gamepad1.dpad_up)
-            drivePower = driverController.update(0, -1, 0);
-        else if (gamepad1.dpad_down)
             drivePower = driverController.update(0, 1, 0);
+        else if (gamepad1.dpad_down)
+            drivePower = driverController.update(0, -1, 0);
         else if (gamepad1.dpad_left)
             drivePower = driverController.update(-1, 0, 0);
         else if (gamepad1.dpad_right)
             drivePower = driverController.update(1, 0, 0);
         else
-            drivePower = driverController.update(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
+            drivePower = driverController.update(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
 
         if (slowMode)
             move4(
@@ -90,7 +90,6 @@ public class DerpyOp extends BaseOp {
             move4(drivePower.leftFor, drivePower.leftBack, drivePower.rightFor, drivePower.rightBack);
 
         skyStoneLocalizer.loop(telemetry);
-        telemetry.addData("Target Angle", driverController.getTargetAngle());
         telemetry.addData("Current Angle", driverController.getCurrentAngle());
         telemetry.addData("Slow Mode", slowMode);
         telemetry.addData("loopMS:", currentTime - lastTime);

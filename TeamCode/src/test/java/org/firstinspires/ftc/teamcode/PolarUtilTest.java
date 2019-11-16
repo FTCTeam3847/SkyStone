@@ -17,6 +17,27 @@ import static org.firstinspires.ftc.teamcode.PolarUtil.fromTo;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PolarUtilTest {
+
+    @Property(seed="1825301")
+    boolean AtoB_minus_BtoA_is_PI(
+            @ForAll("radius") double r1,
+            @ForAll("theta") double t1,
+            @ForAll("radius") double r2,
+            @ForAll("theta") double t2
+    ) {
+        PolarCoord a = new PolarCoord(r1, t1);
+        PolarCoord b = new PolarCoord(r2, t2);
+        PolarCoord aMinusB = fromTo(a, b);
+        PolarCoord bMinusA = fromTo(b, a);
+        if (a.equals(b)) {
+            return equalRound2(aMinusB.radius, 0.0d);
+        } else {
+            return equalRound2(aMinusB.radius-bMinusA.radius, PI);
+            return equalRound2(bMinusA.radius-aMinusB.radius, PI);
+        }
+    }
+
+
     @Property(seed="1825301")
     boolean subtract_reverse_should_have_same_radius(
             @ForAll("radius") double r1,

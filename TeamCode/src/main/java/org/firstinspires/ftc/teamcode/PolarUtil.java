@@ -18,41 +18,22 @@ public class PolarUtil {
     }
 
     public static PolarCoord fromTo(PolarCoord from, PolarCoord to) {
-        if (from.equals(to) || (from.radius == 0.0d && to.radius == 0.0d))
-            return new PolarCoord(0.0d, 0.0d);
+        double fromX = from.radius * cos(from.theta);
+        double fromY = from.radius * sin(from.theta);
 
-        // moving CW from source, solve for CCW and reverse theta
-        // moving towards origin, solve for away from origin and reverse theta
-        if ((to.theta < from.theta) || (ORIGIN.equals(to) && !ORIGIN.equals(from))) {
-            return reverse(fromTo(to, from));
+        double toX = to.radius * cos(to.theta);
+        double toY = to.radius * sin(to.theta);
+
+        double distance = sqrt( pow(toY-fromY, 2) + pow(toX-fromX, 2));
+        double theta = atan2(toY-fromY, toX-fromX) % (2*PI);
+
+
+        if(from.radius == to.radius && from.theta == to.theta || from.radius == 0 && to.radius == 0)
+        {
+            return new PolarCoord(0.0,0.0);
         }
 
-        double r1 = from.radius;
-        double r2 = to.radius;
-        double deltaT = to.theta - from.theta;
-        double deltaR = r2 - r1;
+        return new PolarCoord(distance, theta);
 
-        if (deltaT == 0.0) {
-            if (deltaR > 0.0) {
-                // increasing radius
-                return new PolarCoord(deltaR, from.theta);
-            } else {
-                // decreasing radius
-                double newTheta = (from.theta + PI) % (2 * PI);
-                return new PolarCoord(-deltaR, newTheta);
-            }
-        }
-
-        double r3 = sqrt(pow(r1, 2) + pow(r2, 2) - (2 * r1 * r2 * cos(deltaT)));
-
-
-        double t2 = asin((r2 * sin(abs(deltaT))) / r3);
-
-//        double t3 = 2 * PI - (t2 - (from.theta - PI));
-        double t3 = subtractRadians(addRadians(from.theta, PI), t2);
-
-        PolarCoord p3 = new PolarCoord(r3, t3);
-
-        return p3;
     }
 }

@@ -26,32 +26,23 @@ public class MecanumDriveController {
         return headingController.getCurrent();
     }
 
-    private static double powSign(double base, double exp) {
-        return signum(base) * pow(abs(base), exp);
+    private static DrivePower turnPower(double turn) {
+        return new DrivePower(-turn, -turn, turn, turn);
     }
 
-    private static DrivePower turnPower(double turn, int sensitivity) {
-        double scaled = powSign(turn, sensitivity);
-        return new DrivePower(-scaled, -scaled, scaled, scaled);
-    }
-
-    private static DrivePower strafePower(PolarCoord strafe, int sensitivity) {
-        double magnitude = powSign(strafe.radius, sensitivity);
-
-        double rblf = magnitude * sin(addRadians(strafe.theta, QTR_PI)) / ROOT_2_OVER_2;
-        double rflb = magnitude * sin(subtractRadians(strafe.theta, QTR_PI)) / ROOT_2_OVER_2;
+    private static DrivePower strafePower(PolarCoord strafe) {
+        double rblf = strafe.radius * sin(addRadians(strafe.theta, QTR_PI)) / ROOT_2_OVER_2;
+        double rflb = strafe.radius * sin(subtractRadians(strafe.theta, QTR_PI)) / ROOT_2_OVER_2;
 
         return new DrivePower(rflb, rblf, rblf, rflb);
     }
 
-
     public DrivePower update(double left_x, double left_y, double right_x) {
-        PolarCoord strafe = PolarCoord.fromXY(left_x, left_y);
-        int sensitivity = 3;
-        return update(strafe, right_x, sensitivity);
+        PolarCoord strafe = PolarUtil.fromXY(left_x, left_y);
+        return update(strafe, right_x);
     }
 
-    public DrivePower update(PolarCoord strafe, double turn, int sensitivity) {
+    public DrivePower update(PolarCoord strafe, double turn) {
         double currentAngle = headingController.update();
 
         DrivePower drivePower;
@@ -67,14 +58,14 @@ public class MecanumDriveController {
                 headingController.setDesired(currentAngle);
             }
 
-            DrivePower strafePower = strafePower(strafe, sensitivity);
+            DrivePower strafePower = strafePower(strafe);
             DrivePower turnPower;
             if (turn == 0.0d) {
                 // the user isn't asking to turn, so get a
                 // correction value to hold our desired heading
-                turnPower = turnPower(headingController.getControlValue(), 1);
+                turnPower = turnPower(headingController.getControlValue());
             } else {
-                turnPower = turnPower(turn, sensitivity);
+                turnPower = turnPower(turn);
             }
 
             drivePower = DrivePower.combine(strafePower, turnPower);

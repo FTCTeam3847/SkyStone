@@ -8,6 +8,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.Hardware.AngularPController;
 import org.firstinspires.ftc.teamcode.gamepad.ToggleButton;
 
+import static java.lang.Math.abs;
+import static java.lang.Math.pow;
+import static java.lang.Math.signum;
+
 @TeleOp(name = "DerpyOp", group = "1")
 public class DerpyOp extends BaseOp {
     ToggleButton toggleButtonA = new ToggleButton(() -> gamepad1.a);
@@ -60,6 +64,12 @@ public class DerpyOp extends BaseOp {
         return imu;
     }
 
+    private static double sensitivity(double base, double exp) {
+        return signum(base) * pow(abs(base), exp);
+    }
+
+    private static final int SENSITIVITY = 3;
+
     @Override
     public void loop() {
         super.loop();
@@ -77,7 +87,11 @@ public class DerpyOp extends BaseOp {
         else if (gamepad1.dpad_right)
             drivePower = driverController.update(1, 0, 0);
         else
-            drivePower = driverController.update(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
+            drivePower = driverController.update(
+                    sensitivity(gamepad1.left_stick_x, SENSITIVITY),
+                    sensitivity(-gamepad1.left_stick_y, SENSITIVITY),
+                    sensitivity(gamepad1.right_stick_x, SENSITIVITY)
+            );
 
         if (slowMode)
             move4(

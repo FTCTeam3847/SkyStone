@@ -34,6 +34,9 @@ import static org.hamcrest.Matchers.is;
 class MecanumDriveControllerTest {
     final AngularPController FIXED_HEADING =
             new AngularPController(() -> 0.0, 2.0d, 2.0d, 0.1d);
+    {
+        FIXED_HEADING.setDesired(0.0d);
+    }
 
     final double LEFT = -1.0d;
     final double RIGHT = 1.0d;

@@ -2,30 +2,21 @@ package org.firstinspires.ftc.teamcode;
 
 import java.util.Objects;
 
-import static java.lang.Math.*;
+import static java.lang.Math.PI;
+import static java.lang.String.format;
 
-class PolarCoord
-{
+class PolarCoord {
     public final double theta;
     public final double radius;
 
     public PolarCoord(double radius, double theta) {
-        this.theta = theta;
         this.radius = radius;
-    }
-
-    public static PolarCoord fromXY(double x, double y) {
-        double radius = sqrt(x*x+y*y);
-        double theta = PolarUtil.normalize(atan2(y, x));
-        return new PolarCoord(radius, theta);
+        this.theta = theta;
     }
 
     @Override
     public String toString() {
-        return "PolarCoord{" +
-                "radius=" + radius +
-                ", theta=" + theta +
-                '}';
+        return format("PolarCoord{%.2f, %.2f·π}", radius, theta / PI);
     }
 
     @Override
@@ -41,5 +32,4 @@ class PolarCoord
     public int hashCode() {
         return Objects.hash(theta, radius);
     }
-
 }

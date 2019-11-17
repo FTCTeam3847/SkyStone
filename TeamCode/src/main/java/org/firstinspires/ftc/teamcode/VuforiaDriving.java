@@ -1,10 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.location.Location;
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
@@ -49,13 +46,11 @@ public class VuforiaDriving extends OpMode {
 
     }
 
-    public boolean driveTo(LocationRotation current, LocationRotation destination)
-    {
-        if(Math.abs(destination.getX()-current.getX()) < 10 && Math.abs(destination.getY()-current.getY()) > 10)
-        {
+    public boolean driveTo(LocationRotation current, LocationRotation destination) {
+        if (Math.abs(destination.x - current.x) < 10 && Math.abs(destination.y - current.y) > 10) {
             return true;
         }
-        double driveAngle = Math.atan2(destination.getY()-current.getY(), destination.getX()-current.getX());
+        double driveAngle = Math.atan2(destination.y - current.y, destination.x - current.x);
         return false;
     }
 

@@ -7,6 +7,8 @@ import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.Hardware.AngularPController;
 
+import static org.firstinspires.ftc.teamcode.PolarUtil.subtractRadians;
+
 @Autonomous
 public class PositionControllerOpMode extends BaseOp {
 
@@ -58,8 +60,8 @@ public class PositionControllerOpMode extends BaseOp {
 
         telemetry.addData("driveCommand: ", driveCommand);
 
-        double x = driveCommand.radius * Math.cos(PolarUtil.subtractRadians(driveCommand.theta, Math.PI));
-        double y = (driveCommand.radius * Math.sin(PolarUtil.subtractRadians(driveCommand.theta, Math.PI)));
+        double x = driveCommand.radius * Math.cos(subtractRadians(driveCommand.theta, Math.PI));
+        double y = (driveCommand.radius * Math.sin(subtractRadians(driveCommand.theta, Math.PI)));
 
         telemetry.addData("X Value: ", x);
         telemetry.addData("Y Value: ", y);
@@ -75,8 +77,8 @@ public class PositionControllerOpMode extends BaseOp {
         PolarCoord driveCommand = positionController.loop();
         skyStoneLocalizer.loop(telemetry);
 
-        double x = driveCommand.radius * Math.cos(PolarUtil.subtractRadians(driveCommand.theta, Math.PI));
-        double y = (driveCommand.radius * Math.sin(PolarUtil.subtractRadians(driveCommand.theta, Math.PI)));
+        double x = driveCommand.radius * Math.cos(subtractRadians(driveCommand.theta, Math.PI));
+        double y = (driveCommand.radius * Math.sin(subtractRadians(driveCommand.theta, Math.PI)));
 
         telemetry.addData("X Value: ", x);
         telemetry.addData("Y Value: ", y);

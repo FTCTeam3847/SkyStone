@@ -3,12 +3,10 @@ package org.firstinspires.ftc.teamcode;
 import org.firstinspires.ftc.teamcode.Hardware.AngularPController;
 
 import static java.lang.Math.PI;
-import static java.lang.Math.abs;
-import static java.lang.Math.pow;
-import static java.lang.Math.signum;
 import static java.lang.Math.sin;
 import static org.firstinspires.ftc.teamcode.DrivePower.ZERO;
 import static org.firstinspires.ftc.teamcode.PolarUtil.addRadians;
+import static org.firstinspires.ftc.teamcode.PolarUtil.fromXY;
 import static org.firstinspires.ftc.teamcode.PolarUtil.subtractRadians;
 
 public class MecanumDriveController {
@@ -38,7 +36,7 @@ public class MecanumDriveController {
     }
 
     public DrivePower update(double left_x, double left_y, double right_x) {
-        PolarCoord strafe = PolarUtil.fromXY(left_x, left_y);
+        PolarCoord strafe = fromXY(left_x, left_y);
         return update(strafe, right_x);
     }
 

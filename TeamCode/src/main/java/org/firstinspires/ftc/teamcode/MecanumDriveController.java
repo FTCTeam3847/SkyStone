@@ -51,7 +51,7 @@ public class MecanumDriveController {
             drivePower = ZERO;
         } else {
             // we're moving
-            if (turn == 0.0d && lastTurn != 0) {
+            if (turn == 0.0d && lastTurn != 0.0d) {
                 // the user just stopped turning, so hold this angle
                 headingController.setDesired(currentAngle);
             }
@@ -61,7 +61,9 @@ public class MecanumDriveController {
             if (turn == 0.0d) {
                 // the user isn't asking to turn, so get a
                 // correction value to hold our desired heading
-                turnPower = turnPower(headingController.getControlValue());
+                //turnPower = turnPower(headingController.getControlValue());
+                turnPower = ZERO;
+                //Turned off DriveController because of movement bug
             } else {
                 turnPower = turnPower(turn);
             }

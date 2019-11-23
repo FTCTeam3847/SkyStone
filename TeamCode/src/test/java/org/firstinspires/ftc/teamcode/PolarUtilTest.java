@@ -6,12 +6,9 @@ import net.jqwik.api.ForAll;
 import net.jqwik.api.Property;
 import net.jqwik.api.Provide;
 
-import org.junit.jupiter.api.Test;
-
 import static java.lang.Math.PI;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
-import static org.firstinspires.ftc.teamcode.PolarUtil.fromXY;
 import static org.firstinspires.ftc.teamcode.PolarUtil.subtractRadians;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -34,7 +31,7 @@ class PolarUtilTest {
             assertThat(
                     "Relative coord between equal points should be (0,0)",
                     fromP1ToP2,
-                    is(equalTo(new PolarCoord(0.0d, 0.0d))));
+                    is(equalTo(PolarUtil.ORIGIN)));
         } else {
             assertThat(fromP1ToP2.radius, is(closeTo(fromP1ToP2.radius)));
             assertThat(
@@ -60,14 +57,5 @@ class PolarUtilTest {
 
     public static org.hamcrest.Matcher<java.lang.Double> closeTo(double operand) {
         return org.hamcrest.number.IsCloseTo.closeTo(operand, 0.0001);
-    }
-
-    @Test
-    public void backward() {
-        assertThat(
-                "",
-                fromXY(0,-1).theta/PI,
-                is(equalTo(1))
-        );
     }
 }

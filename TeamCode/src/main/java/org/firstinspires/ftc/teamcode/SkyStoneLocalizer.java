@@ -21,7 +21,6 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 public class SkyStoneLocalizer {
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
     private static final boolean PHONE_IS_PORTRAIT = true;
-    public static final FieldPosition UNKNOWN = new FieldPosition(-0.0d, -0.0d, -0.0d, "unknown");
     private VuforiaLocalizer vuforiaLocalizer;
 
     // Since ImageTarget trackables use mm to specifiy their dimensions, we must use mm for all the physical dimension.
@@ -235,9 +234,9 @@ public class SkyStoneLocalizer {
             }
         }
 
-        // Provide feedback as to where the robot is located (if we know).
-        // express position (translation) of robot in inches.
-        if (targetVisible) {
+        if (null != lastLocation && targetVisible) {
+            // Provide feedback as to where the robot is located (if we know).
+            // express position (translation) of robot in inches.
             VectorF translation = lastLocation.getTranslation();
 
             // express the rotation of the robot in degrees.
@@ -250,7 +249,7 @@ public class SkyStoneLocalizer {
                     description.toString()
             );
         } else {
-            return UNKNOWN;
+            return FieldPosition.UNKNOWN;
         }
     }
 

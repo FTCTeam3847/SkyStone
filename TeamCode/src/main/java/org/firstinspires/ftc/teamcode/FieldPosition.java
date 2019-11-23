@@ -4,6 +4,8 @@ import java.util.Locale;
 
 public class FieldPosition
 {
+    public static final FieldPosition UNKNOWN = new FieldPosition(-0.0d, -0.0d, -0.0d, "unknown");
+
     public final double x;
     public final  double y;
     public final  double h;

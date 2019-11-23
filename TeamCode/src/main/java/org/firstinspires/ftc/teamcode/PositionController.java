@@ -21,7 +21,7 @@ public class PositionController {
     public PolarCoord getTargetFieldRelative() {
         FieldPosition currentFieldPosition = fieldPositionSupplier.get();
         if (currentFieldPosition == null || targetFieldPosition == null) {
-            return new PolarCoord(0, 0);
+            return PolarUtil.ORIGIN;
         }
 
         PolarCoord currentPolar = fromXY(currentFieldPosition.x, currentFieldPosition.y);

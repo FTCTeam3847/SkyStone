@@ -42,11 +42,11 @@ public class PositionControllerOpMode extends BaseOp {
 
         parameters.vuforiaLicenseKey = GameConstants.VUFORIA_KEY;
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+        parameters.useExtendedTracking = true;
 
         this.vuforiaLocalizer = ClassFactory.getInstance().createVuforia(parameters);
         skyStoneLocalizer.init(vuforiaLocalizer);
         positionController = new PositionController(() -> skyStoneLocalizer.loop());
-
     }
 
     @Override
@@ -73,16 +73,22 @@ public class PositionControllerOpMode extends BaseOp {
 
         positionController.setTargetLocation(targetFieldPosition);
 
-        PolarCoord strafe = positionController.loop();
-
         telemetry.addData("targetPos", targetFieldPosition);
         telemetry.addData("fieldPos", fieldPosition);
+
+        PolarCoord strafe;
+
+        if (FieldPosition.UNKNOWN != fieldPosition) {
+            strafe = positionController.loop();
+        } else {
+            strafe = PolarUtil.ORIGIN;
+        }
+
         telemetry.addData("strafe(bot)", strafe);
-
-        telemetry.update();
-
         DrivePower drivepower = driverController.update(strafe, 0);
         move(scale(drivepower, 0.5));
+
+        telemetry.update();
     }
 
     private BNO055IMU initImu(BNO055IMU imu) {

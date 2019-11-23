@@ -31,13 +31,17 @@ public class BaseOp extends OpMode {
     public void init() {
         leftFrontMotor = hardwareMap.get(DcMotor.class, "motor-left-front");
         leftFrontMotor.setDirection(DcMotor.Direction.REVERSE);
+        leftFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         leftBackMotor = hardwareMap.get(DcMotor.class, "motor-left-back");
         leftBackMotor.setDirection(DcMotor.Direction.REVERSE);
+        leftBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         rightFrontMotor = hardwareMap.get(DcMotor.class, "motor-right-front");
+        rightFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         rightBackMotor = hardwareMap.get(DcMotor.class, "motor-right-back");
+        rightBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         liftingServo = hardwareMap.crservo.get("lservo");
         //working on accelerating DcMotor, but it ain't working yet. The motor stays at a constant rate instead of

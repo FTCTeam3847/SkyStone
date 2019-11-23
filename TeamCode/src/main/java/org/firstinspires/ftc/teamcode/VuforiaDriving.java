@@ -41,12 +41,13 @@ public class VuforiaDriving extends OpMode {
     @Override
     public void loop() {
         //super.loop();
-        LocationRotation locrot = skyStoneLocalizer.loop(telemetry);
+        FieldPosition fieldPosition = skyStoneLocalizer.loop();
+        telemetry.addData("fieldPosition", fieldPosition);
         telemetry.update();
 
     }
 
-    public boolean driveTo(LocationRotation current, LocationRotation destination) {
+    public boolean driveTo(FieldPosition current, FieldPosition destination) {
         if (Math.abs(destination.x - current.x) < 10 && Math.abs(destination.y - current.y) > 10) {
             return true;
         }

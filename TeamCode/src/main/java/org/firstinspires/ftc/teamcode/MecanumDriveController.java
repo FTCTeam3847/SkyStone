@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import org.firstinspires.ftc.teamcode.Hardware.AngularPController;
 
 import static java.lang.Math.PI;
+import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import static org.firstinspires.ftc.teamcode.DrivePower.ZERO;
 import static org.firstinspires.ftc.teamcode.PolarUtil.addRadians;
@@ -28,15 +29,16 @@ public class MecanumDriveController {
         return new DrivePower(-turn, -turn, turn, turn);
     }
 
-    private static DrivePower strafePower(PolarCoord strafe) {
-        double rblf = strafe.radius * sin(addRadians(strafe.theta, QTR_PI)) / ROOT_2_OVER_2;
-        double rflb = strafe.radius * sin(subtractRadians(strafe.theta, QTR_PI)) / ROOT_2_OVER_2;
+     static DrivePower strafePower(PolarCoord strafe) {
+        double rblf = strafe.radius * cos(addRadians(strafe.theta, QTR_PI)) / ROOT_2_OVER_2;
+        double rflb = strafe.radius * cos(subtractRadians(strafe.theta, QTR_PI)) / ROOT_2_OVER_2;
 
         return new DrivePower(rflb, rblf, rblf, rflb);
     }
 
     public DrivePower update(double left_x, double left_y, double right_x) {
-        PolarCoord strafe = fromXY(left_x, left_y);
+        PolarCoord xypolar = fromXY(left_x, left_y);
+        PolarCoord strafe = new PolarCoord(xypolar.radius, subtractRadians(xypolar.theta, 2*QTR_PI));
         return update(strafe, right_x);
     }
 

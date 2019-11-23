@@ -7,7 +7,7 @@ import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.Hardware.AngularPController;
 
-import static org.firstinspires.ftc.teamcode.PolarUtil.subtractRadians;
+import static org.firstinspires.ftc.teamcode.DrivePower.scale;
 
 @Autonomous
 public class PositionControllerOpMode extends BaseOp {
@@ -45,51 +45,44 @@ public class PositionControllerOpMode extends BaseOp {
 
         this.vuforiaLocalizer = ClassFactory.getInstance().createVuforia(parameters);
         skyStoneLocalizer.init(vuforiaLocalizer);
-        positionController = new PositionController(() -> skyStoneLocalizer.loop(telemetry));
+        positionController = new PositionController(() -> skyStoneLocalizer.loop());
 
     }
 
     @Override
     public void init_loop() {
         super.init_loop();
-        skyStoneLocalizer.loop(telemetry);
+        FieldPosition fieldPosition = skyStoneLocalizer.loop();
+        FieldPosition targetFieldPosition = new FieldPosition(24, 24, 0, "");
 
-        positionController.setTargetLocation(new LocationRotation(0, 0, 0));
+        positionController.setTargetLocation(targetFieldPosition);
 
-        PolarCoord driveCommand = positionController.loop();
-
-        telemetry.addData("driveCommand: ", driveCommand);
-
-        double x = driveCommand.radius * Math.cos(subtractRadians(driveCommand.theta, Math.PI));
-        double y = (driveCommand.radius * Math.sin(subtractRadians(driveCommand.theta, Math.PI)));
-
-        telemetry.addData("X Value: ", x);
-        telemetry.addData("Y Value: ", y);
+        PolarCoord strafe = positionController.loop();
+        telemetry.addData("targetPos", targetFieldPosition);
+        telemetry.addData("fieldPos", fieldPosition);
+        telemetry.addData("strafe(bot)", strafe);
 
         telemetry.update();
-
-
     }
 
     @Override
     public void loop() {
         super.loop();
-        PolarCoord driveCommand = positionController.loop();
-        skyStoneLocalizer.loop(telemetry);
+        FieldPosition fieldPosition = skyStoneLocalizer.loop();
+        FieldPosition targetFieldPosition = new FieldPosition(24, 24, 0, "");
 
-        double x = driveCommand.radius * Math.cos(subtractRadians(driveCommand.theta, Math.PI));
-        double y = (driveCommand.radius * Math.sin(subtractRadians(driveCommand.theta, Math.PI)));
+        positionController.setTargetLocation(targetFieldPosition);
 
-        telemetry.addData("X Value: ", x);
-        telemetry.addData("Y Value: ", y);
+        PolarCoord strafe = positionController.loop();
 
-        DrivePower drivePower = driverController.update(x, y, 0);
+        telemetry.addData("targetPos", targetFieldPosition);
+        telemetry.addData("fieldPos", fieldPosition);
+        telemetry.addData("strafe(bot)", strafe);
 
-        move4(drivePower.leftFor, drivePower.leftBack, drivePower.rightFor, drivePower.rightBack);
-
-
-        telemetry.addData("driveCommand: ", driveCommand);
         telemetry.update();
+
+        DrivePower drivepower = driverController.update(strafe, 0);
+        move(scale(drivepower, 0.5));
     }
 
     private BNO055IMU initImu(BNO055IMU imu) {

@@ -19,7 +19,8 @@ public class PolarUtil {
 
     public static PolarCoord fromXY(double x, double y) {
         double radius = sqrt(x * x + y * y);
-        double theta = normalize(atan2(y, x));
+        double t1 = atan2(y,x);
+        double theta = normalize(t1);
         return new PolarCoord(radius, theta);
     }
 

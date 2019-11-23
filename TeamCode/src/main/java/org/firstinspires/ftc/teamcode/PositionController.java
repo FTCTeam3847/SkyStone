@@ -7,33 +7,36 @@ import static org.firstinspires.ftc.teamcode.PolarUtil.fromXY;
 import static org.firstinspires.ftc.teamcode.PolarUtil.subtractRadians;
 
 public class PositionController {
-    private final Supplier<LocationRotation> locationRotationSupplier;
-    private LocationRotation targetLocationRotation;
+    private final Supplier<FieldPosition> fieldPositionSupplier;
+    private FieldPosition targetFieldPosition;
 
-    public PositionController(Supplier<LocationRotation> locationRotationSupplier) {
-        this.locationRotationSupplier = locationRotationSupplier;
+    public PositionController(Supplier<FieldPosition> fieldPositionSupplier) {
+        this.fieldPositionSupplier = fieldPositionSupplier;
     }
 
-    public void setTargetLocation(LocationRotation targetLocationRotation) {
-        this.targetLocationRotation = targetLocationRotation;
+    public void setTargetLocation(FieldPosition targetFieldPosition) {
+        this.targetFieldPosition = targetFieldPosition;
     }
 
-    public PolarCoord loop() {
-        LocationRotation currentLocationRotation = locationRotationSupplier.get();
-        if (currentLocationRotation == null || targetLocationRotation == null) {
+    public PolarCoord getTargetFieldRelative() {
+        FieldPosition currentFieldPosition = fieldPositionSupplier.get();
+        if (currentFieldPosition == null || targetFieldPosition == null) {
             return new PolarCoord(0, 0);
         }
 
-        PolarCoord currentPolar = fromXY(currentLocationRotation.x, currentLocationRotation.y);
-        PolarCoord targetPolar = fromXY(targetLocationRotation.x, targetLocationRotation.y);
-        PolarCoord relativePolar = fromTo(currentPolar, targetPolar);
+        PolarCoord currentPolar = fromXY(currentFieldPosition.x, currentFieldPosition.y);
+        PolarCoord targetPolar = fromXY(targetFieldPosition.x, targetFieldPosition.y);
+        return fromTo(currentPolar, targetPolar);
+    }
 
-        if (relativePolar.radius <= 12) {
-            double power = relativePolar.radius / 12;
-            return new PolarCoord(power, relativePolar.theta);
-        } else {
-            return new PolarCoord(1, subtractRadians(relativePolar.theta, currentLocationRotation.h));
-        }
+    public PolarCoord loop() {
+        FieldPosition currentFieldPosition = fieldPositionSupplier.get();
 
+        PolarCoord targetFieldRelative = getTargetFieldRelative();
+        double power = Math.min(targetFieldRelative.radius/12, 1);
+
+        PolarCoord strafe = new PolarCoord(power, subtractRadians(targetFieldRelative.theta, currentFieldPosition.h));
+
+        return strafe;
     }
 }

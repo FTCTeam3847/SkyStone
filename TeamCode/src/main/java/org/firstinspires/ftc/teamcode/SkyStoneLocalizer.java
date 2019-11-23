@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
@@ -22,6 +21,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 public class SkyStoneLocalizer {
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
     private static final boolean PHONE_IS_PORTRAIT = true;
+    public static final FieldPosition UNKNOWN = new FieldPosition(-0.0d, -0.0d, -0.0d, "unknown");
     private VuforiaLocalizer vuforiaLocalizer;
 
     // Since ImageTarget trackables use mm to specifiy their dimensions, we must use mm for all the physical dimension.
@@ -215,12 +215,14 @@ public class SkyStoneLocalizer {
 
     }
 
-    public LocationRotation loop(Telemetry telemetry) {
+    public FieldPosition loop() {
         // check all the trackable targets to see which one (if any) is visible.
         targetVisible = false;
+        List<String> description = new ArrayList<>();
+
         for (VuforiaTrackable trackable : allTrackables) {
             if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
-                telemetry.addData("Visible Target", trackable.getName());
+                description.add("tgt: " + trackable.getName());
                 targetVisible = true;
 
                 // getUpdatedRobotLocation() will return null if no new information is available since
@@ -234,23 +236,22 @@ public class SkyStoneLocalizer {
         }
 
         // Provide feedback as to where the robot is located (if we know).
+        // express position (translation) of robot in inches.
         if (targetVisible) {
-            // express position (translation) of robot in inches.
             VectorF translation = lastLocation.getTranslation();
-            telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-                    translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
 
             // express the rotation of the robot in degrees.
             Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, RADIANS);
             double heading = PolarUtil.normalize(rotation.thirdAngle);
-            telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
-
-            return new LocationRotation(translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, heading);
+            return new FieldPosition(
+                    translation.get(0) / mmPerInch,
+                    translation.get(1) / mmPerInch,
+                    heading,
+                    description.toString()
+            );
+        } else {
+            return UNKNOWN;
         }
-        else {
-            telemetry.addData("Visible Target", "none");
-        }
-        return null;
     }
 
     public void stop() {

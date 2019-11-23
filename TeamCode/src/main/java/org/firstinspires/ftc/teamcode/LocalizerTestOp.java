@@ -41,7 +41,8 @@ public class LocalizerTestOp extends OpMode {
     @Override
     public void loop() {
         //super.loop();
-        skyStoneLocalizer.loop(telemetry);
+        FieldPosition fieldPosition = skyStoneLocalizer.loop();
+        telemetry.addData("fieldPosition", fieldPosition);
         telemetry.update();
     }
 

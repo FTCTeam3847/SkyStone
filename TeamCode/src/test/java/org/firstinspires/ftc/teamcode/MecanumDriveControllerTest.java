@@ -180,4 +180,44 @@ class MecanumDriveControllerTest {
                 is(equalTo(strafeRightAndTurnRight))
         );
     }
+
+    @Test
+    void strafeBackwardPolar() {
+        DrivePower drivePower = MecanumDriveController.strafePower(new PolarCoord(1, Math.PI));
+        assertThat(
+                "..",
+                round2(drivePower),
+                is(equalTo(new DrivePower(BACKWARD, BACKWARD, BACKWARD, BACKWARD)))
+        );
+    }
+
+    @Test
+    void strafeForwardPolar() {
+        DrivePower drivePower = MecanumDriveController.strafePower(new PolarCoord(1, 0));
+        assertThat(
+                "..",
+                round2(drivePower),
+                is(equalTo(new DrivePower(FORWARD, FORWARD, FORWARD, FORWARD)))
+        );
+    }
+
+    @Test
+    void strafeRightPolar() {
+        DrivePower drivePower = MecanumDriveController.strafePower(new PolarCoord(1, 3*Math.PI / 2));
+        assertThat(
+                "..",
+                round2(drivePower),
+                is(equalTo(new DrivePower(BACKWARD, FORWARD, FORWARD, BACKWARD)))
+        );
+    }
+
+    @Test
+    void strafeLeftPolar() {
+        DrivePower drivePower = MecanumDriveController.strafePower(new PolarCoord(1, Math.PI / 2));
+        assertThat(
+                "..",
+                round2(drivePower),
+                is(equalTo(new DrivePower(FORWARD, BACKWARD, BACKWARD, FORWARD)))
+        );
+    }
 }

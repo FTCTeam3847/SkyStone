@@ -76,6 +76,11 @@ public class BaseOp extends OpMode {
         rightBackMotor.setPower(rightBack);
     }
 
+    public void move(DrivePower drivePower) {
+        move4(drivePower.leftFor, drivePower.leftBack, drivePower.rightFor, drivePower.rightBack);
+    }
+
+
     public void lift() {
         if (gamepad1.x){
             liftingServo.setPower(0.5);

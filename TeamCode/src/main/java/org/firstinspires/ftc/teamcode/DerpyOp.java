@@ -103,8 +103,8 @@ public class DerpyOp extends BaseOp {
         else
             move4(drivePower.leftFor, drivePower.leftBack, drivePower.rightFor, drivePower.rightBack);
 
-        skyStoneLocalizer.loop(telemetry);
-        telemetry.addData("Current Angle", driverController.getCurrentAngle());
+        FieldPosition fieldPosition = skyStoneLocalizer.loop();
+        telemetry.addData("fieldPosition", fieldPosition);
         telemetry.addData("Slow Mode", slowMode);
         telemetry.addData("loopMS:", currentTime - lastTime);
         telemetry.update();

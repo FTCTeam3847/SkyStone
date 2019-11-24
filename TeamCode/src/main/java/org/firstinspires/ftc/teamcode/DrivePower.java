@@ -17,8 +17,12 @@ public class DrivePower {
         this.leftBack = leftBack;
     }
 
-    public static DrivePower scale(DrivePower drivePower, double scalar) {
-        return new DrivePower(drivePower.rightFor * scalar, drivePower.rightBack * scalar, drivePower.leftFor * scalar, drivePower.leftBack * scalar);
+    public DrivePower scale(double scalar) {
+        return new DrivePower(
+                rightFor * scalar,
+                rightBack * scalar,
+                leftFor * scalar,
+                leftBack * scalar);
     }
 
     public static DrivePower combine(DrivePower... drivePowers) {
@@ -34,7 +38,7 @@ public class DrivePower {
 
     public static DrivePower normalize(DrivePower drivePower) {
         double scalar = 1.0 / maxAbs(drivePower.rightFor, drivePower.rightBack, drivePower.leftFor, drivePower.leftBack, 1.0d);
-        return scale(drivePower, scalar);
+        return drivePower.scale(scalar);
     }
 
     private static double maxAbs(double... doubles) {

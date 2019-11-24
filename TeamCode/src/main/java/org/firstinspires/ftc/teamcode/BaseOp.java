@@ -63,10 +63,6 @@ public class BaseOp extends OpMode {
 
     @Override
     public void loop() {
-        leftFrontMotor.setPower(leftFrontMotor.getPower());
-        leftBackMotor.setPower(leftBackMotor.getPower());
-        rightFrontMotor.setPower(rightFrontMotor.getPower());
-        rightBackMotor.setPower(rightBackMotor.getPower());
     }
 
     public void move4(double leftFront, double leftBack, double rightFront, double rightBack) {
@@ -90,64 +86,4 @@ public class BaseOp extends OpMode {
             liftingServo.setPower(0.0);
         }
     }
-//    private void moveLR(double left, double right) {
-//        move4(left, left, right, right);
-//    }
-
-//    public void turn(double power) {
-//        move4(-power, -power, power, power);
-//    }
-
-    public void moveStop() {
-        move4(0, 0, 0, 0);
-    }
-
-//    public void moveStraight(double power) {
-//        moveLR(power, power);
-//    }
-//
-//    public void strafeLeft (double power) {
-//        move4(power, -power, power, -power);
-//    }
-//
-//    public void strafeRight (double power) {
-//        move4(-power, power, -power, power);
-//    }
-
-//    static double addRadians(double a, double b) {
-//        double tmp = (a + b + PI) % (2 * PI);
-//        if (tmp < 0.0) tmp = (2 * PI) + tmp;
-//        return tmp - PI;
-//    }
-//
-//    static double subtractRadians(double a, double b) {
-//        return addRadians(a, -b);
-//    }
-//
-//    void geometricDrive(double x, double y) {
-//        double x2 = pow(x, 2.0);
-//        double y2 = pow(y, 2.0);
-//        double radius = sqrt(x2 + y2);
-//
-//        // Larger sensitivity values correspond to lower
-//        // twitchiness. 1 is most twitchy. 3 to 5 feel
-//        // pretty good. 7 is kinda mushy.
-//        double sensitivity = 3;
-//        double magnitude = pow(radius, sensitivity);
-//
-//        double theta = atan2(y, x);
-//        double rad45 = toRadians(45.0);
-//        double angle = subtractRadians(theta, rad45);
-//
-//        double cosAngle = cos(angle);
-//        double cos45 = cos(rad45); // constant, same as √2 / 2
-//        double left = magnitude * (cosAngle / cos45);
-//
-//        double sinAngle = sin(angle);
-//        double sin45 = sin(rad45); // constant, same as √2 / 2
-//        double right = magnitude * (sinAngle / sin45);
-//
-//        moveLR(left, right);
-//    }
-
 }

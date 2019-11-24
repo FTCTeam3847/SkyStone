@@ -11,7 +11,6 @@ import org.firstinspires.ftc.teamcode.gamepad.ToggleButton;
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
 import static java.lang.Math.signum;
-import static org.firstinspires.ftc.teamcode.DrivePower.scale;
 
 @TeleOp(name = "DerpyOp", group = "1")
 public class DerpyOp extends BaseOp {
@@ -96,7 +95,7 @@ public class DerpyOp extends BaseOp {
             );
 
 
-        drivePower = slowMode ? scale(drivePower, 0.5) : drivePower;
+        drivePower = slowMode ? drivePower.scale(0.5) : drivePower;
 
         move(drivePower);
 

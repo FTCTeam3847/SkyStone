@@ -5,7 +5,6 @@ import org.firstinspires.ftc.teamcode.Hardware.AngularPController;
 import static java.lang.Math.PI;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
-import static org.firstinspires.ftc.teamcode.DrivePower.ZERO;
 import static org.firstinspires.ftc.teamcode.PolarUtil.addRadians;
 import static org.firstinspires.ftc.teamcode.PolarUtil.fromXY;
 import static org.firstinspires.ftc.teamcode.PolarUtil.subtractRadians;
@@ -26,7 +25,11 @@ public class MecanumDriveController {
     }
 
     private static DrivePower turnPower(double turn) {
-        return new DrivePower(-turn, -turn, turn, turn);
+        if (Double.isFinite(turn)) {
+            return new DrivePower(-turn, -turn, turn, turn);
+        } else {
+            return DrivePower.ZERO;
+        }
     }
 
      static DrivePower strafePower(PolarCoord strafe) {
@@ -50,7 +53,7 @@ public class MecanumDriveController {
         if (strafe.radius == 0.0d && turn == 0.0d) {
             // we're stopped
             headingController.setDesired(currentAngle);
-            drivePower = ZERO;
+            drivePower = DrivePower.ZERO;
         } else {
             // we're moving
             if (turn == 0.0d && lastTurn != 0.0d) {

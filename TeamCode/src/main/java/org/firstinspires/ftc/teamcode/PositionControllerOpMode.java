@@ -7,8 +7,6 @@ import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.Hardware.AngularPController;
 
-import static org.firstinspires.ftc.teamcode.DrivePower.scale;
-
 @Autonomous
 public class PositionControllerOpMode extends BaseOp {
 
@@ -85,9 +83,9 @@ public class PositionControllerOpMode extends BaseOp {
         }
 
         telemetry.addData("strafe(bot)", strafe);
-        DrivePower drivepower = driverController.update(strafe, 0);
-        move(scale(drivepower, 0.5));
-
+        DrivePower drivepower = driverController.update(strafe, 0).scale(0.5);
+        telemetry.addData("drivepower", drivepower);
+        move(drivepower);
         telemetry.update();
     }
 

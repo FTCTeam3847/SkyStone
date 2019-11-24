@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.gamepad.ToggleButton;
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
 import static java.lang.Math.signum;
+import static org.firstinspires.ftc.teamcode.DrivePower.scale;
 
 @TeleOp(name = "DerpyOp", group = "1")
 public class DerpyOp extends BaseOp {
@@ -19,6 +20,7 @@ public class DerpyOp extends BaseOp {
     public long lastTime = System.currentTimeMillis();
     public BNO055IMU imu;
     public MecanumDriveController driverController;
+    AngularPController headingController;
 
     SkyStoneLocalizer skyStoneLocalizer = new SkyStoneLocalizer();
     VuforiaLocalizer vuforiaLocalizer;
@@ -27,11 +29,11 @@ public class DerpyOp extends BaseOp {
     public void init() {
         super.init();
         imu = initImu(hardwareMap.get(BNO055IMU.class, "imu"));
-        AngularPController headingController = new AngularPController(
+        headingController = new AngularPController(
                 () -> (double) imu.getAngularOrientation().firstAngle,
-                2.0d,
-                1.0d,
-                0.1d);
+                0.0d,
+                10.0d,
+                0.0d);
         driverController = new MecanumDriveController(headingController);
 
         int cameraMonitorViewId =
@@ -88,23 +90,19 @@ public class DerpyOp extends BaseOp {
             drivePower = driverController.update(1, 0, 0);
         else
             drivePower = driverController.update(
-                    sensitivity(gamepad1.left_stick_x, SENSITIVITY),
-                    sensitivity(-gamepad1.left_stick_y, SENSITIVITY),
-                    sensitivity(gamepad1.right_stick_x, SENSITIVITY)
+                    sensitivity(gamepad1.right_stick_x, SENSITIVITY),
+                    sensitivity(-gamepad1.right_stick_y, SENSITIVITY),
+                    sensitivity(gamepad1.left_stick_x, SENSITIVITY)
             );
 
-        if (slowMode)
-            move4(
-                    drivePower.leftFor / 2,
-                    drivePower.leftBack / 2,
-                    drivePower.rightFor / 2,
-                    drivePower.rightBack / 2
-            );
-        else
-            move4(drivePower.leftFor, drivePower.leftBack, drivePower.rightFor, drivePower.rightBack);
+
+        drivePower = slowMode ? scale(drivePower, 0.5) : drivePower;
+
+        move(drivePower);
 
         FieldPosition fieldPosition = skyStoneLocalizer.loop();
         telemetry.addData("fieldPosition", fieldPosition);
+        telemetry.addData("h correct", -headingController.getControlValue());
         telemetry.addData("Slow Mode", slowMode);
         telemetry.addData("loopMS:", currentTime - lastTime);
         telemetry.update();

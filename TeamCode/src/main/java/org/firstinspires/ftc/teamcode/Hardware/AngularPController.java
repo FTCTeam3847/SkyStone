@@ -114,7 +114,7 @@ public class AngularPController {
      * Adjusts the controller's current value based on a provided
      * reference angle.
      *
-     * @param reference angle in degrees between [-1.0..1.0]
+     * @param reference angle in degrees between [-180..180]
      */
     public void calibrateTo(double reference) {
         checkAngleArgument(reference);

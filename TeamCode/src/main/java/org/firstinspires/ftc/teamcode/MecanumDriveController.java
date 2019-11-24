@@ -36,10 +36,10 @@ public class MecanumDriveController {
         return new DrivePower(rflb, rblf, rblf, rflb);
     }
 
-    public DrivePower update(double left_x, double left_y, double right_x) {
-        PolarCoord xypolar = fromXY(left_x, left_y);
+    public DrivePower update(double strafe_x, double strafe_y, double turn) {
+        PolarCoord xypolar = fromXY(strafe_x, strafe_y);
         PolarCoord strafe = new PolarCoord(xypolar.radius, subtractRadians(xypolar.theta, 2*QTR_PI));
-        return update(strafe, right_x);
+        return update(strafe, turn);
     }
 
     public DrivePower update(PolarCoord strafe, double turn) {
@@ -63,9 +63,7 @@ public class MecanumDriveController {
             if (turn == 0.0d) {
                 // the user isn't asking to turn, so get a
                 // correction value to hold our desired heading
-                //turnPower = turnPower(headingController.getControlValue());
-                turnPower = ZERO;
-                //Turned off DriveController because of movement bug
+                turnPower = turnPower(-headingController.getControlValue());
             } else {
                 turnPower = turnPower(turn);
             }

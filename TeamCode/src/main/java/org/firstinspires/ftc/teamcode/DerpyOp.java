@@ -46,8 +46,11 @@ public class DerpyOp extends BaseOp {
                         );
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
+
         parameters.vuforiaLicenseKey = GameConstants.VUFORIA_KEY;
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+
+        parameters.useExtendedTracking = false; //Disables extended tracking on vuforia
 
         this.vuforiaLocalizer = ClassFactory.getInstance().createVuforia(parameters);
         skyStoneLocalizer.init(vuforiaLocalizer);

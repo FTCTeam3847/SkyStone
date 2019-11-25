@@ -15,6 +15,7 @@ public class PositionControllerOpMode extends BaseOp {
     PositionController positionController;
     public BNO055IMU imu;
     public MecanumDriveController driverController;
+    public FieldPosition lastFieldPosition;
 
     @Override
     public void init() {
@@ -40,11 +41,12 @@ public class PositionControllerOpMode extends BaseOp {
 
         parameters.vuforiaLicenseKey = GameConstants.VUFORIA_KEY;
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
-        parameters.useExtendedTracking = true;
+        parameters.useExtendedTracking = false;
 
         this.vuforiaLocalizer = ClassFactory.getInstance().createVuforia(parameters);
         skyStoneLocalizer.init(vuforiaLocalizer);
         positionController = new PositionController(() -> skyStoneLocalizer.loop());
+
     }
 
     @Override
@@ -55,10 +57,10 @@ public class PositionControllerOpMode extends BaseOp {
 
         positionController.setTargetLocation(targetFieldPosition);
 
-        PolarCoord strafe = positionController.loop();
+        //PolarCoord strafe = positionController.loop();
         telemetry.addData("targetPos", targetFieldPosition);
         telemetry.addData("fieldPos", fieldPosition);
-        telemetry.addData("strafe(bot)", strafe);
+        //telemetry.addData("strafe(bot)", strafe);
 
         telemetry.update();
     }
@@ -67,25 +69,44 @@ public class PositionControllerOpMode extends BaseOp {
     public void loop() {
         super.loop();
         FieldPosition fieldPosition = skyStoneLocalizer.loop();
-        FieldPosition targetFieldPosition = new FieldPosition(24, 24, 0, "");
+        FieldPosition targetFieldPosition = new FieldPosition(24, 48, 0, "");
 
-        positionController.setTargetLocation(targetFieldPosition);
 
-        telemetry.addData("targetPos", targetFieldPosition);
-        telemetry.addData("fieldPos", fieldPosition);
+        //clamps distance
+        if(Math.sqrt(Math.pow(targetFieldPosition.y-fieldPosition.y,2)+ Math.pow(targetFieldPosition.x-fieldPosition.x,2)) > 5) {
 
-        PolarCoord strafe;
+            if (fieldPosition != fieldPosition.UNKNOWN) {
+                lastFieldPosition = fieldPosition;
+            }
 
-        if (FieldPosition.UNKNOWN != fieldPosition) {
+            positionController.setTargetLocation(targetFieldPosition);
+
+            telemetry.addData("targetPos", targetFieldPosition);
+            telemetry.addData("fieldPos", fieldPosition);
+            telemetry.addData("lastfieldPos", lastFieldPosition);
+
+            PolarCoord strafe;
+
+//        if (FieldPosition.UNKNOWN != fieldPosition) {
+//            strafe = positionController.loop();
+//        } else {
+//            strafe = ;
+//        }
+
             strafe = positionController.loop();
-        } else {
-            strafe = PolarUtil.ORIGIN;
-        }
 
-        telemetry.addData("strafe(bot)", strafe);
-        DrivePower drivepower = driverController.update(strafe, 0).scale(0.5);
-        telemetry.addData("drivepower", drivepower);
-        move(drivepower);
+            if (!strafe.equals(PolarUtil.ORIGIN)) {
+                telemetry.addData("strafe(bot)", strafe);
+                DrivePower drivepower = driverController.update(strafe, 0).scale(0.5);
+                telemetry.addData("drivepower", drivepower);
+
+                telemetry.addData("numValues", positionController.getNumValues());
+                telemetry.addData("runningAverage", positionController.getRunningAverage());
+
+                move(drivepower);
+            }
+
+        }
         telemetry.update();
     }
 

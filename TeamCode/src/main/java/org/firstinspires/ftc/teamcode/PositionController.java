@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+
 import java.util.function.Supplier;
 
 import static org.firstinspires.ftc.teamcode.PolarUtil.fromTo;
@@ -9,9 +12,27 @@ import static org.firstinspires.ftc.teamcode.PolarUtil.subtractRadians;
 public class PositionController {
     private final Supplier<FieldPosition> fieldPositionSupplier;
     private FieldPosition targetFieldPosition;
+    private PolarCoord runningAverage;
+    private int numValues;
+
+
+    public PolarCoord getRunningAverage() {
+        return runningAverage;
+    }
+
+    public int getNumValues() {
+        return numValues;
+    }
+
+
+
 
     public PositionController(Supplier<FieldPosition> fieldPositionSupplier) {
         this.fieldPositionSupplier = fieldPositionSupplier;
+
+        //resets runningAverage
+        numValues = 0;
+        runningAverage = PolarUtil.ORIGIN;
     }
 
     public void setTargetLocation(FieldPosition targetFieldPosition) {
@@ -21,7 +42,7 @@ public class PositionController {
     public PolarCoord getTargetFieldRelative() {
         FieldPosition currentFieldPosition = fieldPositionSupplier.get();
         if (currentFieldPosition == null || targetFieldPosition == null) {
-            return PolarUtil.ORIGIN;
+            return runningAverage;
         }
 
         PolarCoord currentPolar = fromXY(currentFieldPosition.x, currentFieldPosition.y);
@@ -32,11 +53,30 @@ public class PositionController {
     public PolarCoord loop() {
         FieldPosition currentFieldPosition = fieldPositionSupplier.get();
 
+        if (currentFieldPosition == FieldPosition.UNKNOWN) {
+            return runningAverage;
+        }
+
         PolarCoord targetFieldRelative = getTargetFieldRelative();
         double power = Math.min(targetFieldRelative.radius/12, 1);
 
         PolarCoord strafe = new PolarCoord(power, subtractRadians(targetFieldRelative.theta, currentFieldPosition.h));
 
-        return strafe;
+        if (runningAverage == null) {
+            runningAverage = new PolarCoord(strafe.radius, strafe.theta);
+        }
+
+
+        numValues++;
+        //double avgRadius = (runningAverage.radius * (numValues - 1) / (numValues)) + (strafe.radius * (1 / (numValues)));
+        //double avgTheta = (runningAverage.theta * (numValues - 1) / (numValues)) + (strafe.theta * (1 / (numValues)));
+
+        //double avgRadius = (runningAverage.radius * (numValues-1) + strafe.radius) / numValues; //generates an average strafe value based on all of its past information
+        double avgTheta = (runningAverage.theta * (numValues-1) + strafe.theta) / numValues;
+
+
+        runningAverage = new PolarCoord(strafe.radius, avgTheta);
+
+        return runningAverage;
     }
 }

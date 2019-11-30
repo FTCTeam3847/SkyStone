@@ -107,6 +107,10 @@ public class PositionControllerOpMode extends BaseOp {
             }
 
         }
+        else
+        {
+            stop(); //is supposed to make it stop when its closer than 5 inches, DOESN'T WORK!
+        }
         telemetry.update();
     }
 

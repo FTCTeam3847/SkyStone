@@ -62,7 +62,7 @@ public class PositionController {
 
         PolarCoord strafe = new PolarCoord(power, subtractRadians(targetFieldRelative.theta, currentFieldPosition.h));
 
-        if (runningAverage == null) {
+        if (runningAverage == PolarUtil.ORIGIN) {
             runningAverage = new PolarCoord(strafe.radius, strafe.theta);
         }
 

@@ -36,7 +36,7 @@ import static java.lang.Math.signum;
  *    heading.calibrateTo(-45.0f);
  *  }
  *
- *  void loop() {
+ *  void getCurrent() {
  *    double h;
  *    // updated heading after reading from the supplier (may take time)
  *    h = heading.update();
@@ -148,7 +148,7 @@ public class AngularPController {
      * Reads from the absolute angle provider, and returns the
      * calibration-adjusted current angle. This method must be
      * called in order for the controller to update its state.
-     * e.g. call from within a main loop().
+     * e.g. call from within a main getCurrent().
      *
      * @return a value in degrees within [-180.0..180.0].
      * @see AngularPController#getCurrent() ()

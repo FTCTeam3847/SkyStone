@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.Hardware.AngularPController;
 @Autonomous
 public class PositionControllerOpMode extends BaseOp {
 
-    SkyStoneLocalizer skyStoneLocalizer = new SkyStoneLocalizer();
+    SkyStoneLocalizer skyStoneLocalizer;
     VuforiaLocalizer vuforiaLocalizer;
     PositionController positionController;
     public BNO055IMU imu;
@@ -44,20 +44,20 @@ public class PositionControllerOpMode extends BaseOp {
         parameters.useExtendedTracking = false;
 
         this.vuforiaLocalizer = ClassFactory.getInstance().createVuforia(parameters);
-        skyStoneLocalizer.init(vuforiaLocalizer);
-        positionController = new PositionController(() -> skyStoneLocalizer.loop());
+        skyStoneLocalizer = new SkyStoneLocalizer(vuforiaLocalizer);
+        positionController = new PositionController(() -> skyStoneLocalizer.getCurrent());
 
     }
 
     @Override
     public void init_loop() {
         super.init_loop();
-        FieldPosition fieldPosition = skyStoneLocalizer.loop();
+        FieldPosition fieldPosition = skyStoneLocalizer.getCurrent();
         FieldPosition targetFieldPosition = new FieldPosition(24, 24, 0, "");
 
         positionController.setTargetLocation(targetFieldPosition);
 
-        //PolarCoord strafe = positionController.loop();
+        //PolarCoord strafe = positionController.getCurrent();
         telemetry.addData("targetPos", targetFieldPosition);
         telemetry.addData("fieldPos", fieldPosition);
         //telemetry.addData("strafe(bot)", strafe);
@@ -68,7 +68,7 @@ public class PositionControllerOpMode extends BaseOp {
     @Override
     public void loop() {
         super.loop();
-        FieldPosition fieldPosition = skyStoneLocalizer.loop();
+        FieldPosition fieldPosition = skyStoneLocalizer.getCurrent();
         FieldPosition targetFieldPosition = new FieldPosition(24, 48, 0, "");
 
 
@@ -88,7 +88,7 @@ public class PositionControllerOpMode extends BaseOp {
             PolarCoord strafe;
 
 //        if (FieldPosition.UNKNOWN != fieldPosition) {
-//            strafe = positionController.loop();
+//            strafe = positionController.getCurrent();
 //        } else {
 //            strafe = ;
 //        }

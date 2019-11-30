@@ -21,7 +21,7 @@ public class DerpyOp extends BaseOp {
     public MecanumDriveController driverController;
     AngularPController headingController;
 
-    SkyStoneLocalizer skyStoneLocalizer = new SkyStoneLocalizer();
+    SkyStoneLocalizer skyStoneLocalizer;
     VuforiaLocalizer vuforiaLocalizer;
 
     @Override
@@ -52,8 +52,8 @@ public class DerpyOp extends BaseOp {
 
         parameters.useExtendedTracking = false; //Disables extended tracking on vuforia
 
-        this.vuforiaLocalizer = ClassFactory.getInstance().createVuforia(parameters);
-        skyStoneLocalizer.init(vuforiaLocalizer);
+        vuforiaLocalizer = ClassFactory.getInstance().createVuforia(parameters);
+        skyStoneLocalizer = new SkyStoneLocalizer(vuforiaLocalizer);
 
 
     }
@@ -78,7 +78,7 @@ public class DerpyOp extends BaseOp {
     public void loop() {
         super.loop();
         long currentTime = System.currentTimeMillis();
-        boolean slowMode = toggleButtonB.get();
+        boolean slowMode = toggleButtonB.getCurrent();
 
         DrivePower drivePower;
 
@@ -102,7 +102,7 @@ public class DerpyOp extends BaseOp {
 
         move(drivePower);
 
-        FieldPosition fieldPosition = skyStoneLocalizer.loop();
+        FieldPosition fieldPosition = skyStoneLocalizer.getCurrent();
         telemetry.addData("fieldPosition", fieldPosition);
         telemetry.addData("h correct", -headingController.getControlValue());
         telemetry.addData("Slow Mode", slowMode);

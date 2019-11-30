@@ -20,10 +20,6 @@ public class MecanumDriveController {
     private static double ROOT_2_OVER_2 = sin(QTR_PI);
     private double lastTurn;
 
-    public double getCurrentAngle() {
-        return headingController.getCurrent();
-    }
-
     private static DrivePower turnPower(double turn) {
         if (Double.isFinite(turn)) {
             return new DrivePower(-turn, -turn, turn, turn);
@@ -64,7 +60,7 @@ public class MecanumDriveController {
             DrivePower strafePower = strafePower(strafe);
             DrivePower turnPower;
             if (turn == 0.0d) {
-                // the user isn't asking to turn, so get a
+                // the user isn't asking to turn, so getCurrent a
                 // correction value to hold our desired heading
                 turnPower = turnPower(-headingController.getControlValue());
             } else {

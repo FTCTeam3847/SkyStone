@@ -11,6 +11,11 @@ class TowerGrabberTest {
         public void setPosition (double pos) {
             this.pos = pos;
         }
+
+        public double getPosition()
+        {
+            return pos;
+        }
     }
 
     @Test
@@ -18,7 +23,7 @@ class TowerGrabberTest {
         FakeServo left = new FakeServo();
         FakeServo right = new FakeServo();
 
-        TowerGrabber tg = new TowerGrabber(left::setPosition, right::setPosition);
+        TowerGrabber tg = new TowerGrabber(left::setPosition, right::setPosition, left::getPosition, right::getPosition);
 
         tg.setPosition(0.5);
 

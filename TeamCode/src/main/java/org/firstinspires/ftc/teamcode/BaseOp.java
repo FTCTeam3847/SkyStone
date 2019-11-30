@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Hardware.AcceleratingDcMotor;
 import org.firstinspires.ftc.teamcode.Hardware.ClampingDcMotor;
@@ -27,27 +28,75 @@ public class BaseOp extends OpMode {
 
     public CRServo liftingServo;
 
+    //Tower lifter
+    public DcMotor leftGrabberLifter;
+    public DcMotor rightGrabberLifter;
+
+    public Servo leftGrabber;
+    public Servo rightGrabber;
+
+    //Individual block lifter
+    public Servo blockGrabber;
+
+    public CRServo slider;
+    public CRServo leftSliderLifter;
+    public CRServo rightSliderLifter;
+
     @Override
     public void init() {
+        //Drivetrain:
+
+        //Primary Port 3
         leftFrontMotor = hardwareMap.get(DcMotor.class, "motor-left-front");
-        leftFrontMotor.setDirection(DcMotor.Direction.REVERSE);
         leftFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        //Primary Port 1
         leftBackMotor = hardwareMap.get(DcMotor.class, "motor-left-back");
         leftBackMotor.setDirection(DcMotor.Direction.REVERSE);
         leftBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        //Primary Port 2
         rightFrontMotor = hardwareMap.get(DcMotor.class, "motor-right-front");
+        rightFrontMotor.setDirection(DcMotor.Direction.REVERSE);
         rightFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        //Primary Port 0
         rightBackMotor = hardwareMap.get(DcMotor.class, "motor-right-back");
         rightBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        liftingServo = hardwareMap.crservo.get("lservo");
+        //Tower Grabber + Lifter:
+
+        //Secondary Port 0
+        leftGrabberLifter = hardwareMap.get(DcMotor.class, "left-grabber-lifter");
+        leftGrabberLifter.setDirection(DcMotor.Direction.REVERSE);
+
+        //Secondary Port 1
+        rightGrabberLifter = hardwareMap.get(DcMotor.class, "right-grabber-lifter");
+
+        //Primary Port 0
+        leftGrabber = hardwareMap.get(Servo.class, "left-grabber");
+
+        //Primary Port 1
+        rightGrabber = hardwareMap.get(Servo.class, "right-grabber");
+
+        //Block Grabber + Placer:
+
+        //Primary Port 2
+        blockGrabber = hardwareMap.get(Servo.class, "block-grabber");
+
+        //Primary Port 3
+        slider = hardwareMap.get(CRServo.class, "slider");
+
+        //Primary Port 4
+        leftSliderLifter = hardwareMap.get(CRServo.class, "left-slider-lifter");
+
+        //Primary Port 5
+        rightSliderLifter = hardwareMap.get(CRServo.class, "right-slider-lifter");
+
         //working on accelerating DcMotor, but it ain't working yet. The motor stays at a constant rate instead of
         //accelerating.
 //        leftFrontMotor = new AcceleratingDcMotor(new ClampingDcMotor(hardwareMap.dcMotor.get("motor-left-front")));
@@ -76,14 +125,38 @@ public class BaseOp extends OpMode {
         move4(drivePower.leftFor, drivePower.leftBack, drivePower.rightFor, drivePower.rightBack);
     }
 
+    public void moveGrabber (double power) {
+        leftGrabberLifter.setPower(power);
+        rightGrabberLifter.setPower(power);
+    }
 
-    public void lift() {
-        if (gamepad1.x){
-            liftingServo.setPower(0.5);
-        } else if (gamepad1.y) {
-            liftingServo.setPower(-0.5);
-        } else {
-            liftingServo.setPower(0.0);
-        }
+    public void grabTower () {
+        //Need proper angles/values for grabTower to work - these are filler values
+        leftGrabber.setPosition(0.5);
+        rightGrabber.setPosition(0.5);
+
+    }
+
+    public void releaseTower () {
+        //Need proper angles/values for releaseTower to work - these are filler values
+        leftGrabber.setPosition(0);
+        rightGrabber.setPosition(1);
+    }
+
+    public void grabBlock () {
+        blockGrabber.setPosition(1); //filler value - need real value
+    }
+
+    public void releaseBlock () {
+        blockGrabber.setPosition(0); //filler value - need real value
+    }
+
+    public void slide (double speed) {
+        slider.setPower(speed);
+    }
+
+    public void moveSlider (double speed) {
+        leftSliderLifter.setPower(-speed);
+        rightSliderLifter.setPower(speed);
     }
 }

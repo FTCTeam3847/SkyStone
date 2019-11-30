@@ -59,15 +59,15 @@ class ToggleButtonTest {
 
     /**
      * In this test, we simulate an iterative OpMode. We control the
-     * gamepad as though we are the user. We invoke the OpMode's getCurrent()
-     * many times just as a real OpMode's getCurrent() is called iteratively.
+     * gamepad as though we are the user. We invoke the OpMode's getLast()
+     * many times just as a real OpMode's getLast() is called iteratively.
      */
     @Test
     void get() {
         final FakeDerpyOp derpyOp = new FakeDerpyOp();
 
         // user hasn't pushed the A button yet - testMode should
-        // remain false through multiple getCurrent() iterations.
+        // remain false through multiple getLast() iterations.
         derpyOp.loop();
         assertFalse(derpyOp.testMode);
         derpyOp.loop();

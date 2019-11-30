@@ -82,20 +82,27 @@ public class DerpyOp extends BaseOp {
 
         DrivePower drivePower;
 
-        if (gamepad1.dpad_up)
-            drivePower = driverController.update(0, 1, 0);
-        else if (gamepad1.dpad_down)
-            drivePower = driverController.update(0, -1, 0);
-        else if (gamepad1.dpad_left)
-            drivePower = driverController.update(-1, 0, 0);
-        else if (gamepad1.dpad_right)
-            drivePower = driverController.update(1, 0, 0);
-        else
-            drivePower = driverController.update(
+        if (gamepad1.dpad_up) {
+            driverController.setTarget(0, 1, 0);
+        }
+        else if (gamepad1.dpad_down) {
+            driverController.setTarget(0, -1, 0);
+        }
+        else if (gamepad1.dpad_left) {
+            driverController.setTarget(-1, 0, 0);
+        }
+        else if (gamepad1.dpad_right) {
+            driverController.setTarget(1, 0, 0);
+        }
+        else {
+            driverController.setTarget(
                     sensitivity(gamepad1.right_stick_x, SENSITIVITY),
                     sensitivity(-gamepad1.right_stick_y, SENSITIVITY),
                     sensitivity(gamepad1.left_stick_x, SENSITIVITY)
             );
+        }
+        drivePower = driverController.getControl();
+
 
 
         drivePower = slowMode ? drivePower.scale(0.5) : drivePower;
@@ -104,7 +111,7 @@ public class DerpyOp extends BaseOp {
 
         FieldPosition fieldPosition = skyStoneLocalizer.getCurrent();
         telemetry.addData("fieldPosition", fieldPosition);
-        telemetry.addData("h correct", -headingController.getControlValue());
+        telemetry.addData("h correct", -headingController.getControl());
         telemetry.addData("Slow Mode", slowMode);
         telemetry.addData("loopMS:", currentTime - lastTime);
         telemetry.update();

@@ -9,7 +9,7 @@ import static org.firstinspires.ftc.teamcode.PolarUtil.addRadians;
 import static org.firstinspires.ftc.teamcode.PolarUtil.fromXY;
 import static org.firstinspires.ftc.teamcode.PolarUtil.subtractRadians;
 
-public class MecanumDriveController {
+public class MecanumDriveController implements Controller<Void, DriveCommand, DrivePower>{
     private final AngularPController headingController;
 
     public MecanumDriveController(AngularPController headingController) {
@@ -19,6 +19,7 @@ public class MecanumDriveController {
     private static double QTR_PI = PI / 4;
     private static double ROOT_2_OVER_2 = sin(QTR_PI);
     private double lastTurn;
+    private DriveCommand target;
 
     private static DrivePower turnPower(double turn) {
         if (Double.isFinite(turn)) {
@@ -35,41 +36,52 @@ public class MecanumDriveController {
         return new DrivePower(rflb, rblf, rblf, rflb);
     }
 
-    public DrivePower update(double strafe_x, double strafe_y, double turn) {
+    public void setTarget(double strafe_x, double strafe_y, double turn) {
         PolarCoord xypolar = fromXY(strafe_x, strafe_y);
         PolarCoord strafe = new PolarCoord(xypolar.radius, subtractRadians(xypolar.theta, 2*QTR_PI));
-        return update(strafe, turn);
+        target = new DriveCommand(strafe, turn);
+        getControl();
     }
 
-    public DrivePower update(PolarCoord strafe, double turn) {
-        double currentAngle = headingController.update();
+    public DrivePower getControl() {
+        double currentAngle = headingController.getCurrent();
 
         DrivePower drivePower;
 
-        if (strafe.radius == 0.0d && turn == 0.0d) {
+        if (target.strafe.radius == 0.0d && target.turn == 0.0d) {
             // we're stopped
-            headingController.setDesired(currentAngle);
+            headingController.setTarget(currentAngle);
             drivePower = DrivePower.ZERO;
         } else {
             // we're moving
-            if (turn == 0.0d && lastTurn != 0.0d) {
+            if (target.turn == 0.0d && lastTurn != 0.0d) {
                 // the user just stopped turning, so hold this angle
-                headingController.setDesired(currentAngle);
+                headingController.setTarget(currentAngle);
             }
 
-            DrivePower strafePower = strafePower(strafe);
+            DrivePower strafePower = strafePower(target.strafe);
             DrivePower turnPower;
-            if (turn == 0.0d) {
-                // the user isn't asking to turn, so getCurrent a
+            if (target.turn == 0.0d) {
+                // the user isn't asking to turn, so getLast a
                 // correction value to hold our desired heading
-                turnPower = turnPower(-headingController.getControlValue());
+                turnPower = turnPower(-headingController.getControl());
             } else {
-                turnPower = turnPower(turn);
+                turnPower = turnPower(target.turn);
             }
 
             drivePower = DrivePower.combine(strafePower, turnPower);
         }
-        lastTurn = turn;
+        lastTurn = target.turn;
         return drivePower;
+    }
+
+    @Override
+    public void setTarget(DriveCommand target) {
+        this.target = target;
+    }
+
+    @Override
+    public Void getCurrent() {
+        return null;
     }
 }

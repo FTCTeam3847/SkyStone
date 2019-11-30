@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
+import org.firstinspires.ftc.teamcode.Controller;
+
 import java.util.function.Supplier;
 
 import static java.lang.Double.NaN;
@@ -36,25 +38,25 @@ import static java.lang.Math.signum;
  *    heading.calibrateTo(-45.0f);
  *  }
  *
- *  void getCurrent() {
+ *  void getLast() {
  *    double h;
  *    // updated heading after reading from the supplier (may take time)
- *    h = heading.update();
- *
- *    // last known heading, does not read from the supplier (fast)
  *    h = heading.getCurrent();
  *
+ *    // last known heading, does not read from the supplier (fast)
+ *    h = heading.getLast();
+ *
  *    // we want to turn until facing due West
- *    heading.setDesired(90.0);
+ *    heading.setTarget(90.0);
  *
  *    // turning rate of either 0.0f or NaN means stop turning
- *    robot.setTurnRate(heading.getControlValue());
+ *    robot.setTurnRate(heading.setTarget());
  *
  *    ...
  *
- *    // We don't have a desired heading right now so let
- *    // getControlValue() be NaN.
- *    heading.setDesired(Math.NaN);
+ *    // We don't have a target heading right now so let
+ *    // setTarget() be NaN.
+ *    heading.setTarget(Math.NaN);
  *  }
  * </pre>
  * <p>
@@ -62,11 +64,11 @@ import static java.lang.Math.signum;
  * the Java standard library. This makes the class easily testable, and
  * and easily embeddable into a simulation environment.
  */
-public class AngularPController {
+public class AngularPController implements Controller<Double, Double, Double> {
     private double zero;
     private double lastAbsolute;
 
-    private double desired = NaN;
+    private double target = NaN;
 
     private final Supplier<Double> absolute;
     private final double tolerance;
@@ -122,51 +124,51 @@ public class AngularPController {
     }
 
     /**
-     * Sets the desired angle. When set to an angle, calls to
-     * [AngularPController#getControlValue()] will provide a
-     * value. When set to NaN, [AngularPController#getControlValue()]
+     * Sets the target angle. When set to an angle, calls to
+     * [AngularPController#setTarget()] will provide a
+     * value. When set to NaN, [AngularPController#setTarget()]
      * will also provide NaN.
      *
-     * @param desired angle in degrees within [-180.0..180.0] or NaN.
+     * @param target angle in degrees within [-180.0..180.0] or NaN.
      */
-    public void setDesired(double desired) {
-        checkAngleArgumentOrNaN(desired);
-        this.desired = desired;
+    public void setTarget(Double target) {
+        checkAngleArgumentOrNaN(target);
+        this.target = target;
     }
 
     /**
-     * Retrieves the controller's desired angle, or NaN if
-     * no desired angle is requested.
+     * Retrieves the controller's target angle, or NaN if
+     * no target angle is requested.
      *
      * @return angle in degrees within [-180.0..180.0] or NaN
      */
-    public double getDesired() {
-        return desired;
+    public double getTarget() {
+        return target;
     }
 
     /**
      * Reads from the absolute angle provider, and returns the
      * calibration-adjusted current angle. This method must be
-     * called in order for the controller to update its state.
-     * e.g. call from within a main getCurrent().
+     * called in order for the controller to getCurrent its state.
+     * e.g. call from within a main getLast().
      *
      * @return a value in degrees within [-180.0..180.0].
-     * @see AngularPController#getCurrent() ()
+     * @see AngularPController#getLast() ()
      * @see AngularPController#calibrateTo(double)
      */
-    public double update() {
+    public Double getCurrent() {
         readAbsolute();
-        return getCurrent();
+        return getLast();
     }
 
     /**
      * The controller's main output, value proportional to the error term,
      * multiplied by the controller's gain and then clamped, or NaN if the
-     * desired angle is also NaN.
+     * target angle is also NaN.
      *
      * @return a value within [-1.0..-clamp, 0.0, clamp..1.0, NaN]
      */
-    public double getControlValue() {
+    public Double getControl() {
         return calcControlValue(getProportion(), gain, clamp, 1.0f);
     }
 
@@ -176,24 +178,24 @@ public class AngularPController {
      *
      * @return last known angle in degrees between
      * [-180.0..180.0], as adjusted by calibration.
-     * @see AngularPController#update()
+     * @see AngularPController#getCurrent()
      * @see AngularPController#calibrateTo(double)
      */
-    public double getCurrent() {
+    public double getLast() {
         return subtractAngle(getAbsolute(), getZero());
     }
 
     /**
      * Returns the controller's error term - the difference between the
-     * desired and current angles, or 0.0f if the difference is less than
+     * target and current angles, or 0.0f if the difference is less than
      * the controller's error tolerance. Does not read from the absolute
      * angle provider.
      *
      * @return A value in degrees [-180.0..-tolerance, 0.0, tolerance..180.0]
-     * @see AngularPController#update()
+     * @see AngularPController#getCurrent()
      */
     public double getError() {
-        return calcAngularError(getDesired(), getCurrent(), tolerance);
+        return calcAngularError(getTarget(), getLast(), tolerance);
     }
 
     /**

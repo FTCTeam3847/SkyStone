@@ -55,9 +55,9 @@ public class PositionControllerOpMode extends BaseOp {
         FieldPosition fieldPosition = skyStoneLocalizer.getCurrent();
         FieldPosition targetFieldPosition = new FieldPosition(24, 24, 0, "");
 
-        positionController.setTargetLocation(targetFieldPosition);
+        positionController.setTarget(targetFieldPosition);
 
-        //PolarCoord strafe = positionController.getCurrent();
+        //PolarCoord strafe = positionController.getLast();
         telemetry.addData("targetPos", targetFieldPosition);
         telemetry.addData("fieldPos", fieldPosition);
         //telemetry.addData("strafe(bot)", strafe);
@@ -79,7 +79,7 @@ public class PositionControllerOpMode extends BaseOp {
                 lastFieldPosition = fieldPosition;
             }
 
-            positionController.setTargetLocation(targetFieldPosition);
+            positionController.setTarget(targetFieldPosition);
 
             telemetry.addData("targetPos", targetFieldPosition);
             telemetry.addData("fieldPos", fieldPosition);
@@ -88,16 +88,18 @@ public class PositionControllerOpMode extends BaseOp {
             PolarCoord strafe;
 
 //        if (FieldPosition.UNKNOWN != fieldPosition) {
-//            strafe = positionController.getCurrent();
+//            strafe = positionController.getLast();
 //        } else {
 //            strafe = ;
 //        }
 
-            strafe = positionController.loop();
+            strafe = positionController.getControl();
 
             if (!strafe.equals(PolarUtil.ORIGIN)) {
                 telemetry.addData("strafe(bot)", strafe);
-                DrivePower drivepower = driverController.update(strafe, 0).scale(0.5);
+
+                driverController.setTarget(new DriveCommand(strafe, 0));
+                DrivePower drivepower = driverController.getControl().scale(0.5);
                 telemetry.addData("drivepower", drivepower);
 
                 telemetry.addData("numValues", positionController.getNumValues());

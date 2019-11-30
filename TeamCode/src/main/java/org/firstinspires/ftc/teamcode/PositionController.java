@@ -6,7 +6,7 @@ import static org.firstinspires.ftc.teamcode.PolarUtil.fromTo;
 import static org.firstinspires.ftc.teamcode.PolarUtil.fromXY;
 import static org.firstinspires.ftc.teamcode.PolarUtil.subtractRadians;
 
-public class PositionController {
+public class PositionController implements Controller<PolarCoord, FieldPosition, PolarCoord>{
     private final Supplier<FieldPosition> fieldPositionSupplier;
     private FieldPosition targetFieldPosition;
     private PolarCoord runningAverage;
@@ -32,11 +32,11 @@ public class PositionController {
         runningAverage = PolarUtil.ORIGIN;
     }
 
-    public void setTargetLocation(FieldPosition targetFieldPosition) {
+    public void setTarget(FieldPosition targetFieldPosition) {
         this.targetFieldPosition = targetFieldPosition;
     }
 
-    public PolarCoord getTargetFieldRelative() {
+    public PolarCoord getCurrent() {
         FieldPosition currentFieldPosition = fieldPositionSupplier.get();
         if (currentFieldPosition == null || targetFieldPosition == null) {
             return runningAverage;
@@ -47,14 +47,14 @@ public class PositionController {
         return fromTo(currentPolar, targetPolar);
     }
 
-    public PolarCoord loop() {
+    public PolarCoord getControl() {
         FieldPosition currentFieldPosition = fieldPositionSupplier.get();
 
         if (currentFieldPosition == FieldPosition.UNKNOWN) {
             return runningAverage;
         }
 
-        PolarCoord targetFieldRelative = getTargetFieldRelative();
+        PolarCoord targetFieldRelative = getCurrent();
         double power = Math.min(targetFieldRelative.radius/12, 1);
 
         PolarCoord strafe = new PolarCoord(power, subtractRadians(targetFieldRelative.theta, currentFieldPosition.h));

@@ -11,7 +11,7 @@ class PositionControllerTest {
         PositionController pos = new PositionController(loc);
         FieldPosition targetLocation = new FieldPosition(0,0,0, "");
         pos.setTargetLocation(targetLocation);
-        PolarCoord coord = pos.loop();
+        PolarCoord coord = pos.getControl();
         System.out.println(coord);
 
     }

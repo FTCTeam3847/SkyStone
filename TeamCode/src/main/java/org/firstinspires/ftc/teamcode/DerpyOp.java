@@ -3,19 +3,19 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.Hardware.AngularPController;
 import org.firstinspires.ftc.teamcode.gamepad.ToggleButton;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 import static java.lang.Math.pow;
 import static java.lang.Math.signum;
 
 @TeleOp(name = "DerpyOp", group = "1")
 public class DerpyOp extends BaseOp {
-    ToggleButton toggleButtonA = new ToggleButton(() -> gamepad1.a);
-    ToggleButton toggleButtonB = new ToggleButton(() -> gamepad1.b);
+    ToggleButton slowMode = new ToggleButton(() -> gamepad1.y);
     public long lastTime = System.currentTimeMillis();
     public BNO055IMU imu;
     public MecanumDriveController driverController;
@@ -23,6 +23,8 @@ public class DerpyOp extends BaseOp {
 
     SkyStoneLocalizer skyStoneLocalizer;
     VuforiaLocalizer vuforiaLocalizer;
+    public static final double TOWER_GRABBER_SPEED = 0.05;
+    public static final double BLOCK_GRABBER_SPEED = 0.05;
 
     @Override
     public void init() {
@@ -52,8 +54,8 @@ public class DerpyOp extends BaseOp {
 
         parameters.useExtendedTracking = false; //Disables extended tracking on vuforia
 
-        vuforiaLocalizer = ClassFactory.getInstance().createVuforia(parameters);
-        skyStoneLocalizer = new SkyStoneLocalizer(vuforiaLocalizer);
+//        vuforiaLocalizer = ClassFactory.getInstance().createVuforia(parameters);
+//        skyStoneLocalizer = new SkyStoneLocalizer(vuforiaLocalizer);
 
 
     }
@@ -78,39 +80,85 @@ public class DerpyOp extends BaseOp {
     public void loop() {
         super.loop();
         long currentTime = System.currentTimeMillis();
-        boolean slowMode = toggleButtonB.getCurrent();
+        boolean slowMode = this.slowMode.getCurrent();
 
         DrivePower drivePower;
 
-        if (gamepad1.dpad_up) {
-            driverController.setTarget(0, 1, 0);
-        }
-        else if (gamepad1.dpad_down) {
-            driverController.setTarget(0, -1, 0);
-        }
-        else if (gamepad1.dpad_left) {
-            driverController.setTarget(-1, 0, 0);
-        }
-        else if (gamepad1.dpad_right) {
-            driverController.setTarget(1, 0, 0);
-        }
-        else {
-            driverController.setTarget(
-                    sensitivity(gamepad1.right_stick_x, SENSITIVITY),
-                    sensitivity(-gamepad1.right_stick_y, SENSITIVITY),
-                    sensitivity(gamepad1.left_stick_x, SENSITIVITY)
-            );
-        }
+        driverController.setTarget(
+                sensitivity(gamepad1.right_stick_x, SENSITIVITY),
+                sensitivity(-gamepad1.right_stick_y, SENSITIVITY),
+                sensitivity(gamepad1.left_stick_x, SENSITIVITY)
+        );
         drivePower = driverController.getControl();
-
-
-
         drivePower = slowMode ? drivePower.scale(0.5) : drivePower;
-
         move(drivePower);
 
-        FieldPosition fieldPosition = skyStoneLocalizer.getCurrent();
-        telemetry.addData("fieldPosition", fieldPosition);
+        // DRAFT tower grabber
+        if(gamepad1.a) {
+            // OPEN
+            leftGrabber.setPosition(min(leftGrabber.getPosition() + TOWER_GRABBER_SPEED, 0.58));
+            rightGrabber.setPosition(max(rightGrabber.getPosition() - TOWER_GRABBER_SPEED, 0.16));
+        }else if(gamepad1.b) {
+            // CLOSE
+            leftGrabber.setPosition(max(leftGrabber.getPosition() - TOWER_GRABBER_SPEED, 0.13));
+            rightGrabber.setPosition(min(rightGrabber.getPosition() + TOWER_GRABBER_SPEED, 0.66));
+        }
+
+        // DRAFT tower lifter
+        if (gamepad1.y) {
+            // UP
+            leftGrabberLifter.setPower(-0.25);
+            rightGrabberLifter.setPower(-0.25);
+        } else if (gamepad1.x) {
+            // DOWN
+            leftGrabberLifter.setPower(0.25);
+            rightGrabberLifter.setPower(0.25);
+        } else {
+            // DOWN
+            leftGrabberLifter.setPower(0);
+            rightGrabberLifter.setPower(0);
+        }
+
+        // DRAFT slider lifter
+        //   - rightSliderLifter is setup as CS and direction is correct
+        //   - leftSliderLifter servo IS NOT set for CR, can't dial it in yet
+        if (gamepad1.right_trigger != 0.0) {
+            // UP
+            // leftSliderLifter.setPower(0.25);
+            rightSliderLifter.setPower(-0.25);
+        } else if (gamepad1.left_trigger != 0.0) {
+            // DOWN
+            // leftSliderLifter.setPower(-0.25);
+            rightSliderLifter.setPower(0.25);
+        } else {
+            leftSliderLifter.setPower(0.0);
+            rightSliderLifter.setPower(0.0);
+        }
+
+
+        // DRAFT block grabber
+        if (gamepad1.right_bumper) {
+            //CLOSE 0.35
+            blockGrabber.setPosition(max(blockGrabber.getPosition() - BLOCK_GRABBER_SPEED, 0.35));
+
+        } else if (gamepad1.left_bumper) {
+            // OPEN 0.82
+            blockGrabber.setPosition(min(blockGrabber.getPosition() + BLOCK_GRABBER_SPEED, 0.82));
+        }
+
+        // DRAFT block slider
+        if (gamepad1.dpad_up) {
+            // FORWARD
+            slider.setPower(-1.0);
+        } else if (gamepad1.dpad_down) {
+            // BACKWARD
+            slider.setPower(1.0);
+        } else {
+            slider.setPower(0.0);
+        }
+
+//        FieldPosition fieldPosition = skyStoneLocalizer.getCurrent();
+//        telemetry.addData("fieldPosition", fieldPosition);
         telemetry.addData("h correct", -headingController.getControl());
         telemetry.addData("Slow Mode", slowMode);
         telemetry.addData("loopMS:", currentTime - lastTime);
@@ -121,6 +169,6 @@ public class DerpyOp extends BaseOp {
     @Override
     public void stop() {
         super.stop();
-        skyStoneLocalizer.stop();
+//        skyStoneLocalizer.stop();
     }
 }

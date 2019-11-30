@@ -84,10 +84,28 @@ public class BaseOp extends OpMode {
 
         //Primary Port 5
         rightSliderLifter = hardwareMap.get(CRServo.class, "right-slider-lifter");
+
+
+        // DRAFT lifter init
+        leftGrabber.setPosition(0.58);
+        rightGrabber.setPosition(0.16);
+
+        // DRAFT grabber init
+        blockGrabber.setPosition(0.82);
+    }
+
+    public void init_loop() {
+        telemetry.addData("left grabber", "%.2f", leftGrabber.getPosition());
+        telemetry.addData("right grabber", "%.2f", rightGrabber.getPosition());
+        telemetry.update();
+
     }
 
     @Override
     public void loop() {
+        telemetry.addData("left grabber", "%.2f", leftGrabber.getPosition());
+        telemetry.addData("right grabber", "%.2f", rightGrabber.getPosition());
+        telemetry.addData("block grabber", "%.2f", blockGrabber.getPosition());
     }
 
     public void move4(double leftFront, double leftBack, double rightFront, double rightBack) {

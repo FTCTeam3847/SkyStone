@@ -134,7 +134,6 @@ public class BaseOp extends OpMode {
         //Need proper angles/values for grabTower to work - these are filler values
         leftGrabber.setPosition(0.5);
         rightGrabber.setPosition(0.5);
-
     }
 
     public void releaseTower () {

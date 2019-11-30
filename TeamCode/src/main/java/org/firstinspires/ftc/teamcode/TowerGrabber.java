@@ -17,7 +17,10 @@ public class TowerGrabber {
     double constant = 1;
     double position;
 
-    public TowerGrabber(Consumer<Double> servoLeft, Consumer<Double> servoRight, Supplier<Double> servoLeftSupplier, Supplier<Double> servoRightSupplier) {
+    public TowerGrabber(Consumer<Double> servoLeft,
+                        Consumer<Double> servoRight,
+                        Supplier<Double> servoLeftSupplier,
+                        Supplier<Double> servoRightSupplier) {
         this.servoLeft = servoLeft;
         this.servoRight = servoRight;
         this.servoLeftSupplier = servoLeftSupplier;
@@ -26,8 +29,8 @@ public class TowerGrabber {
 
     //accept() takes a variable and returns a void
     public void setPosition (double pos) {
-        servoLeft.accept(pos * constant);
-        servoRight.accept(pos * -constant);
+        servoLeft.accept(pos * constant); //clockwise
+        servoRight.accept(pos * -constant); //counterclockwise
         position = pos;
     }
 
@@ -41,4 +44,5 @@ public class TowerGrabber {
                 servoRightSupplier.get()
         );
     }
+
 }

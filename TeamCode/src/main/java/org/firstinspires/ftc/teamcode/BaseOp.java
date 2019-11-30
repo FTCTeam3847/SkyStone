@@ -3,19 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
-
-import org.firstinspires.ftc.teamcode.Hardware.AcceleratingDcMotor;
-import org.firstinspires.ftc.teamcode.Hardware.ClampingDcMotor;
-
-import static java.lang.Math.PI;
-import static java.lang.Math.atan2;
-import static java.lang.Math.cos;
-import static java.lang.Math.pow;
-import static java.lang.Math.sin;
-import static java.lang.Math.sqrt;
-import static java.lang.Math.toRadians;
 
 
 public class BaseOp extends OpMode {
@@ -96,18 +84,6 @@ public class BaseOp extends OpMode {
 
         //Primary Port 5
         rightSliderLifter = hardwareMap.get(CRServo.class, "right-slider-lifter");
-
-        //working on accelerating DcMotor, but it ain't working yet. The motor stays at a constant rate instead of
-        //accelerating.
-//        leftFrontMotor = new AcceleratingDcMotor(new ClampingDcMotor(hardwareMap.dcMotor.get("motor-left-front")));
-//        leftFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-//
-//        leftBackMotor = new AcceleratingDcMotor(new ClampingDcMotor(hardwareMap.dcMotor.get("motor-left-back")));
-//        leftBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-//
-//        rightFrontMotor = new AcceleratingDcMotor(new ClampingDcMotor(hardwareMap.dcMotor.get("motor-right-front")));
-//
-//        rightBackMotor = new AcceleratingDcMotor(new ClampingDcMotor(hardwareMap.dcMotor.get("motor-right-back")));
     }
 
     @Override

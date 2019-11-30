@@ -1,6 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
-import static java.lang.Math.*;
+import static java.lang.Math.PI;
+import static java.lang.Math.atan2;
+import static java.lang.Math.cos;
+import static java.lang.Math.pow;
+import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
 
 public class PolarUtil {
     public static PolarCoord ORIGIN = new PolarCoord(0.0d, 0.0d);

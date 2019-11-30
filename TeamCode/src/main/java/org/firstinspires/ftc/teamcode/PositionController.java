@@ -1,8 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-
 import java.util.function.Supplier;
 
 import static org.firstinspires.ftc.teamcode.PolarUtil.fromTo;
@@ -62,7 +59,7 @@ public class PositionController {
 
         PolarCoord strafe = new PolarCoord(power, subtractRadians(targetFieldRelative.theta, currentFieldPosition.h));
 
-        if (runningAverage == null) {
+        if (runningAverage == PolarUtil.ORIGIN) {
             runningAverage = new PolarCoord(strafe.radius, strafe.theta);
         }
 

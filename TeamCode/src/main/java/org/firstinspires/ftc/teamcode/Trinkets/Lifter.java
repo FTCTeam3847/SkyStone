@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Trinkets;
 
 import java.util.Locale;
 import java.util.function.Consumer;

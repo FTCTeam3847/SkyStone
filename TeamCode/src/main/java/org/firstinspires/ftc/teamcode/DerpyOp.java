@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
@@ -24,8 +25,13 @@ public class DerpyOp extends BaseOp {
     SkyStoneLocalizer skyStoneLocalizer;
     VuforiaLocalizer vuforiaLocalizer;
 
+
+    int targetPosition = 0;
+
     @Override
     public void init() {
+        leftGrabberLifter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightGrabberLifter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         super.init();
         imu = initImu(hardwareMap.get(BNO055IMU.class, "imu"));
         headingController = new AngularPController(
@@ -54,6 +60,7 @@ public class DerpyOp extends BaseOp {
 
         vuforiaLocalizer = ClassFactory.getInstance().createVuforia(parameters);
         skyStoneLocalizer = new SkyStoneLocalizer(vuforiaLocalizer);
+
 
 
     }
@@ -103,6 +110,36 @@ public class DerpyOp extends BaseOp {
         }
         drivePower = driverController.getControl();
 
+//
+//        if(gamepad1.right_bumper)
+//        {
+////            leftGrabberLifter.setTargetPosition(targetPosition += 1);
+////            rightGrabberLifter.setTargetPosition(targetPosition += 1);
+////
+////            leftGrabberLifter.setPower(.1);
+////            rightGrabberLifter.setPower(.1);
+//
+//            slider.setPosition();
+//
+//        }
+//        else if(gamepad1.left_bumper)
+//        {
+////            leftGrabberLifter.setTargetPosition(targetPosition -= 1);
+////            rightGrabberLifter.setTargetPosition(targetPosition -= 1);
+////
+////            leftGrabberLifter.setPower(-.1);
+////            rightGrabberLifter.setPower(-.1);
+//
+//
+//        } else {
+//            leftGrabberLifter.setPower(0);
+//            rightGrabberLifter.setPower(0);
+//        }
+//
+//        telemetry.addData("left motor position", leftGrabberLifter.getCurrentPosition());
+//        telemetry.addData("right motor position", rightGrabberLifter.getCurrentPosition());
+//
+//        telemetry.addData("blockExtender position", slider.getPosition());
 
 
         drivePower = slowMode ? drivePower.scale(0.5) : drivePower;

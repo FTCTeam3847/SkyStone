@@ -26,7 +26,7 @@ public class BaseOp extends OpMode {
     //Individual block lifter
     public Servo blockGrabber;
 
-    public CRServo slider;
+    public Servo slider;
     public CRServo leftSliderLifter;
     public CRServo rightSliderLifter;
 
@@ -60,10 +60,16 @@ public class BaseOp extends OpMode {
 
         //Secondary Port 0
         leftGrabberLifter = hardwareMap.get(DcMotor.class, "left-grabber-lifter");
+        leftGrabberLifter.setTargetPosition(0);
+        leftGrabberLifter.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftGrabberLifter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftGrabberLifter.setDirection(DcMotor.Direction.REVERSE);
 
         //Secondary Port 1
         rightGrabberLifter = hardwareMap.get(DcMotor.class, "right-grabber-lifter");
+        rightGrabberLifter.setTargetPosition(0);
+        rightGrabberLifter.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightGrabberLifter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         //Primary Port 0
         leftGrabber = hardwareMap.get(Servo.class, "left-grabber");
@@ -77,7 +83,7 @@ public class BaseOp extends OpMode {
         blockGrabber = hardwareMap.get(Servo.class, "block-grabber");
 
         //Primary Port 3
-        slider = hardwareMap.get(CRServo.class, "slider");
+        slider = hardwareMap.get(Servo.class, "slider");
 
         //Primary Port 4
         leftSliderLifter = hardwareMap.get(CRServo.class, "left-slider-lifter");
@@ -127,7 +133,7 @@ public class BaseOp extends OpMode {
     }
 
     public void slide (double speed) {
-        slider.setPower(speed);
+        //slider.setPower(speed);
     }
 
     public void moveSlider (double speed) {

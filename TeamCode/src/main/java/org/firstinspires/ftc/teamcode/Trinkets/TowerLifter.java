@@ -16,8 +16,6 @@ public class TowerLifter {
     Supplier<Integer> motorRightSupplier;
 
 
-    double constant = 1;
-    double position;
 
     public TowerLifter(Consumer<Double> leftPower,
                        Consumer<Double> rightPower,
@@ -36,17 +34,17 @@ public class TowerLifter {
 
     //accept() takes a variable and returns a void
     public void lift () {
-        motorLeft.accept(-2950);
-        motorRight.accept(-2950);
+        motorLeft.accept(0);
+        motorRight.accept(0);
 
-        leftPower.accept(-.3);
-        rightPower.accept(-.3);
+        leftPower.accept(.3);
+        rightPower.accept(.3);
 
     }
 
     public void down () {
-        motorLeft.accept(0);
-        motorRight.accept(0);
+        motorLeft.accept(2800);
+        motorRight.accept(2800);
 
         leftPower.accept(.3);
         rightPower.accept(.3);
@@ -66,8 +64,7 @@ public class TowerLifter {
     public String toString() {
         return format(
                 Locale.ENGLISH,
-                "position: %.2f, left actual: %.2f, right actual: %.2f",
-                position,
+                "left actual: %.2f, right actual: %.2f",
                 motorLeftSupplier.get(),
                 motorRightSupplier.get()
         );

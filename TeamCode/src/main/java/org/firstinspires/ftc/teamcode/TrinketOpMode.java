@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Trinkets.BlockExtender;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerLifter;
@@ -23,10 +24,10 @@ public class TrinketOpMode extends BaseOp {
         super.init();
 
         towerLifter = new TowerLifter(leftGrabberLifter::setPower, rightGrabberLifter::setPower, leftGrabberLifter::setTargetPosition, rightGrabberLifter::setTargetPosition, leftGrabberLifter::getCurrentPosition, rightGrabberLifter::getCurrentPosition);
-        blockExtender = new BlockExtender(slider::setPosition, slider::getPosition);
+        blockExtender = new BlockExtender(slider::setPower, slider::getPower);
 
-        //leftGrabberLifter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //rightGrabberLifter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftGrabberLifter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightGrabberLifter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
 
@@ -39,11 +40,11 @@ public class TrinketOpMode extends BaseOp {
             towerLifter.lift();
         }
 
-        if (toggleButtonB.getCurrent()) {
+        else if (toggleButtonB.getCurrent()) {
             towerLifter.down();
         }
 
-        if (gamepad1.right_bumper) {
+        else if (gamepad1.right_bumper) {
             towerLifter.stop();
         }
 
@@ -54,7 +55,7 @@ public class TrinketOpMode extends BaseOp {
         telemetry.addData("right motor position", rightGrabberLifter.getCurrentPosition());
 
 
-        telemetry.addData("blockExtender position", slider.getPosition());
+        telemetry.addData("blockExtender position", slider.getPower());
 
         telemetry.update();
     }

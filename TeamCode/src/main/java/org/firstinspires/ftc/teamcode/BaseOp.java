@@ -26,7 +26,7 @@ public class BaseOp extends OpMode {
     //Individual block lifter
     public Servo blockGrabber;
 
-    public Servo slider;
+    public CRServo slider;
     public CRServo leftSliderLifter;
     public CRServo rightSliderLifter;
 
@@ -83,7 +83,7 @@ public class BaseOp extends OpMode {
         blockGrabber = hardwareMap.get(Servo.class, "block-grabber");
 
         //Primary Port 3
-        slider = hardwareMap.get(Servo.class, "slider");
+        slider = hardwareMap.get(CRServo.class, "slider");
 
         //Primary Port 4
         leftSliderLifter = hardwareMap.get(CRServo.class, "left-slider-lifter");

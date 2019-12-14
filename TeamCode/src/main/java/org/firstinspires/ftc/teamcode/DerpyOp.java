@@ -30,8 +30,6 @@ public class DerpyOp extends BaseOp {
 
     @Override
     public void init() {
-        leftGrabberLifter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightGrabberLifter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         super.init();
         imu = initImu(hardwareMap.get(BNO055IMU.class, "imu"));
         headingController = new AngularPController(
@@ -113,33 +111,33 @@ public class DerpyOp extends BaseOp {
 //
 //        if(gamepad1.right_bumper)
 //        {
-////            leftGrabberLifter.setTargetPosition(targetPosition += 1);
-////            rightGrabberLifter.setTargetPosition(targetPosition += 1);
+////            leftTowerLifter.setTargetPosition(targetPosition += 1);
+////            rightTowerLifter.setTargetPosition(targetPosition += 1);
 ////
-////            leftGrabberLifter.setPower(.1);
-////            rightGrabberLifter.setPower(.1);
+////            leftTowerLifter.setPower(.1);
+////            rightTowerLifter.setPower(.1);
 //
-//            slider.setPosition();
+//            extender.setPosition();
 //
 //        }
 //        else if(gamepad1.left_bumper)
 //        {
-////            leftGrabberLifter.setTargetPosition(targetPosition -= 1);
-////            rightGrabberLifter.setTargetPosition(targetPosition -= 1);
+////            leftTowerLifter.setTargetPosition(targetPosition -= 1);
+////            rightTowerLifter.setTargetPosition(targetPosition -= 1);
 ////
-////            leftGrabberLifter.setPower(-.1);
-////            rightGrabberLifter.setPower(-.1);
+////            leftTowerLifter.setPower(-.1);
+////            rightTowerLifter.setPower(-.1);
 //
 //
 //        } else {
-//            leftGrabberLifter.setPower(0);
-//            rightGrabberLifter.setPower(0);
+//            leftTowerLifter.setPower(0);
+//            rightTowerLifter.setPower(0);
 //        }
 //
-//        telemetry.addData("left motor position", leftGrabberLifter.getCurrentPosition());
-//        telemetry.addData("right motor position", rightGrabberLifter.getCurrentPosition());
+//        telemetry.addData("left motor position", leftTowerLifter.getCurrentPosition());
+//        telemetry.addData("right motor position", rightTowerLifter.getCurrentPosition());
 //
-//        telemetry.addData("blockExtender position", slider.getPosition());
+//        telemetry.addData("blockExtender position", extender.getPosition());
 
 
         drivePower = slowMode ? drivePower.scale(0.5) : drivePower;

@@ -8,21 +8,29 @@ import static java.lang.String.format;
 
 public class BlockLifter {
     //Consumer takes a variable and returns a void
-    Consumer<Double> servo;
-    Supplier<Double> servoSupplier;
+    Consumer<Double> servoLeft;
+    Consumer<Double> servoRight;
+    Supplier<Double> servoSupplierLeft;
+    Supplier<Double> servoSupplierRight;
 
 
     double constant = 1;
     double position;
 
-    public BlockLifter(Consumer<Double> servo, Supplier<Double> servoSupplier) {
-        this.servo = servo;
-        this.servoSupplier = servoSupplier;
+    public BlockLifter(Consumer<Double> servoLeft,
+                       Consumer<Double> servoRight,
+                       Supplier<Double> servoSupplierLeft,
+                       Supplier<Double> servoSupplierRight) {
+        this.servoLeft = servoLeft;
+        this.servoRight = servoRight;
+        this.servoSupplierLeft = servoSupplierLeft;
+        this.servoSupplierRight = servoSupplierRight;
     }
 
     //accept() takes a variable and returns a void
     public void setPosition (double pos) {
-        servo.accept(pos * constant);
+        servoLeft.accept(pos * constant);
+        servoRight.accept(pos * constant);
         position = pos;
     }
 
@@ -30,9 +38,10 @@ public class BlockLifter {
     public String toString() {
         return format(
                 Locale.ENGLISH,
-                "position: %.2f, actual: %.2f",
+                "position: %.2f, left actual: %.2f", "right actual: %.2f",
                 position,
-                servoSupplier.get()
+                servoSupplierLeft.get(),
+                servoSupplierRight.get()
         );
     }
 

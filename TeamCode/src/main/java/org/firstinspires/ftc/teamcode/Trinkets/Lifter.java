@@ -50,7 +50,7 @@ public class Lifter {
     public String toString() {
         return format(
                 Locale.ENGLISH,
-                "position: %.2f, speed: %.2f, servo actual: %.2f, left motor actual: %.2f, right motor actual: %.2f",
+                "position: %.2f, speed: %.2f, servoLeft actual: %.2f, left motor actual: %.2f, right motor actual: %.2f",
                 position,
                 speed,
                 servoSupplier.get(),

@@ -4,6 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Trinkets.BlockExtender;
+import org.firstinspires.ftc.teamcode.Trinkets.BlockGrabber;
+import org.firstinspires.ftc.teamcode.Trinkets.BlockLifter;
+import org.firstinspires.ftc.teamcode.Trinkets.TowerGrabber;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerLifter;
 import org.firstinspires.ftc.teamcode.gamepad.ToggleButton;
 
@@ -14,8 +17,11 @@ public class TrinketOpMode extends BaseOp {
     ToggleButton toggleButtonB = new ToggleButton(() -> gamepad1.b);
 
 
-    TowerLifter towerLifter;
     BlockExtender blockExtender;
+    BlockGrabber blockGrabber;
+    BlockLifter blockLifter;
+    TowerGrabber towerGrabber;
+    TowerLifter towerLifter;
 
 
 
@@ -23,11 +29,11 @@ public class TrinketOpMode extends BaseOp {
     public void init() {
         super.init();
 
-        towerLifter = new TowerLifter(leftGrabberLifter::setPower, rightGrabberLifter::setPower, leftGrabberLifter::setTargetPosition, rightGrabberLifter::setTargetPosition, leftGrabberLifter::getCurrentPosition, rightGrabberLifter::getCurrentPosition);
-        blockExtender = new BlockExtender(slider::setPower, slider::getPower);
-
-        leftGrabberLifter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightGrabberLifter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        towerLifter = new TowerLifter(leftTowerLifter::setPower, rightTowerLifter::setPower, leftTowerLifter::getCurrentPosition, rightTowerLifter::getCurrentPosition);
+        blockExtender = new BlockExtender(extender::setPower, extender::getPower);
+        blockGrabber = new BlockGrabber(grabber::setPosition, grabber::getPosition);
+        blockLifter = new BlockLifter(leftBlockLifter::setPower, rightBlockLifter::setPower, leftBlockLifter::getPower, rightBlockLifter::getPower);
+        towerGrabber = new TowerGrabber(leftTowerGrabber::setPosition, rightTowerGrabber::setPosition, leftTowerGrabber::getPosition, rightTowerGrabber::getPosition);
 
     }
 
@@ -35,29 +41,42 @@ public class TrinketOpMode extends BaseOp {
     @Override
     public void loop() {
         super.loop();
-
         if (toggleButtonA.getCurrent()) {
-            towerLifter.lift();
+            if (leftTowerLifter.getCurrentPosition() > -2700) {
+                towerLifter.lift();
+            } else {
+                towerLifter.stop();
+            }
         }
-
         else if (toggleButtonB.getCurrent()) {
-            towerLifter.down();
+            if (leftTowerLifter.getCurrentPosition() < -100) {
+                towerLifter.down();
+            } else {
+                towerLifter.stop();
+            }
         }
-
-        else if (gamepad1.right_bumper) {
+        else {
             towerLifter.stop();
         }
+//
+        if (gamepad1.left_bumper) {
+            leftTowerLifter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightTowerLifter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            leftTowerLifter.setMode((DcMotor.RunMode.RUN_WITHOUT_ENCODER));
+            rightTowerLifter.setMode((DcMotor.RunMode.RUN_WITHOUT_ENCODER));
 
-
-
-
-        telemetry.addData("left motor position", leftGrabberLifter.getCurrentPosition());
-        telemetry.addData("right motor position", rightGrabberLifter.getCurrentPosition());
-
-
-        telemetry.addData("blockExtender position", slider.getPower());
-
-        telemetry.update();
+        }
+//
+//
+//
+//
+            telemetry.addData("left motor position", leftTowerLifter.getCurrentPosition());
+            telemetry.addData("right motor position", rightTowerLifter.getCurrentPosition());
+//
+//
+//            telemetry.addData("blockExtender position", extender.getPower());
+//
+            telemetry.update();
     }
 
     @Override

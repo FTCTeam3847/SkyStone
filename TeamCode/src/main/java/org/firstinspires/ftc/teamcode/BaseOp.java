@@ -17,18 +17,18 @@ public class BaseOp extends OpMode {
     public CRServo liftingServo;
 
     //Tower lifter
-    public DcMotor leftGrabberLifter;
-    public DcMotor rightGrabberLifter;
+    public DcMotor leftTowerLifter;
+    public DcMotor rightTowerLifter;
 
-    public Servo leftGrabber;
-    public Servo rightGrabber;
+    public Servo leftTowerGrabber;
+    public Servo rightTowerGrabber;
 
     //Individual block lifter
-    public Servo blockGrabber;
+    public Servo grabber;
 
-    public CRServo slider;
-    public CRServo leftSliderLifter;
-    public CRServo rightSliderLifter;
+    public CRServo extender;
+    public CRServo leftBlockLifter;
+    public CRServo rightBlockLifter;
 
     @Override
     public void init() {
@@ -59,37 +59,42 @@ public class BaseOp extends OpMode {
         //Tower Grabber + Lifter:
 
         //Secondary Port 0
-        leftGrabberLifter = hardwareMap.get(DcMotor.class, "left-grabber-lifter");
-        leftGrabberLifter.setTargetPosition(0);
-        leftGrabberLifter.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftGrabberLifter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftGrabberLifter.setDirection(DcMotor.Direction.REVERSE);
+        leftTowerLifter = hardwareMap.get(DcMotor.class, "left-grabber-lifter");
+        leftTowerLifter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftTowerLifter.setTargetPosition(0);
+        //leftTowerLifter.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftTowerLifter.setDirection(DcMotor.Direction.REVERSE);
+        //leftTowerLifter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftTowerLifter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
 
         //Secondary Port 1
-        rightGrabberLifter = hardwareMap.get(DcMotor.class, "right-grabber-lifter");
-        rightGrabberLifter.setTargetPosition(0);
-        rightGrabberLifter.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightGrabberLifter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightTowerLifter = hardwareMap.get(DcMotor.class, "right-grabber-lifter");
+        rightTowerLifter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightTowerLifter.setTargetPosition(0);
+        //rightTowerLifter.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        //rightTowerLifter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightTowerLifter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         //Primary Port 0
-        leftGrabber = hardwareMap.get(Servo.class, "left-grabber");
+        leftTowerGrabber = hardwareMap.get(Servo.class, "left-grabber");
 
         //Primary Port 1
-        rightGrabber = hardwareMap.get(Servo.class, "right-grabber");
+        rightTowerGrabber = hardwareMap.get(Servo.class, "right-grabber");
 
         //Block Grabber + Placer:
 
         //Primary Port 2
-        blockGrabber = hardwareMap.get(Servo.class, "block-grabber");
+        grabber = hardwareMap.get(Servo.class, "block-grabber");
 
         //Primary Port 3
-        slider = hardwareMap.get(CRServo.class, "slider");
+        extender = hardwareMap.get(CRServo.class, "extender");
 
         //Primary Port 4
-        leftSliderLifter = hardwareMap.get(CRServo.class, "left-slider-lifter");
+        leftBlockLifter = hardwareMap.get(CRServo.class, "left-extender-lifter");
 
         //Primary Port 5
-        rightSliderLifter = hardwareMap.get(CRServo.class, "right-slider-lifter");
+        rightBlockLifter = hardwareMap.get(CRServo.class, "right-extender-lifter");
     }
 
     @Override
@@ -108,36 +113,36 @@ public class BaseOp extends OpMode {
     }
 
     public void moveGrabber (double power) {
-        leftGrabberLifter.setPower(power);
-        rightGrabberLifter.setPower(power);
+        leftTowerLifter.setPower(power);
+        rightTowerLifter.setPower(power);
     }
 
     public void grabTower () {
         //Need proper angles/values for grabTower to work - these are filler values
-        leftGrabber.setPosition(0.5);
-        rightGrabber.setPosition(0.5);
+        leftTowerGrabber.setPosition(0.5);
+        rightTowerGrabber.setPosition(0.5);
     }
 
     public void releaseTower () {
         //Need proper angles/values for releaseTower to work - these are filler values
-        leftGrabber.setPosition(0);
-        rightGrabber.setPosition(1);
+        leftTowerGrabber.setPosition(0);
+        rightTowerGrabber.setPosition(1);
     }
 
     public void grabBlock () {
-        blockGrabber.setPosition(1); //filler value - need real value
+        grabber.setPosition(1); //filler value - need real value
     }
 
     public void releaseBlock () {
-        blockGrabber.setPosition(0); //filler value - need real value
+        grabber.setPosition(0); //filler value - need real value
     }
 
     public void slide (double speed) {
-        //slider.setPower(speed);
+        //extender.setPower(speed);
     }
 
     public void moveSlider (double speed) {
-        leftSliderLifter.setPower(-speed);
-        rightSliderLifter.setPower(speed);
+        leftBlockLifter.setPower(-speed);
+        rightBlockLifter.setPower(speed);
     }
 }

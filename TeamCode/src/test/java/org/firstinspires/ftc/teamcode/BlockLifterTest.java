@@ -21,12 +21,18 @@ class BlockLifterTest {
 
     @Test
     void setPosition() {
-        FakeServo servo = new FakeServo();
+        FakeServo servoLeft = new FakeServo();
+        FakeServo servoRight = new FakeServo();
 
-        BlockLifter bl = new BlockLifter(servo::setPosition, servo::getPosition);
+        BlockLifter bl = new BlockLifter(
+                servoLeft::setPosition,
+                servoRight::setPosition,
+                servoLeft::getPosition,
+                servoRight::getPosition
+        );
 
         bl.setPosition(0.5);
 
-        assertEquals(0.5, servo.pos);
+        assertEquals(0.5, servoLeft.pos);
     }
 }

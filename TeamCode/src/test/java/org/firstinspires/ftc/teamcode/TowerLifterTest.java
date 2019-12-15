@@ -18,6 +18,10 @@ class TowerLifterTest {
         {
             return speed;
         }
+        public int getPosition()
+        {
+            return 0;
+        }
     }
 
     @Test
@@ -25,9 +29,14 @@ class TowerLifterTest {
         FakeDCMotor left = new FakeDCMotor();
         FakeDCMotor right = new FakeDCMotor();
 
-        TowerLifter tl = new TowerLifter(left::setSpeed, right::setSpeed, left::getSpeed, right::getSpeed);
+        TowerLifter tl = new TowerLifter(
+                left::setSpeed,
+                right::setSpeed,
+                left::getPosition,
+                right::getPosition
+        );
 
-        tl.setSpeed(0.5);
+        tl.lift();
 
         assertEquals(0.5, left.speed);
         assertEquals(-0.5, right.speed);

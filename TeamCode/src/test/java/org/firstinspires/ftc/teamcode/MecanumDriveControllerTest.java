@@ -65,9 +65,10 @@ class MecanumDriveControllerTest {
         MecanumDriveController driveController = new MecanumDriveController(FIXED_HEADING);
         DrivePower forward = new DrivePower(FORWARD, FORWARD, FORWARD, FORWARD);
 
+        driveController.setTarget(ZERO, UP, ZERO);
         assertThat(
                 "Forward should power all wheels forward at full power",
-                round2(driveController.setTarget(ZERO, UP, ZERO)),
+                round2(driveController.getControl()),
                 is(equalTo(forward))
         );
     }
@@ -77,9 +78,10 @@ class MecanumDriveControllerTest {
         MecanumDriveController driveController = new MecanumDriveController(FIXED_HEADING);
         DrivePower backward = new DrivePower(BACKWARD, BACKWARD, BACKWARD, BACKWARD);
 
+        driveController.setTarget(ZERO, DOWN, ZERO);
         assertThat(
                 "Backward should power all wheels backward at negative full power",
-                round2(driveController.setTarget(ZERO, DOWN, ZERO)),
+                round2(driveController.getControl()),
                 is(equalTo(backward))
         );
     }
@@ -89,9 +91,10 @@ class MecanumDriveControllerTest {
         MecanumDriveController driveController = new MecanumDriveController(FIXED_HEADING);
         DrivePower left = new DrivePower(FORWARD, BACKWARD, BACKWARD, FORWARD);
 
+        driveController.setTarget(LEFT, ZERO, ZERO);
         assertThat(
                 "Left should provide full power to RF and LB, and negative full power to LF and RB.",
-                round2(driveController.setTarget(LEFT, ZERO, ZERO)),
+                round2(driveController.getControl()),
                 is(equalTo(left))
         );
     }
@@ -101,9 +104,10 @@ class MecanumDriveControllerTest {
         MecanumDriveController driveController = new MecanumDriveController(FIXED_HEADING);
         DrivePower right = new DrivePower(BACKWARD, FORWARD, FORWARD, BACKWARD);
 
+        driveController.setTarget(RIGHT, ZERO, ZERO);
         assertThat(
                 "Left should provide full power to LF and RB, and negative full power to RF and LB.",
-                round2(driveController.setTarget(RIGHT, ZERO, ZERO)),
+                round2(driveController.getControl()),
                 is(equalTo(right))
         );
     }
@@ -113,9 +117,10 @@ class MecanumDriveControllerTest {
         MecanumDriveController driveController = new MecanumDriveController(FIXED_HEADING);
         DrivePower turnLeft = new DrivePower(FORWARD, FORWARD, BACKWARD, BACKWARD);
 
+        driveController.setTarget(ZERO, ZERO, LEFT);
         assertThat(
                 "Turn left should provide full power to the right wheels, and negative full power to the left wheels.",
-                round2(driveController.setTarget(ZERO, ZERO, LEFT)),
+                round2(driveController.getControl()),
                 is(equalTo(turnLeft))
         );
     }
@@ -125,9 +130,10 @@ class MecanumDriveControllerTest {
         MecanumDriveController driveController = new MecanumDriveController(FIXED_HEADING);
         DrivePower turnRight = new DrivePower(BACKWARD, BACKWARD, FORWARD, FORWARD);
 
+        driveController.setTarget(ZERO, ZERO, RIGHT);
         assertThat(
                 "Turn left should provide full power to the left wheels, and negative full power to the right wheels.",
-                round2(driveController.setTarget(ZERO, ZERO, RIGHT)),
+                round2(driveController.getControl()),
                 is(equalTo(turnRight))
         );
     }
@@ -137,9 +143,10 @@ class MecanumDriveControllerTest {
         MecanumDriveController driveController = new MecanumDriveController(FIXED_HEADING);
         DrivePower strafeRightAndTurnRight = new DrivePower(BACKWARD, ZERO, FORWARD, ZERO);
 
+        driveController.setTarget(RIGHT, ZERO, RIGHT);
         assertThat(
                 "...",
-                round2(driveController.setTarget(RIGHT, ZERO, RIGHT)),
+                round2(driveController.getControl()),
                 is(equalTo(strafeRightAndTurnRight))
         );
     }
@@ -149,9 +156,10 @@ class MecanumDriveControllerTest {
         MecanumDriveController driveController = new MecanumDriveController(FIXED_HEADING);
         DrivePower strafeRightAndTurnRight = new DrivePower(ZERO, FORWARD, ZERO, BACKWARD);
 
+        driveController.setTarget(RIGHT, ZERO, LEFT);
         assertThat(
                 "...",
-                round2(driveController.setTarget(RIGHT, ZERO, LEFT)),
+                round2(driveController.getControl()),
                 is(equalTo(strafeRightAndTurnRight))
         );
     }
@@ -161,9 +169,10 @@ class MecanumDriveControllerTest {
         MecanumDriveController driveController = new MecanumDriveController(FIXED_HEADING);
         DrivePower strafeRightAndTurnRight = new DrivePower(ZERO, BACKWARD, ZERO, FORWARD);
 
+        driveController.setTarget(LEFT, ZERO, RIGHT);
         assertThat(
                 "...",
-                round2(driveController.setTarget(LEFT, ZERO, RIGHT)),
+                round2(driveController.getControl()),
                 is(equalTo(strafeRightAndTurnRight))
         );
     }
@@ -173,9 +182,10 @@ class MecanumDriveControllerTest {
         MecanumDriveController driveController = new MecanumDriveController(FIXED_HEADING);
         DrivePower strafeRightAndTurnRight = new DrivePower(FORWARD, ZERO, BACKWARD, ZERO);
 
+        driveController.setTarget(LEFT, ZERO, LEFT);
         assertThat(
                 "...",
-                round2(driveController.setTarget(LEFT, ZERO, LEFT)),
+                round2(driveController.getControl()),
                 is(equalTo(strafeRightAndTurnRight))
         );
     }

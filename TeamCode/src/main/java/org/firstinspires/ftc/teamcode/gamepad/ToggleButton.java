@@ -7,7 +7,7 @@ import java.util.function.Supplier;
 /**
  * Keeps track of a toggle value in response to button presses on a
  * gamepad. It's expected that an OpMode will call {@link #getCurrent()}
- * once per `getCurrent()` to obtain the current value of the toggle.
+ * once per `loop()` to obtain the current value of the toggle.
  * <p>
  * The tricky part is that getCurrent() runs many times per second, and so
  * the button state is checked many times per second. It's difficult for a

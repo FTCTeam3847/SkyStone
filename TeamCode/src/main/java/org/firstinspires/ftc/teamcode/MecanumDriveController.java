@@ -40,7 +40,6 @@ public class MecanumDriveController implements Controller<Void, DriveCommand, Dr
         PolarCoord xypolar = fromXY(strafe_x, strafe_y);
         PolarCoord strafe = new PolarCoord(xypolar.radius, subtractRadians(xypolar.theta, 2*QTR_PI));
         target = new DriveCommand(strafe, turn);
-        getControl();
     }
 
     public DrivePower getControl() {

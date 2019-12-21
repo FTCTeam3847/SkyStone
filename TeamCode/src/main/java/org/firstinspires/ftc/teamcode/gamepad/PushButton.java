@@ -30,4 +30,22 @@ import java.util.function.Supplier;
  * PushButton Value:   F F F T F F F T F F F F T F F F F T F F F T F F F F F ...
  */
 public class PushButton implements Sensor<Boolean> {
+    private Supplier<Boolean> button;
+    private boolean previousButtonState = false;
+    private boolean pushValue = false;
+
+    public PushButton(Supplier<Boolean> button) {
+        this.button = button;
+    }
+
+    public Boolean getCurrent() {
+        boolean buttonStateNow = button.get();
+
+        pushValue = buttonStateNow && !previousButtonState;
+
+        previousButtonState = buttonStateNow;
+
+        return pushValue;
+    }
+
 }

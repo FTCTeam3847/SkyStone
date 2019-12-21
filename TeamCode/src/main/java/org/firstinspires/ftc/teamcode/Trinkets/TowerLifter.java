@@ -27,22 +27,22 @@ public class TowerLifter {
     }
 
     //accept() takes a variable and returns a void
-    public void lift () {
-        leftPower.accept(-.3);
-        rightPower.accept(-.3);
+    public void lift (double left, double right) {
+        leftPower.accept(-left);
+        rightPower.accept(-right);
 
     }
 
-    public void down () {
-        leftPower.accept(.3);
-        rightPower.accept(.3);
+    public void down (double left, double right) {
+        leftPower.accept(left);
+        rightPower.accept(right);
 
     }
 
     public void stop()
     {
         leftPower.accept(0.0);
-        leftPower.accept(0.0);
+        rightPower.accept(0.0);
     }
 
     @Override

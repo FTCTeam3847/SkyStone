@@ -15,7 +15,7 @@ public class BlockLifter {
 
 
     double constant = 1;
-    double position;
+    double power;
 
     public BlockLifter(Consumer<Double> servoLeft,
                        Consumer<Double> servoRight,
@@ -28,18 +28,18 @@ public class BlockLifter {
     }
 
     //accept() takes a variable and returns a void
-    public void setPosition (double pos) {
-        servoLeft.accept(pos * constant);
-        servoRight.accept(pos * constant);
-        position = pos;
+    public void setPower (double power) {
+        servoLeft.accept(power * constant);
+        servoRight.accept(power * constant);
+        this.power = power;
     }
 
     @Override
     public String toString() {
         return format(
                 Locale.ENGLISH,
-                "position: %.2f, left actual: %.2f", "right actual: %.2f",
-                position,
+                "position: %.2f, left actual: %.2f, right actual: %.2f",
+                power,
                 servoSupplierLeft.get(),
                 servoSupplierRight.get()
         );

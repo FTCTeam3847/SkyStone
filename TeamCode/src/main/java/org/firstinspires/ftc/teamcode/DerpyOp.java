@@ -30,6 +30,9 @@ public class DerpyOp extends BaseOp {
 
     @Override
     public void init() {
+        telemetry.addLine("Initializing...");
+        telemetry.update();
+
         super.init();
         imu = initImu(hardwareMap.get(BNO055IMU.class, "imu"));
         headingController = new AngularPController(
@@ -58,9 +61,13 @@ public class DerpyOp extends BaseOp {
 
         vuforiaLocalizer = ClassFactory.getInstance().createVuforia(parameters);
         skyStoneLocalizer = new SkyStoneLocalizer(vuforiaLocalizer);
+    }
 
-
-
+    @Override
+    public void init_loop() {
+        super.init_loop();
+        telemetry.addLine("Initialized.");
+        telemetry.update();
     }
 
     private BNO055IMU initImu(BNO055IMU imu) {

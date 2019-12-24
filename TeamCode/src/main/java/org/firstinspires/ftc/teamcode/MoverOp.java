@@ -13,7 +13,7 @@ import static java.lang.Math.signum;
 public class MoverOp extends OpMode {
     PushButton pushButtonA = new PushButton(() -> gamepad1.a);
 
-    MoveAction moveCommand;
+    MoveAction moveAction;
 
     SkystoneBot bot;
 
@@ -23,8 +23,8 @@ public class MoverOp extends OpMode {
         bot = new DerpyBot(hardwareMap);
         bot.init();
 
-        DriveCommand command = new DriveCommand(new PolarCoord(0.5, 0), 0);
-        moveCommand = new MoveAction(1, command, System::nanoTime, bot);
+        StrafeAndTurn strafeAndTurn = new StrafeAndTurn(new PolarCoord(0.5, 0), 0);
+        moveAction = new MoveAction(1, strafeAndTurn, System::nanoTime, bot);
 
     }
 
@@ -37,18 +37,18 @@ public class MoverOp extends OpMode {
     @Override
     public void loop() {
         if (pushButtonA.getCurrent()) {
-            DriveCommand command = new DriveCommand(new PolarCoord(0.5, 0), 0);
-            moveCommand = new MoveAction(1, command, System::nanoTime, bot);
-            moveCommand.start();
+            StrafeAndTurn command = new StrafeAndTurn(new PolarCoord(0.5, 0), 0);
+            moveAction = new MoveAction(1, command, System::nanoTime, bot);
+            moveAction.start();
         }
 
-        moveCommand.loop();
+        moveAction.loop();
 //        bot.move(sensitivity(gamepad1.right_stick_x, SENSITIVITY),
 //                sensitivity(-gamepad1.right_stick_y, SENSITIVITY),
 //                sensitivity(gamepad1.left_stick_x, SENSITIVITY));
 
-        telemetry.addData("Started", moveCommand.started());
-        telemetry.addData("Is done", moveCommand.isDone());
+        telemetry.addData("Started", moveAction.started());
+        telemetry.addData("Is done", moveAction.isDone());
         telemetry.update();
     }
 

@@ -83,8 +83,8 @@ public class DerpyBot implements SkystoneBot {
     }
 
     @Override
-    public void move(DriveCommand driveCommand) {
-        driverController.setTarget(driveCommand);
+    public void move(StrafeAndTurn strafeAndTurn) {
+        driverController.setTarget(strafeAndTurn);
         move(driverController.getControl());
     }
 

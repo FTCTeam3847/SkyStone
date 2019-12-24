@@ -9,7 +9,7 @@ import static org.firstinspires.ftc.teamcode.PolarUtil.addRadians;
 import static org.firstinspires.ftc.teamcode.PolarUtil.fromXY;
 import static org.firstinspires.ftc.teamcode.PolarUtil.subtractRadians;
 
-public class MecanumDriveController implements Controller<Void, DriveCommand, DrivePower> {
+public class MecanumDriveController implements Controller<Void, StrafeAndTurn, DrivePower> {
     private final AngularPController headingController;
 
     public MecanumDriveController(AngularPController headingController) {
@@ -19,7 +19,7 @@ public class MecanumDriveController implements Controller<Void, DriveCommand, Dr
     private static double QTR_PI = PI / 4;
     private static double ROOT_2_OVER_2 = sin(QTR_PI);
     private double lastTurn;
-    private DriveCommand target;
+    private StrafeAndTurn target;
 
     private static DrivePower turnPower(double turn) {
         if (Double.isFinite(turn)) {
@@ -39,7 +39,7 @@ public class MecanumDriveController implements Controller<Void, DriveCommand, Dr
     public void setTarget(double strafe_x, double strafe_y, double turn) {
         PolarCoord xypolar = fromXY(strafe_x, strafe_y);
         PolarCoord strafe = new PolarCoord(xypolar.radius, subtractRadians(xypolar.theta, 2 * QTR_PI));
-        target = new DriveCommand(strafe, turn);
+        target = new StrafeAndTurn(strafe, turn);
     }
 
     public DrivePower getControl() {
@@ -75,7 +75,7 @@ public class MecanumDriveController implements Controller<Void, DriveCommand, Dr
     }
 
     @Override
-    public void setTarget(DriveCommand target) {
+    public void setTarget(StrafeAndTurn target) {
         this.target = target;
     }
 

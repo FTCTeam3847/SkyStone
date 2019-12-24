@@ -4,7 +4,7 @@ public interface SkystoneBot {
 
     void move(double x, double y, double turn);
 
-    void move(DriveCommand driveCommand);
+    void move(StrafeAndTurn strafeAndTurn);
 
     void init();
 

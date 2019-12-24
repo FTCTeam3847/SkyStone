@@ -5,7 +5,7 @@ import java.util.function.Supplier;
 public class MoveAction implements RoboAction {
     private double startTime;
     private boolean isDone = false;
-    private DriveCommand command;
+    private StrafeAndTurn command;
     private double dur;
     private Supplier<Long> timer;
     private boolean started = false;
@@ -14,7 +14,7 @@ public class MoveAction implements RoboAction {
 
     private SkystoneBot bot;
 
-    public MoveAction(double dur, DriveCommand command, Supplier<Long> timer, SkystoneBot bot) {
+    public MoveAction(double dur, StrafeAndTurn command, Supplier<Long> timer, SkystoneBot bot) {
         this.command = command;
         this.dur = dur * SECOND;
         this.timer = timer;
@@ -34,10 +34,10 @@ public class MoveAction implements RoboAction {
             } else {
                 stop();
                 started = false;
-                bot.move(new DriveCommand(new PolarCoord(0, 0), 0));
+                bot.move(new StrafeAndTurn(new PolarCoord(0, 0), 0));
             }
         } else {
-            bot.move(new DriveCommand(new PolarCoord(0, 0), 0));
+            bot.move(new StrafeAndTurn(new PolarCoord(0, 0), 0));
         }
     }
 

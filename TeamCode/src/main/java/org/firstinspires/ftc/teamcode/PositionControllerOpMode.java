@@ -98,7 +98,7 @@ public class PositionControllerOpMode extends BaseOp {
             if (!strafe.equals(PolarUtil.ORIGIN)) {
                 telemetry.addData("strafe(bot)", strafe);
 
-                driverController.setTarget(new DriveCommand(strafe, 0));
+                driverController.setTarget(new StrafeAndTurn(strafe, 0));
                 DrivePower drivepower = driverController.getControl().scale(0.5);
                 telemetry.addData("drivepower", drivepower);
 

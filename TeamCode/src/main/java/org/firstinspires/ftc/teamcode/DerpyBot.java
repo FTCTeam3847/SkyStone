@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.Hardware.AngularPController;
@@ -90,7 +89,7 @@ public class DerpyBot implements SkystoneBot {
     }
 
     public void move(double x, double y, double turn) {
-         driverController.setTarget(x, y, turn);
-         move(driverController.getControl());
+        driverController.setTarget(x, y, turn);
+        move(driverController.getControl());
     }
 }

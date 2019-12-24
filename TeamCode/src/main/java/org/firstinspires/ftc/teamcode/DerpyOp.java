@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
@@ -96,17 +95,13 @@ public class DerpyOp extends BaseOp {
 
         if (gamepad1.dpad_up) {
             driverController.setTarget(0, 1, 0);
-        }
-        else if (gamepad1.dpad_down) {
+        } else if (gamepad1.dpad_down) {
             driverController.setTarget(0, -1, 0);
-        }
-        else if (gamepad1.dpad_left) {
+        } else if (gamepad1.dpad_left) {
             driverController.setTarget(-1, 0, 0);
-        }
-        else if (gamepad1.dpad_right) {
+        } else if (gamepad1.dpad_right) {
             driverController.setTarget(1, 0, 0);
-        }
-        else {
+        } else {
             driverController.setTarget(
                     sensitivity(gamepad1.right_stick_x, SENSITIVITY),
                     sensitivity(-gamepad1.right_stick_y, SENSITIVITY),

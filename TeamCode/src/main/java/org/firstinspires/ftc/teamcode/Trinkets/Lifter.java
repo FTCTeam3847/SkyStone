@@ -35,7 +35,7 @@ public class Lifter {
     }
 
     //accept() takes a variable and returns a void
-    public void setPositionSpeed (double pos, double speed) {
+    public void setPositionSpeed(double pos, double speed) {
         servo.accept(pos * constant);
 
         motorLeft.accept(speed * -constant); //counterclockwise

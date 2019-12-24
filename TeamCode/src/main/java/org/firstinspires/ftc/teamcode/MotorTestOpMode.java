@@ -21,8 +21,7 @@ public class MotorTestOpMode extends OpMode {
     @Override
     public void loop() {
 
-        if(gamepad1.a)
-        {
+        if (gamepad1.a) {
             motor1.setTargetPosition(motor1.getCurrentPosition() + 100);
             motor1.setPower(.3);
 

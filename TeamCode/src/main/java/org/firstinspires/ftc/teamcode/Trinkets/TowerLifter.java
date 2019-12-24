@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static java.lang.String.format;
+
 public class TowerLifter {
 
     //Consumer takes a variable and returns a void
@@ -12,7 +13,6 @@ public class TowerLifter {
     Consumer<Double> rightPower;
     Supplier<Integer> motorLeftSupplier;
     Supplier<Integer> motorRightSupplier;
-
 
 
     public TowerLifter(Consumer<Double> leftPower,
@@ -27,20 +27,19 @@ public class TowerLifter {
     }
 
     //accept() takes a variable and returns a void
-    public void lift (double left, double right) {
+    public void lift(double left, double right) {
         leftPower.accept(-left);
         rightPower.accept(-right);
 
     }
 
-    public void down (double left, double right) {
+    public void down(double left, double right) {
         leftPower.accept(left);
         rightPower.accept(right);
 
     }
 
-    public void stop()
-    {
+    public void stop() {
         leftPower.accept(0.0);
         rightPower.accept(0.0);
     }

@@ -16,7 +16,7 @@ public class MoveAction implements RoboAction {
 
     public MoveAction(double dur, DriveCommand command, Supplier<Long> timer, SkystoneBot bot) {
         this.command = command;
-        this.dur = dur*SECOND;
+        this.dur = dur * SECOND;
         this.timer = timer;
         this.bot = bot;
     }
@@ -25,6 +25,7 @@ public class MoveAction implements RoboAction {
         startTime = timer.get();
         started = true;
     }
+
     public void loop() {
         if (started) {
             double currentTime = timer.get();
@@ -33,10 +34,10 @@ public class MoveAction implements RoboAction {
             } else {
                 stop();
                 started = false;
-                bot.move(new DriveCommand(new PolarCoord(0,0), 0));
+                bot.move(new DriveCommand(new PolarCoord(0, 0), 0));
             }
         } else {
-            bot.move(new DriveCommand(new PolarCoord(0,0), 0));
+            bot.move(new DriveCommand(new PolarCoord(0, 0), 0));
         }
     }
 

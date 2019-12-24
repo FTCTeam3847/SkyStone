@@ -23,7 +23,7 @@ public class MoverOp extends OpMode {
         bot = new DerpyBot(hardwareMap);
         bot.init();
 
-        DriveCommand command = new DriveCommand(new PolarCoord(0.5, 0),0);
+        DriveCommand command = new DriveCommand(new PolarCoord(0.5, 0), 0);
         moveCommand = new MoveAction(1, command, System::nanoTime, bot);
 
     }
@@ -37,7 +37,7 @@ public class MoverOp extends OpMode {
     @Override
     public void loop() {
         if (pushButtonA.getCurrent()) {
-            DriveCommand command = new DriveCommand(new PolarCoord(0.5, 0),0);
+            DriveCommand command = new DriveCommand(new PolarCoord(0.5, 0), 0);
             moveCommand = new MoveAction(1, command, System::nanoTime, bot);
             moveCommand.start();
         }

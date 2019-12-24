@@ -73,7 +73,7 @@ public class PositionControllerOpMode extends BaseOp {
 
 
         //clamps distance
-        if(Math.sqrt(Math.pow(targetFieldPosition.y-fieldPosition.y,2)+ Math.pow(targetFieldPosition.x-fieldPosition.x,2)) > 5) {
+        if (Math.sqrt(Math.pow(targetFieldPosition.y - fieldPosition.y, 2) + Math.pow(targetFieldPosition.x - fieldPosition.x, 2)) > 5) {
 
             if (fieldPosition != fieldPosition.UNKNOWN) {
                 lastFieldPosition = fieldPosition;
@@ -108,9 +108,7 @@ public class PositionControllerOpMode extends BaseOp {
                 move(drivepower);
             }
 
-        }
-        else
-        {
+        } else {
             stop(); //is supposed to make it stop when its closer than 5 inches, DOESN'T WORK!
         }
         telemetry.update();

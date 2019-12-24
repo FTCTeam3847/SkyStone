@@ -6,7 +6,7 @@ import static org.firstinspires.ftc.teamcode.PolarUtil.fromTo;
 import static org.firstinspires.ftc.teamcode.PolarUtil.fromXY;
 import static org.firstinspires.ftc.teamcode.PolarUtil.subtractRadians;
 
-public class PositionController implements Controller<PolarCoord, FieldPosition, PolarCoord>{
+public class PositionController implements Controller<PolarCoord, FieldPosition, PolarCoord> {
     private final Supplier<FieldPosition> fieldPositionSupplier;
     private FieldPosition targetFieldPosition;
     private PolarCoord runningAverage;
@@ -20,8 +20,6 @@ public class PositionController implements Controller<PolarCoord, FieldPosition,
     public int getNumValues() {
         return numValues;
     }
-
-
 
 
     public PositionController(Supplier<FieldPosition> fieldPositionSupplier) {
@@ -55,7 +53,7 @@ public class PositionController implements Controller<PolarCoord, FieldPosition,
         }
 
         PolarCoord targetFieldRelative = getCurrent();
-        double power = Math.min(targetFieldRelative.radius/12, 1);
+        double power = Math.min(targetFieldRelative.radius / 12, 1);
 
         PolarCoord strafe = new PolarCoord(power, subtractRadians(targetFieldRelative.theta, currentFieldPosition.h));
 
@@ -69,7 +67,7 @@ public class PositionController implements Controller<PolarCoord, FieldPosition,
         //double avgTheta = (runningAverage.theta * (numValues - 1) / (numValues)) + (strafe.theta * (1 / (numValues)));
 
         //double avgRadius = (runningAverage.radius * (numValues-1) + strafe.radius) / numValues; //generates an average strafe value based on all of its past information
-        double avgTheta = (runningAverage.theta * (numValues-1) + strafe.theta) / numValues;
+        double avgTheta = (runningAverage.theta * (numValues - 1) + strafe.theta) / numValues;
 
 
         runningAverage = new PolarCoord(strafe.radius, avgTheta);

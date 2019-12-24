@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
-public class DriveCommand
-{
+public class DriveCommand {
     PolarCoord strafe;
     double turn;
 

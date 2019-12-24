@@ -18,7 +18,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 
-public class SkyStoneLocalizer implements Sensor<FieldPosition>{
+public class SkyStoneLocalizer implements Sensor<FieldPosition> {
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
     private static final boolean PHONE_IS_PORTRAIT = true;
     private VuforiaLocalizer vuforiaLocalizer;
@@ -53,7 +53,7 @@ public class SkyStoneLocalizer implements Sensor<FieldPosition>{
     List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
 
 
-    public SkyStoneLocalizer (VuforiaLocalizer vuforiaLocalizer) {
+    public SkyStoneLocalizer(VuforiaLocalizer vuforiaLocalizer) {
         this.vuforiaLocalizer = vuforiaLocalizer;
 
         // Load the data sets for the trackable objects. These particular data

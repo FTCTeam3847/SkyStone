@@ -18,9 +18,9 @@ public class BlockManipulator {
     double position;
 
     public BlockManipulator(Consumer<Double> servoGrabber,
-                        Consumer<Double> servoExtender,
-                        Supplier<Double> servoGrabberSupplier,
-                        Supplier<Double> servoExtenderSupplier) {
+                            Consumer<Double> servoExtender,
+                            Supplier<Double> servoGrabberSupplier,
+                            Supplier<Double> servoExtenderSupplier) {
         this.servoGrabber = servoGrabber;
         this.servoExtender = servoExtender;
         this.servoGrabberSupplier = servoGrabberSupplier;
@@ -28,7 +28,7 @@ public class BlockManipulator {
     }
 
     //accept() takes a variable and returns a void
-    public void setPosition (double pos) {
+    public void setPosition(double pos) {
         servoGrabber.accept(pos * -constant); //counterclockwise
         servoExtender.accept(pos * constant); //clockwise
         position = pos;

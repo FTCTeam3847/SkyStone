@@ -21,7 +21,7 @@ public class BlockGrabber {
     }
 
     //accept() takes a variable and returns a void
-    public void setPosition (double pos) {
+    public void setPosition(double pos) {
         servo.accept(pos * constant);
         position = pos;
     }

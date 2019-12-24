@@ -28,7 +28,7 @@ public class TowerGrabber {
     }
 
     //accept() takes a variable and returns a void
-    public void setPosition (double pos) {
+    public void setPosition(double pos) {
         servoLeft.accept(pos * constant); //clockwise
         servoRight.accept(pos * -constant); //counterclockwise
         position = pos;

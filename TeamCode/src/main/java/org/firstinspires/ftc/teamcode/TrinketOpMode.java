@@ -17,9 +17,6 @@ import org.firstinspires.ftc.teamcode.Trinkets.TowerLifter;
 import org.firstinspires.ftc.teamcode.gamepad.PushButton;
 import org.firstinspires.ftc.teamcode.gamepad.ToggleButton;
 
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-
 
 @TeleOp(name = "TrinketOpMode", group = "1")
 public class TrinketOpMode extends BaseOp {

@@ -28,7 +28,7 @@ public class BlockLifter {
     }
 
     //accept() takes a variable and returns a void
-    public void setPower (double power) {
+    public void setPower(double power) {
         servoLeft.accept(power * constant);
         servoRight.accept(power * constant);
         this.power = power;

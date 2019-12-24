@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.gamepad;
 
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -38,7 +39,7 @@ class ToggleButtonTest {
      * which would be used in an iterative OpMode. So here we have
      * a fake OpMode that looks a bit like the real thing.
      *
-     * DerpyOp uses gamepad1.a to set a `testMode` variable to decide
+     * SkottOp uses gamepad1.a to set a `testMode` variable to decide
      * which drive-train code to use.
      */
     class FakeDerpyOp {

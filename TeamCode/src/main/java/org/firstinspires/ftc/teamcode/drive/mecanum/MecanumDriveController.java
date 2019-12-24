@@ -1,25 +1,28 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.drive.mecanum;
 
-import org.firstinspires.ftc.teamcode.Hardware.AngularPController;
+import org.firstinspires.ftc.teamcode.controller.Controller;
+import org.firstinspires.ftc.teamcode.controller.HeadingController;
+import org.firstinspires.ftc.teamcode.drive.DrivePower;
+import org.firstinspires.ftc.teamcode.polar.PolarCoord;
 
 import static java.lang.Math.PI;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
-import static org.firstinspires.ftc.teamcode.PolarUtil.addRadians;
-import static org.firstinspires.ftc.teamcode.PolarUtil.fromXY;
-import static org.firstinspires.ftc.teamcode.PolarUtil.subtractRadians;
+import static org.firstinspires.ftc.teamcode.polar.PolarUtil.addRadians;
+import static org.firstinspires.ftc.teamcode.polar.PolarUtil.fromXY;
+import static org.firstinspires.ftc.teamcode.polar.PolarUtil.subtractRadians;
 
-public class MecanumDriveController implements Controller<Void, StrafeAndTurn, DrivePower> {
-    private final AngularPController headingController;
+public class MecanumDriveController implements Controller<Void, MecanumPower, DrivePower> {
+    private final HeadingController headingController;
 
-    public MecanumDriveController(AngularPController headingController) {
+    public MecanumDriveController(HeadingController headingController) {
         this.headingController = headingController;
     }
 
     private static double QTR_PI = PI / 4;
     private static double ROOT_2_OVER_2 = sin(QTR_PI);
     private double lastTurn;
-    private StrafeAndTurn target;
+    private MecanumPower target;
 
     private static DrivePower turnPower(double turn) {
         if (Double.isFinite(turn)) {
@@ -39,7 +42,7 @@ public class MecanumDriveController implements Controller<Void, StrafeAndTurn, D
     public void setTarget(double strafe_x, double strafe_y, double turn) {
         PolarCoord xypolar = fromXY(strafe_x, strafe_y);
         PolarCoord strafe = new PolarCoord(xypolar.radius, subtractRadians(xypolar.theta, 2 * QTR_PI));
-        target = new StrafeAndTurn(strafe, turn);
+        target = new MecanumPower(strafe, turn);
     }
 
     public DrivePower getControl() {
@@ -75,7 +78,7 @@ public class MecanumDriveController implements Controller<Void, StrafeAndTurn, D
     }
 
     @Override
-    public void setTarget(StrafeAndTurn target) {
+    public void setTarget(MecanumPower target) {
         this.target = target;
     }
 

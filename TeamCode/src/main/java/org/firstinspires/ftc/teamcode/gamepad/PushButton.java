@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.gamepad;
 
-import org.firstinspires.ftc.teamcode.Sensor;
+import org.firstinspires.ftc.teamcode.controller.Sensor;
 
 import java.util.function.Supplier;
 

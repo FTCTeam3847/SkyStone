@@ -1,6 +1,4 @@
-package org.firstinspires.ftc.teamcode.Hardware;
-
-import org.firstinspires.ftc.teamcode.Controller;
+package org.firstinspires.ftc.teamcode.controller;
 
 import java.util.function.Supplier;
 
@@ -26,7 +24,7 @@ import static java.lang.Math.signum;
  * <pre>
  *  void init() {
  *    imu = initImu();
- *    heading = new AngularPController(
+ *    heading = new HeadingController(
  *         // read the heading angle from the imu
  *         () -> imu.getAngularOrientation().firstAngle,
  *         1.0f, // tolerance
@@ -64,7 +62,7 @@ import static java.lang.Math.signum;
  * the Java standard library. This makes the class easily testable, and
  * and easily embeddable into a simulation environment.
  */
-public class AngularPController implements Controller<Double, Double, Double> {
+public class HeadingController implements Controller<Double, Double, Double> {
     private double zero;
     private double lastAbsolute;
 
@@ -76,7 +74,7 @@ public class AngularPController implements Controller<Double, Double, Double> {
     private final double clamp;
 
     /**
-     * Constructs a new [AngularPController] given a supplier of an absolute
+     * Constructs a new [HeadingController] given a supplier of an absolute
      * angle, an error tolerance, a gain value, and a clamp value.
      *
      * @param absolute  Supplier of an absolute angle reading, e.g. from an IMU.
@@ -100,7 +98,7 @@ public class AngularPController implements Controller<Double, Double, Double> {
      *                  rate, clamp == 0.1f means the control value will never
      *                  command a turn slower than 10% max rate.
      */
-    public AngularPController(
+    public HeadingController(
             Supplier<Double> absolute,
             double tolerance,
             double gain,
@@ -125,8 +123,8 @@ public class AngularPController implements Controller<Double, Double, Double> {
 
     /**
      * Sets the target angle. When set to an angle, calls to
-     * [AngularPController#setTarget()] will provide a
-     * value. When set to NaN, [AngularPController#setTarget()]
+     * [HeadingController#setTarget()] will provide a
+     * value. When set to NaN, [HeadingController#setTarget()]
      * will also provide NaN.
      *
      * @param target angle in degrees within [-180.0..180.0] or NaN.
@@ -153,8 +151,8 @@ public class AngularPController implements Controller<Double, Double, Double> {
      * e.g. call from within a main getLast().
      *
      * @return a value in degrees within [-180.0..180.0].
-     * @see AngularPController#getLast() ()
-     * @see AngularPController#calibrateTo(double)
+     * @see HeadingController#getLast() ()
+     * @see HeadingController#calibrateTo(double)
      */
     public Double getCurrent() {
         readAbsolute();
@@ -178,8 +176,8 @@ public class AngularPController implements Controller<Double, Double, Double> {
      *
      * @return last known angle in degrees between
      * [-180.0..180.0], as adjusted by calibration.
-     * @see AngularPController#getCurrent()
-     * @see AngularPController#calibrateTo(double)
+     * @see HeadingController#getCurrent()
+     * @see HeadingController#calibrateTo(double)
      */
     public double getLast() {
         return subtractAngle(getAbsolute(), getZero());
@@ -192,7 +190,7 @@ public class AngularPController implements Controller<Double, Double, Double> {
      * angle provider.
      *
      * @return A value in degrees [-180.0..-tolerance, 0.0, tolerance..180.0]
-     * @see AngularPController#getCurrent()
+     * @see HeadingController#getCurrent()
      */
     public double getError() {
         return calcAngularError(getTarget(), getLast(), tolerance);

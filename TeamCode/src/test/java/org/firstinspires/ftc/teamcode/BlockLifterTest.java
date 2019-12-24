@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import org.firstinspires.ftc.teamcode.Trinkets.BlockLifter;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class BlockLifterTest {
     class FakeServo {
@@ -31,7 +31,7 @@ class BlockLifterTest {
                 servoRight::getPosition
         );
 
-        bl.setPosition(0.5);
+        bl.setPower(0.5);
 
         assertEquals(0.5, servoLeft.pos);
     }

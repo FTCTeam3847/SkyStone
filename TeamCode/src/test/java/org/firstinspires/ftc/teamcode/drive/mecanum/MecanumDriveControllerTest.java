@@ -1,6 +1,8 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.drive.mecanum;
 
-import org.firstinspires.ftc.teamcode.Hardware.AngularPController;
+import org.firstinspires.ftc.teamcode.controller.HeadingController;
+import org.firstinspires.ftc.teamcode.drive.DrivePower;
+import org.firstinspires.ftc.teamcode.polar.PolarCoord;
 import org.junit.jupiter.api.Test;
 
 import static java.lang.Math.round;
@@ -31,8 +33,8 @@ import static org.hamcrest.Matchers.is;
  *      output when strafing and turning at the same time.
  */
 class MecanumDriveControllerTest {
-    final AngularPController FIXED_HEADING =
-            new AngularPController(() -> 0.0, 2.0d, 2.0d, 0.1d);
+    final HeadingController FIXED_HEADING =
+            new HeadingController(() -> 0.0, 2.0d, 2.0d, 0.1d);
     {
         FIXED_HEADING.setTarget(0.0d);
     }

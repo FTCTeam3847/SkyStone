@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.polar;
 
 import java.util.Objects;
 
 import static java.lang.Math.PI;
 import static java.lang.String.format;
 
-class PolarCoord {
+public class PolarCoord {
     public final double theta;
     public final double radius;
 

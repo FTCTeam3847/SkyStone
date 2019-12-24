@@ -5,21 +5,24 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.teamcode.Hardware.AngularPController;
+import org.firstinspires.ftc.teamcode.controller.FieldPosition;
+import org.firstinspires.ftc.teamcode.controller.HeadingController;
+import org.firstinspires.ftc.teamcode.drive.DrivePower;
+import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDriveController;
 import org.firstinspires.ftc.teamcode.gamepad.ToggleButton;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
 import static java.lang.Math.signum;
 
-@TeleOp(name = "DerpyOp", group = "1")
-public class DerpyOp extends BaseOp {
+@TeleOp(name = "SkottOp", group = "1")
+public class SkottOp extends BaseOp {
     ToggleButton toggleButtonA = new ToggleButton(() -> gamepad1.a);
     ToggleButton toggleButtonB = new ToggleButton(() -> gamepad1.b);
     public long lastTime = System.currentTimeMillis();
     public BNO055IMU imu;
     public MecanumDriveController driverController;
-    AngularPController headingController;
+    HeadingController headingController;
 
     SkyStoneLocalizer skyStoneLocalizer;
     VuforiaLocalizer vuforiaLocalizer;
@@ -34,7 +37,7 @@ public class DerpyOp extends BaseOp {
 
         super.init();
         imu = initImu(hardwareMap.get(BNO055IMU.class, "imu"));
-        headingController = new AngularPController(
+        headingController = new HeadingController(
                 () -> (double) imu.getAngularOrientation().firstAngle,
                 0.0d,
                 10.0d,

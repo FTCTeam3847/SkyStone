@@ -1,10 +1,13 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.controller;
+
+import org.firstinspires.ftc.teamcode.polar.PolarCoord;
+import org.firstinspires.ftc.teamcode.polar.PolarUtil;
 
 import java.util.function.Supplier;
 
-import static org.firstinspires.ftc.teamcode.PolarUtil.fromTo;
-import static org.firstinspires.ftc.teamcode.PolarUtil.fromXY;
-import static org.firstinspires.ftc.teamcode.PolarUtil.subtractRadians;
+import static org.firstinspires.ftc.teamcode.polar.PolarUtil.fromTo;
+import static org.firstinspires.ftc.teamcode.polar.PolarUtil.fromXY;
+import static org.firstinspires.ftc.teamcode.polar.PolarUtil.subtractRadians;
 
 public class PositionController implements Controller<PolarCoord, FieldPosition, PolarCoord> {
     private final Supplier<FieldPosition> fieldPositionSupplier;

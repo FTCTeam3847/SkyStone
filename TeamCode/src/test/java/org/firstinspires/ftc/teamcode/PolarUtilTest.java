@@ -6,10 +6,13 @@ import net.jqwik.api.ForAll;
 import net.jqwik.api.Property;
 import net.jqwik.api.Provide;
 
+import org.firstinspires.ftc.teamcode.polar.PolarCoord;
+import org.firstinspires.ftc.teamcode.polar.PolarUtil;
+
 import static java.lang.Math.PI;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
-import static org.firstinspires.ftc.teamcode.PolarUtil.subtractRadians;
+import static org.firstinspires.ftc.teamcode.polar.PolarUtil.subtractRadians;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;

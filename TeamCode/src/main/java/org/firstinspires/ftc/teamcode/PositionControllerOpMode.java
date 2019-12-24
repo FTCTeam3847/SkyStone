@@ -5,7 +5,14 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.teamcode.Hardware.AngularPController;
+import org.firstinspires.ftc.teamcode.controller.FieldPosition;
+import org.firstinspires.ftc.teamcode.controller.HeadingController;
+import org.firstinspires.ftc.teamcode.controller.PositionController;
+import org.firstinspires.ftc.teamcode.drive.DrivePower;
+import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDriveController;
+import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
+import org.firstinspires.ftc.teamcode.polar.PolarCoord;
+import org.firstinspires.ftc.teamcode.polar.PolarUtil;
 
 @Autonomous
 public class PositionControllerOpMode extends BaseOp {
@@ -21,7 +28,7 @@ public class PositionControllerOpMode extends BaseOp {
     public void init() {
         super.init();
         imu = initImu(hardwareMap.get(BNO055IMU.class, "imu"));
-        AngularPController headingController = new AngularPController(
+        HeadingController headingController = new HeadingController(
                 () -> (double) imu.getAngularOrientation().firstAngle,
                 2.0d,
                 1.0d,
@@ -98,7 +105,7 @@ public class PositionControllerOpMode extends BaseOp {
             if (!strafe.equals(PolarUtil.ORIGIN)) {
                 telemetry.addData("strafe(bot)", strafe);
 
-                driverController.setTarget(new StrafeAndTurn(strafe, 0));
+                driverController.setTarget(new MecanumPower(strafe, 0));
                 DrivePower drivepower = driverController.getControl().scale(0.5);
                 telemetry.addData("drivepower", drivepower);
 

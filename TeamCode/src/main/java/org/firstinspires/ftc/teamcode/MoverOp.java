@@ -3,7 +3,11 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.action.MoveAction;
+import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
+import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
 import org.firstinspires.ftc.teamcode.gamepad.PushButton;
+import org.firstinspires.ftc.teamcode.polar.PolarCoord;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
@@ -23,8 +27,8 @@ public class MoverOp extends OpMode {
         bot = new DerpyBot(hardwareMap);
         bot.init();
 
-        StrafeAndTurn strafeAndTurn = new StrafeAndTurn(new PolarCoord(0.5, 0), 0);
-        moveAction = new MoveAction(1, strafeAndTurn, System::nanoTime, bot);
+        MecanumPower mecanumPower = new MecanumPower(new PolarCoord(0.5, 0), 0);
+        moveAction = new MoveAction(1, mecanumPower, System::nanoTime, bot);
 
     }
 
@@ -37,7 +41,7 @@ public class MoverOp extends OpMode {
     @Override
     public void loop() {
         if (pushButtonA.getCurrent()) {
-            StrafeAndTurn command = new StrafeAndTurn(new PolarCoord(0.5, 0), 0);
+            MecanumPower command = new MecanumPower(new PolarCoord(0.5, 0), 0);
             moveAction = new MoveAction(1, command, System::nanoTime, bot);
             moveAction.start();
         }

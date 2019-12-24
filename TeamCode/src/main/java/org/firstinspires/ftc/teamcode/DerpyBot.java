@@ -4,7 +4,11 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.Hardware.AngularPController;
+import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
+import org.firstinspires.ftc.teamcode.controller.HeadingController;
+import org.firstinspires.ftc.teamcode.drive.DrivePower;
+import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDriveController;
+import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
 
 public class DerpyBot implements SkystoneBot {
 
@@ -14,9 +18,9 @@ public class DerpyBot implements SkystoneBot {
     public DcMotor rightBackMotor;
 
     private final HardwareMap hardwareMap;
-    private MecanumDriveController driverController;
+    private MecanumDriveController mecanum;
     private BNO055IMU imu;
-    private AngularPController headingController;
+    private HeadingController headingController;
 
 
     public DerpyBot(HardwareMap hardwareMap) {
@@ -37,12 +41,12 @@ public class DerpyBot implements SkystoneBot {
     public void init() {
 
         imu = initImu(hardwareMap.get(BNO055IMU.class, "imu"));
-        headingController = new AngularPController(
+        headingController = new HeadingController(
                 () -> (double) imu.getAngularOrientation().firstAngle,
                 0.0d,
                 10.0d,
                 0.0d);
-        driverController = new MecanumDriveController(headingController);
+        mecanum = new MecanumDriveController(headingController);
         //Drivetrain:
 
         //Primary Port 3
@@ -83,13 +87,8 @@ public class DerpyBot implements SkystoneBot {
     }
 
     @Override
-    public void move(StrafeAndTurn strafeAndTurn) {
-        driverController.setTarget(strafeAndTurn);
-        move(driverController.getControl());
-    }
-
-    public void move(double x, double y, double turn) {
-        driverController.setTarget(x, y, turn);
-        move(driverController.getControl());
+    public void move(MecanumPower mecanumPower) {
+        mecanum.setTarget(mecanumPower);
+        move(mecanum.getControl());
     }
 }

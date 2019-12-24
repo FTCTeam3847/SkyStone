@@ -1,11 +1,15 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.action;
+
+import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
+import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
+import org.firstinspires.ftc.teamcode.polar.PolarCoord;
 
 import java.util.function.Supplier;
 
 public class MoveAction implements RoboAction {
     private double startTime;
     private boolean isDone = false;
-    private StrafeAndTurn command;
+    private MecanumPower mecanumPower;
     private double dur;
     private Supplier<Long> timer;
     private boolean started = false;
@@ -14,8 +18,8 @@ public class MoveAction implements RoboAction {
 
     private SkystoneBot bot;
 
-    public MoveAction(double dur, StrafeAndTurn command, Supplier<Long> timer, SkystoneBot bot) {
-        this.command = command;
+    public MoveAction(double dur, MecanumPower mecanumPower, Supplier<Long> timer, SkystoneBot bot) {
+        this.mecanumPower = mecanumPower;
         this.dur = dur * SECOND;
         this.timer = timer;
         this.bot = bot;
@@ -30,14 +34,14 @@ public class MoveAction implements RoboAction {
         if (started) {
             double currentTime = timer.get();
             if (currentTime < startTime + (dur)) {
-                bot.move(command);
+                bot.move(mecanumPower);
             } else {
                 stop();
                 started = false;
-                bot.move(new StrafeAndTurn(new PolarCoord(0, 0), 0));
+                bot.move(MecanumPower.ZERO);
             }
         } else {
-            bot.move(new StrafeAndTurn(new PolarCoord(0, 0), 0));
+            bot.move(new MecanumPower(new PolarCoord(0, 0), 0));
         }
     }
 

@@ -75,7 +75,7 @@ public class PositionControllerOpMode extends BaseOp {
         //clamps distance
         if (Math.sqrt(Math.pow(targetFieldPosition.y - fieldPosition.y, 2) + Math.pow(targetFieldPosition.x - fieldPosition.x, 2)) > 5) {
 
-            if (fieldPosition != fieldPosition.UNKNOWN) {
+            if (fieldPosition != FieldPosition.UNKNOWN) {
                 lastFieldPosition = fieldPosition;
             }
 

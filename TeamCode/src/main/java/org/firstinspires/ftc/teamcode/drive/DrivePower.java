@@ -8,36 +8,36 @@ import static java.lang.Math.max;
 public class DrivePower {
     public static final DrivePower ZERO = new DrivePower(0, 0, 0, 0);
 
-    public final double rightFor, rightBack, leftFor, leftBack;
+    public final double rightFront, rightBack, leftFront, leftBack;
 
-    public DrivePower(double rightFor, double rightBack, double leftFor, double leftBack) {
-        this.rightFor = rightFor;
+    public DrivePower(double rightFront, double rightBack, double leftFront, double leftBack) {
+        this.rightFront = rightFront;
         this.rightBack = rightBack;
-        this.leftFor = leftFor;
+        this.leftFront = leftFront;
         this.leftBack = leftBack;
     }
 
     public DrivePower scale(double scalar) {
         return new DrivePower(
-                rightFor * scalar,
+                rightFront * scalar,
                 rightBack * scalar,
-                leftFor * scalar,
+                leftFront * scalar,
                 leftBack * scalar);
     }
 
     public static DrivePower combine(DrivePower... drivePowers) {
         double rf = 0, rb = 0, lf = 0, lb = 0;
         for (DrivePower drivePower : drivePowers) {
-            rf += drivePower.rightFor;
+            rf += drivePower.rightFront;
             rb += drivePower.rightBack;
-            lf += drivePower.leftFor;
+            lf += drivePower.leftFront;
             lb += drivePower.leftBack;
         }
         return normalize(new DrivePower(rf, rb, lf, lb));
     }
 
     public static DrivePower normalize(DrivePower drivePower) {
-        double scalar = 1.0 / maxAbs(drivePower.rightFor, drivePower.rightBack, drivePower.leftFor, drivePower.leftBack, 1.0d);
+        double scalar = 1.0 / maxAbs(drivePower.rightFront, drivePower.rightBack, drivePower.leftFront, drivePower.leftBack, 1.0d);
         return drivePower.scale(scalar);
     }
 
@@ -58,9 +58,9 @@ public class DrivePower {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DrivePower that = (DrivePower) o;
-        return Double.compare(that.rightFor, rightFor) == 0 &&
+        return Double.compare(that.rightFront, rightFront) == 0 &&
                 Double.compare(that.rightBack, rightBack) == 0 &&
-                Double.compare(that.leftFor, leftFor) == 0 &&
+                Double.compare(that.leftFront, leftFront) == 0 &&
                 Double.compare(that.leftBack, leftBack) == 0;
     }
 
@@ -69,7 +69,7 @@ public class DrivePower {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(rightFor, rightBack, leftFor, leftBack);
+        return Objects.hash(rightFront, rightBack, leftFront, leftBack);
     }
 
     /**
@@ -78,9 +78,9 @@ public class DrivePower {
     @Override
     public String toString() {
         return "DrivePower{" +
-                "rightFor=" + rightFor +
+                "rightFront=" + rightFront +
                 ", rightBack=" + rightBack +
-                ", leftFor=" + leftFor +
+                ", leftFront=" + leftFront +
                 ", leftBack=" + leftBack +
                 '}';
     }

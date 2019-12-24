@@ -55,9 +55,9 @@ class MecanumDriveControllerTest {
 
     DrivePower round2(DrivePower drivePower) {
         return new DrivePower(
-                round2(drivePower.rightFor),
+                round2(drivePower.rightFront),
                 round2(drivePower.rightBack),
-                round2(drivePower.leftFor),
+                round2(drivePower.leftFront),
                 round2(drivePower.leftBack)
         );
     }

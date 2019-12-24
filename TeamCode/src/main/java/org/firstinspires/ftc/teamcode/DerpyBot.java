@@ -83,7 +83,7 @@ public class DerpyBot implements SkystoneBot {
     }
 
     private void move(DrivePower drivePower) {
-        move4(drivePower.leftFor, drivePower.leftBack, drivePower.rightFor, drivePower.rightBack);
+        move4(drivePower.leftFront, drivePower.leftBack, drivePower.rightFront, drivePower.rightBack);
     }
 
     @Override

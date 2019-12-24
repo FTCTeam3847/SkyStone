@@ -16,8 +16,6 @@ public class BaseOp extends OpMode {
     public DcMotor rightFrontMotor;
     public DcMotor rightBackMotor;
 
-    public CRServo liftingServo;
-
     //Tower lifter
     public DcMotor leftTowerLifter;
     public DcMotor rightTowerLifter;
@@ -112,39 +110,5 @@ public class BaseOp extends OpMode {
 
     public void move(DrivePower drivePower) {
         move4(drivePower.leftFor, drivePower.leftBack, drivePower.rightFor, drivePower.rightBack);
-    }
-
-    public void moveGrabber(double power) {
-        leftTowerLifter.setPower(power);
-        rightTowerLifter.setPower(power);
-    }
-
-    public void grabTower() {
-        //Need proper angles/values for grabTower to work - these are filler values
-        leftTowerGrabber.setPosition(0.5);
-        rightTowerGrabber.setPosition(0.5);
-    }
-
-    public void releaseTower() {
-        //Need proper angles/values for releaseTower to work - these are filler values
-        leftTowerGrabber.setPosition(0);
-        rightTowerGrabber.setPosition(1);
-    }
-
-    public void grabBlock() {
-        grabber.setPosition(1); //filler value - need real value
-    }
-
-    public void releaseBlock() {
-        grabber.setPosition(0); //filler value - need real value
-    }
-
-    public void slide(double speed) {
-        //extender.setPower(speed);
-    }
-
-    public void moveSlider(double speed) {
-        leftBlockLifter.setPower(-speed);
-        rightBlockLifter.setPower(speed);
     }
 }

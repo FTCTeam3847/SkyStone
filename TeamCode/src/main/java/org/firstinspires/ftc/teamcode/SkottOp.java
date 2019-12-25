@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.controller.HeadingController;
 import org.firstinspires.ftc.teamcode.drive.DrivePower;
@@ -13,6 +12,8 @@ import org.firstinspires.ftc.teamcode.gamepad.ToggleButton;
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
 import static java.lang.Math.signum;
+import static org.firstinspires.ftc.teamcode.HardwareMapUtils.initImu;
+import static org.firstinspires.ftc.teamcode.HardwareMapUtils.initVuforia;
 
 @TeleOp(name = "SkottOp", group = "1")
 public class SkottOp extends BaseOp {
@@ -35,7 +36,7 @@ public class SkottOp extends BaseOp {
         telemetry.update();
 
         super.init();
-        imu = initImu(hardwareMap.get(BNO055IMU.class, "imu"));
+        imu = initImu(hardwareMap);
         headingController = new HeadingController(
                 () -> (double) imu.getAngularOrientation().firstAngle,
                 0.0d,
@@ -43,24 +44,7 @@ public class SkottOp extends BaseOp {
                 0.0d);
         driverController = new MecanumDriveController(headingController);
 
-        int cameraMonitorViewId =
-                hardwareMap
-                        .appContext
-                        .getResources()
-                        .getIdentifier(
-                                "cameraMonitorViewId",
-                                "id",
-                                hardwareMap.appContext.getPackageName()
-                        );
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-
-
-        parameters.vuforiaLicenseKey = GameConstants.VUFORIA_KEY;
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
-
-        parameters.useExtendedTracking = false; //Disables extended tracking on vuforia
-
-        vuforiaLocalizer = ClassFactory.getInstance().createVuforia(parameters);
+        vuforiaLocalizer = initVuforia(hardwareMap);
         skyStoneLocalizer = new SkyStoneLocalizer(vuforiaLocalizer);
     }
 
@@ -69,16 +53,6 @@ public class SkottOp extends BaseOp {
         super.init_loop();
         telemetry.addLine("Initialized.");
         telemetry.update();
-    }
-
-    private BNO055IMU initImu(BNO055IMU imu) {
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.mode = BNO055IMU.SensorMode.IMU;
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.loggingEnabled = false;
-        imu.initialize(parameters);
-        return imu;
     }
 
     private static double sensitivity(double base, double exp) {

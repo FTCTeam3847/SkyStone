@@ -4,11 +4,16 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
 import org.firstinspires.ftc.teamcode.controller.HeadingController;
 import org.firstinspires.ftc.teamcode.drive.DrivePower;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDriveController;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
+
+import static org.firstinspires.ftc.teamcode.HardwareMapUtils.initImu;
+import static org.firstinspires.ftc.teamcode.HardwareMapUtils.initVuforia;
 
 public class DerpyBot implements SkystoneBot {
 
@@ -18,36 +23,32 @@ public class DerpyBot implements SkystoneBot {
     public DcMotor rightBackMotor;
 
     private final HardwareMap hardwareMap;
+    private final Telemetry telemetry;
     private MecanumDriveController mecanum;
     private BNO055IMU imu;
     private HeadingController headingController;
+    private SkyStoneLocalizer skyStoneLocalizer;
+    private VuforiaLocalizer vuforiaLocalizer;
 
-
-    public DerpyBot(HardwareMap hardwareMap) {
+    public DerpyBot(
+            HardwareMap hardwareMap,
+            Telemetry telemetry
+    ) {
         this.hardwareMap = hardwareMap;
-    }
-
-    private BNO055IMU initImu(BNO055IMU imu) {
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.mode = BNO055IMU.SensorMode.IMU;
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.loggingEnabled = false;
-        imu.initialize(parameters);
-        return imu;
+        this.telemetry = telemetry;
     }
 
     @Override
     public void init() {
-
-        imu = initImu(hardwareMap.get(BNO055IMU.class, "imu"));
+        imu = initImu(hardwareMap);
         headingController = new HeadingController(
                 () -> (double) imu.getAngularOrientation().firstAngle,
                 0.0d,
                 10.0d,
                 0.0d);
         mecanum = new MecanumDriveController(headingController);
-        //Drivetrain:
+        vuforiaLocalizer = initVuforia(hardwareMap);
+        skyStoneLocalizer = new SkyStoneLocalizer(vuforiaLocalizer);
 
         //Primary Port 3
         leftFrontMotor = hardwareMap.get(DcMotor.class, "motor-left-front");
@@ -74,6 +75,29 @@ public class DerpyBot implements SkystoneBot {
         rightBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
+    @Override
+    public void init_loop() {
+        updateTelemetry();
+    }
+
+    @Override
+    public void start() {
+
+    }
+
+    @Override
+    public void loop() {
+        updateTelemetry();
+    }
+
+    @Override
+    public void stop() {
+
+    }
+
+    private void updateTelemetry() {
+        telemetry.addData("localizer", skyStoneLocalizer);
+    }
 
     private void move4(double leftFront, double leftBack, double rightFront, double rightBack) {
         leftFrontMotor.setPower(leftFront);

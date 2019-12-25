@@ -13,8 +13,8 @@ import static java.lang.Math.abs;
 import static java.lang.Math.pow;
 import static java.lang.Math.signum;
 
-@TeleOp(name = "MoverOp", group = "1")
-public class MoverOp extends OpMode {
+@TeleOp(name = "DerpyOp", group = "1")
+public class DerpyOp extends OpMode {
     PushButton pushButtonA = new PushButton(() -> gamepad1.a);
 
     MoveAction moveAction;
@@ -23,8 +23,7 @@ public class MoverOp extends OpMode {
 
     @Override
     public void init() {
-
-        bot = new DerpyBot(hardwareMap);
+        bot = new DerpyBot(hardwareMap, telemetry);
         bot.init();
 
         MecanumPower mecanumPower = new MecanumPower(new PolarCoord(0.5, 0), 0);
@@ -40,6 +39,8 @@ public class MoverOp extends OpMode {
 
     @Override
     public void loop() {
+        bot.loop();
+
         if (pushButtonA.getCurrent()) {
             MecanumPower command = new MecanumPower(new PolarCoord(0.5, 0), 0);
             moveAction = new MoveAction(1, command, System::nanoTime, bot);

@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.teamcode.controller.FieldPosition;
 import org.firstinspires.ftc.teamcode.controller.HeadingController;
 import org.firstinspires.ftc.teamcode.drive.DrivePower;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDriveController;
@@ -149,8 +148,7 @@ public class SkottOp extends BaseOp {
 
         move(drivePower);
 
-        FieldPosition fieldPosition = skyStoneLocalizer.getCurrent();
-        telemetry.addData("fieldPosition", fieldPosition);
+        telemetry.addData("fieldPosition", skyStoneLocalizer.getCurrent());
         telemetry.addData("h correct", -headingController.getControl());
         telemetry.addData("Slow Mode", slowMode);
         telemetry.addData("loopMS:", currentTime - lastTime);

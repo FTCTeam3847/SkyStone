@@ -1,11 +1,20 @@
 package org.firstinspires.ftc.teamcode.polar;
 
+import java.util.Locale;
 import java.util.Objects;
 
 import static java.lang.Math.PI;
 import static java.lang.String.format;
 
 public class PolarCoord {
+    public static final PolarCoord ORIGIN = new PolarCoord(0.0d, 0.0d);
+    public static final PolarCoord UNKNOWN = new PolarCoord(-0.0d, -0.0d) {
+        @Override
+        public String toString() {
+            return "{UNKNOWN}";
+        }
+    };
+
     public final double theta;
     public final double radius;
 
@@ -16,7 +25,7 @@ public class PolarCoord {
 
     @Override
     public String toString() {
-        return format("PolarCoord{%.2f, %.2f·π}", radius, theta / PI);
+        return format(Locale.US, "{%.2f, %.2f·π}", radius, theta / PI);
     }
 
     @Override

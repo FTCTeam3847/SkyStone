@@ -43,9 +43,7 @@ public class PositionController implements Controller<PolarCoord, FieldPosition,
             return runningAverage;
         }
 
-        PolarCoord currentPolar = fromXY(currentFieldPosition.x, currentFieldPosition.y);
-        PolarCoord targetPolar = fromXY(targetFieldPosition.x, targetFieldPosition.y);
-        return fromTo(currentPolar, targetPolar);
+        return fromTo(currentFieldPosition.polarCoord, targetFieldPosition.polarCoord);
     }
 
     public PolarCoord getControl() {
@@ -58,7 +56,7 @@ public class PositionController implements Controller<PolarCoord, FieldPosition,
         PolarCoord targetFieldRelative = getCurrent();
         double power = Math.min(targetFieldRelative.radius / 12, 1);
 
-        PolarCoord strafe = new PolarCoord(power, subtractRadians(targetFieldRelative.theta, currentFieldPosition.h));
+        PolarCoord strafe = new PolarCoord(power, subtractRadians(targetFieldRelative.theta, currentFieldPosition.heading));
 
         if (runningAverage == PolarUtil.ORIGIN) {
             runningAverage = new PolarCoord(strafe.radius, strafe.theta);

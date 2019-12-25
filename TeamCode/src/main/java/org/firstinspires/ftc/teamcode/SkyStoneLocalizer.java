@@ -20,6 +20,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
+import static org.firstinspires.ftc.teamcode.polar.PolarUtil.fromXY;
 
 public class SkyStoneLocalizer implements Sensor<FieldPosition> {
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
@@ -220,11 +221,9 @@ public class SkyStoneLocalizer implements Sensor<FieldPosition> {
     public FieldPosition getCurrent() {
         // check all the trackable targets to see which one (if any) is visible.
         targetVisible = false;
-        List<String> description = new ArrayList<>();
 
         for (VuforiaTrackable trackable : allTrackables) {
             if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
-                description.add("tgt: " + trackable.getName());
                 targetVisible = true;
 
                 // getUpdatedRobotLocation() will return null if no new information is available since
@@ -242,14 +241,13 @@ public class SkyStoneLocalizer implements Sensor<FieldPosition> {
             // express position (translation) of robot in inches.
             VectorF translation = lastLocation.getTranslation();
 
-            // express the rotation of the robot in degrees.
             Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, RADIANS);
             double heading = PolarUtil.normalize(rotation.thirdAngle);
             return new FieldPosition(
-                    translation.get(0) / mmPerInch,
-                    translation.get(1) / mmPerInch,
-                    heading,
-                    description.toString()
+                    fromXY(
+                            translation.get(0) / mmPerInch,
+                            translation.get(1) / mmPerInch),
+                    heading
             );
         } else {
             return FieldPosition.UNKNOWN;

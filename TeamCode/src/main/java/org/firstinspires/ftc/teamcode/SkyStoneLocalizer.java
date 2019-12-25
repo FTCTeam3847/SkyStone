@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.polar.PolarUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.RADIANS;
@@ -54,7 +55,9 @@ public class SkyStoneLocalizer implements Sensor<FieldPosition> {
     private float phoneZRotate = 0;
 
     VuforiaTrackables targetsSkyStone;
-    List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
+    List<VuforiaTrackable> allTrackables = new ArrayList<>();
+    private FieldPosition currentFieldPosition = FieldPosition.UNKNOWN;
+    private VuforiaTrackable currentTrackable = null;
 
 
     public SkyStoneLocalizer(VuforiaLocalizer vuforiaLocalizer) {
@@ -218,6 +221,7 @@ public class SkyStoneLocalizer implements Sensor<FieldPosition> {
 
     }
 
+    @Override
     public FieldPosition getCurrent() {
         // check all the trackable targets to see which one (if any) is visible.
         targetVisible = false;
@@ -225,6 +229,7 @@ public class SkyStoneLocalizer implements Sensor<FieldPosition> {
         for (VuforiaTrackable trackable : allTrackables) {
             if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
                 targetVisible = true;
+                this.currentTrackable = trackable;
 
                 // getUpdatedRobotLocation() will return null if no new information is available since
                 // the last time that call was made, or if the trackable is not currently visible.
@@ -243,19 +248,30 @@ public class SkyStoneLocalizer implements Sensor<FieldPosition> {
 
             Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, RADIANS);
             double heading = PolarUtil.normalize(rotation.thirdAngle);
-            return new FieldPosition(
+            this.currentFieldPosition = new FieldPosition(
                     fromXY(
                             translation.get(0) / mmPerInch,
                             translation.get(1) / mmPerInch),
                     heading
             );
         } else {
-            return FieldPosition.UNKNOWN;
+            this.currentFieldPosition = FieldPosition.UNKNOWN;
         }
+
+        return this.currentFieldPosition;
     }
 
     public void stop() {
         targetsSkyStone.deactivate();
     }
 
+    @Override
+    public String toString() {
+        return String.format(
+                Locale.US,
+                "pos: %s, tgt: %s",
+                currentFieldPosition,
+                null == currentTrackable ? "Not visible" : currentTrackable.getName()
+        );
+    }
 }

@@ -2,50 +2,45 @@ package org.firstinspires.ftc.teamcode.action;
 
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
-import org.firstinspires.ftc.teamcode.polar.PolarCoord;
 
+import java.util.Locale;
 import java.util.function.Supplier;
 
 public class MoveAction implements RoboAction {
-    private double startTime;
+    private long startTime;
     private boolean isDone = false;
     private MecanumPower mecanumPower;
-    private double dur;
-    private Supplier<Long> timer;
-    private boolean started = false;
-
-    private long SECOND = 1_000_000_000;
+    private long dur;
+    private Supplier<Long> msecTime;
+    private boolean isStarted = false;
 
     private SkystoneBot bot;
 
-    public MoveAction(double dur, MecanumPower mecanumPower, Supplier<Long> timer, SkystoneBot bot) {
+    public MoveAction(long dur, MecanumPower mecanumPower, Supplier<Long> msecTime, SkystoneBot bot) {
         this.mecanumPower = mecanumPower;
-        this.dur = dur * SECOND;
-        this.timer = timer;
+        this.dur = dur;
+        this.msecTime = msecTime;
         this.bot = bot;
     }
 
     public void start() {
-        startTime = timer.get();
-        started = true;
+        startTime = msecTime.get();
+        isStarted = true;
     }
 
     public void loop() {
-        if (started) {
-            double currentTime = timer.get();
-            if (currentTime < startTime + (dur)) {
-                bot.move(mecanumPower);
-            } else {
-                stop();
-                started = false;
-                bot.move(MecanumPower.ZERO);
-            }
+        if (!isStarted) return;
+
+        if (runtime() < dur) {
+            bot.move(mecanumPower);
         } else {
-            bot.move(new MecanumPower(new PolarCoord(0, 0), 0));
+            stop();
         }
     }
 
     public void stop() {
+        bot.move(MecanumPower.ZERO);
+        isStarted = false;
         isDone = true;
     }
 
@@ -53,8 +48,21 @@ public class MoveAction implements RoboAction {
         return isDone;
     }
 
-    public boolean started() {
-        return started;
+    private long runtime() {
+        if (isDone) return dur;
+        else if (!isStarted) return 0;
+        else return msecTime.get() - startTime;
     }
+
+    @Override
+    public String toString() {
+        return String.format(Locale.US,
+                "%s{%.2fs, %s}",
+                getClass().getSimpleName(),
+                runtime() / 1000.0d,
+                mecanumPower
+        );
+    }
+
 
 }

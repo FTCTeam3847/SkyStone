@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.drive.mecanum;
 
 import org.firstinspires.ftc.teamcode.controller.Controller;
-import org.firstinspires.ftc.teamcode.controller.HeadingController;
+import org.firstinspires.ftc.teamcode.controller.HeadingControllerRadians;
 import org.firstinspires.ftc.teamcode.drive.DrivePower;
 import org.firstinspires.ftc.teamcode.polar.PolarCoord;
 
@@ -13,9 +13,9 @@ import static org.firstinspires.ftc.teamcode.polar.PolarUtil.fromXY;
 import static org.firstinspires.ftc.teamcode.polar.PolarUtil.subtractRadians;
 
 public class MecanumDriveController implements Controller<Void, MecanumPower, DrivePower> {
-    private final HeadingController headingController;
+    private final HeadingControllerRadians headingController;
 
-    public MecanumDriveController(HeadingController headingController) {
+    public MecanumDriveController(HeadingControllerRadians headingController) {
         this.headingController = headingController;
     }
 

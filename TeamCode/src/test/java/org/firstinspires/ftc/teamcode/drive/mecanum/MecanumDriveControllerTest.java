@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.drive.mecanum;
 
 import org.firstinspires.ftc.teamcode.controller.HeadingController;
+import org.firstinspires.ftc.teamcode.controller.HeadingControllerRadians;
 import org.firstinspires.ftc.teamcode.drive.DrivePower;
 import org.firstinspires.ftc.teamcode.polar.PolarCoord;
 import org.junit.jupiter.api.Test;
@@ -33,8 +34,8 @@ import static org.hamcrest.Matchers.is;
  *      output when strafing and turning at the same time.
  */
 class MecanumDriveControllerTest {
-    final HeadingController FIXED_HEADING =
-            new HeadingController(() -> 0.0, 2.0d, 2.0d, 0.1d);
+    final HeadingControllerRadians FIXED_HEADING =
+            new HeadingControllerRadians(() -> 0.0, 2.0d, 2.0d, 0.1d);
     {
         FIXED_HEADING.setTarget(0.0d);
     }

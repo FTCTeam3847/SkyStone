@@ -7,13 +7,15 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
-import org.firstinspires.ftc.teamcode.controller.HeadingController;
+import org.firstinspires.ftc.teamcode.controller.HeadingControllerRadians;
 import org.firstinspires.ftc.teamcode.drive.DrivePower;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDriveController;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
 
 import static org.firstinspires.ftc.teamcode.HardwareMapUtils.initImu;
 import static org.firstinspires.ftc.teamcode.HardwareMapUtils.initVuforia;
+import static org.firstinspires.ftc.teamcode.polar.PolarUtil.addRadians;
+import static org.firstinspires.ftc.teamcode.polar.PolarUtil.normalize;
 
 public class DerpyBot implements SkystoneBot {
 
@@ -26,7 +28,7 @@ public class DerpyBot implements SkystoneBot {
     private final Telemetry telemetry;
     private MecanumDriveController mecanum;
     private BNO055IMU imu;
-    private HeadingController headingController;
+    private HeadingControllerRadians headingController;
     private SkyStoneLocalizer skyStoneLocalizer;
     private VuforiaLocalizer vuforiaLocalizer;
 
@@ -41,8 +43,8 @@ public class DerpyBot implements SkystoneBot {
     @Override
     public void init() {
         imu = initImu(hardwareMap);
-        headingController = new HeadingController(
-                () -> (double) imu.getAngularOrientation().firstAngle,
+        headingController = new HeadingControllerRadians(
+                () -> normalize((double) imu.getAngularOrientation().firstAngle),
                 0.0d,
                 4.0d,
                 0.0d);
@@ -98,6 +100,7 @@ public class DerpyBot implements SkystoneBot {
 
     private void updateTelemetry() {
         telemetry.addData("localizer", skyStoneLocalizer);
+        telemetry.addData("heading controller", headingController);
     }
 
     private void move4(double leftFront, double leftBack, double rightFront, double rightBack) {
@@ -116,4 +119,12 @@ public class DerpyBot implements SkystoneBot {
         mecanum.setTarget(mecanumPower);
         move(mecanum.getControl());
     }
+
+
+    @Override
+    public double getFieldRelativeHeading() {
+        return headingController.getCurrent();
+    }
+
+
 }

@@ -4,22 +4,36 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.action.MoveAction;
+import org.firstinspires.ftc.teamcode.action.SequentialAction;
+import org.firstinspires.ftc.teamcode.action.TurnToAction;
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
 import org.firstinspires.ftc.teamcode.gamepad.PushButton;
 import org.firstinspires.ftc.teamcode.polar.PolarCoord;
 
+import static java.lang.Math.PI;
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
 import static java.lang.Math.signum;
+import static org.firstinspires.ftc.teamcode.action.RoboAction.MSEC;
 
 @TeleOp(name = "DerpyOp", group = "1")
 public class DerpyOp extends OpMode {
-    PushButton pushButtonA = new PushButton(() -> gamepad1.a);
+
+    PushButton pushButtonX = new PushButton(() -> gamepad1.x);
 
     MoveAction moveAction;
+    TurnToAction turnToAction;
+    SequentialAction script;
 
     SkystoneBot bot;
+
+    public SequentialAction makeScript() {
+        SequentialAction script = new SequentialAction();
+        script.addAction(new MoveAction(1*MSEC, new MecanumPower(new PolarCoord(0.5, PI / 2), 0), System::currentTimeMillis, bot));
+        script.addAction(new MoveAction(1*MSEC, new MecanumPower(new PolarCoord(0.5, 3 * PI / 2), 0), System::currentTimeMillis, bot));
+        return script;
+    }
 
     @Override
     public void init() {
@@ -28,7 +42,9 @@ public class DerpyOp extends OpMode {
 
         MecanumPower mecanumPower = new MecanumPower(new PolarCoord(0.5, 0), 0);
         moveAction = new MoveAction(1, mecanumPower, System::nanoTime, bot);
+        turnToAction = new TurnToAction(0, bot);
 
+        script = makeScript();
     }
 
     private static double sensitivity(double base, double exp) {
@@ -46,24 +62,23 @@ public class DerpyOp extends OpMode {
     @Override
     public void loop() {
         bot.loop();
+        script.loop();
 
-//        if (pushButtonA.getCurrent()) {
-//            MecanumPower command = new MecanumPower(new PolarCoord(0.5, 0), 0);
-//            moveAction = new MoveAction(1, command, System::nanoTime, bot);
-//            moveAction.start();
-//        }
+        if (pushButtonX.getCurrent()) {
+            script = makeScript();
+            script.start();
+        }
+
+//        MecanumPower mecanumPower = MecanumPower.fromXYTurn(
+//                sensitivity(gamepad1.right_stick_x, SENSITIVITY),
+//                sensitivity(-gamepad1.right_stick_y, SENSITIVITY),
+//                sensitivity(gamepad1.left_stick_x, SENSITIVITY)
+//        );
 //
-//        moveAction.loop();
-        MecanumPower mecanumPower = MecanumPower.fromXYTurn(
-                sensitivity(gamepad1.right_stick_x, SENSITIVITY),
-                sensitivity(-gamepad1.right_stick_y, SENSITIVITY),
-                sensitivity(gamepad1.left_stick_x, SENSITIVITY)
-        );
-
-        bot.move(mecanumPower);
-
-//        telemetry.addData("Started", moveAction.started());
-//        telemetry.addData("Is done", moveAction.isDone());
+//        bot.move(mecanumPower);
+//
+        telemetry.addData("script", script);
+        telemetry.addData("current heading", "%.2f PI", bot.getFieldRelativeHeading() / PI);
         telemetry.update();
     }
 

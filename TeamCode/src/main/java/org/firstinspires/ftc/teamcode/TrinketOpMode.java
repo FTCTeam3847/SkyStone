@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Trinkets.TowerLifter;
 import org.firstinspires.ftc.teamcode.controller.HeadingController;
+import org.firstinspires.ftc.teamcode.controller.HeadingControllerRadians;
 import org.firstinspires.ftc.teamcode.drive.DrivePower;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDriveController;
 import org.firstinspires.ftc.teamcode.gamepad.PushButton;
@@ -26,7 +27,7 @@ import static java.lang.Math.signum;
 public class TrinketOpMode extends BaseOp {
     public BNO055IMU imu;
     public MecanumDriveController driverController;
-    HeadingController headingController;
+    HeadingControllerRadians headingController;
 
     ToggleButton toggleRunMode = new ToggleButton(() -> gamepad1.right_stick_button);
     PushButton resetEncoder = new PushButton(() -> gamepad1.left_stick_button);
@@ -66,7 +67,7 @@ public class TrinketOpMode extends BaseOp {
 
         super.init();
         imu = initImu(hardwareMap.get(BNO055IMU.class, "imu"));
-        headingController = new HeadingController(
+        headingController = new HeadingControllerRadians(
                 () -> (double) imu.getAngularOrientation().firstAngle,
                 0.0d,
                 10.0d,

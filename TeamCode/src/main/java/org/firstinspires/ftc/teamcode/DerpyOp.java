@@ -38,27 +38,38 @@ public class DerpyOp extends OpMode {
     private static final int SENSITIVITY = 3;
 
     @Override
+    public void init_loop() {
+        super.init_loop();
+        bot.init_loop();
+    }
+
+    @Override
     public void loop() {
         bot.loop();
 
-        if (pushButtonA.getCurrent()) {
-            MecanumPower command = new MecanumPower(new PolarCoord(0.5, 0), 0);
-            moveAction = new MoveAction(1, command, System::nanoTime, bot);
-            moveAction.start();
-        }
+//        if (pushButtonA.getCurrent()) {
+//            MecanumPower command = new MecanumPower(new PolarCoord(0.5, 0), 0);
+//            moveAction = new MoveAction(1, command, System::nanoTime, bot);
+//            moveAction.start();
+//        }
+//
+//        moveAction.loop();
+        MecanumPower mecanumPower = MecanumPower.fromXYTurn(
+                sensitivity(gamepad1.right_stick_x, SENSITIVITY),
+                sensitivity(-gamepad1.right_stick_y, SENSITIVITY),
+                sensitivity(gamepad1.left_stick_x, SENSITIVITY)
+        );
 
-        moveAction.loop();
-//        bot.move(sensitivity(gamepad1.right_stick_x, SENSITIVITY),
-//                sensitivity(-gamepad1.right_stick_y, SENSITIVITY),
-//                sensitivity(gamepad1.left_stick_x, SENSITIVITY));
+        bot.move(mecanumPower);
 
-        telemetry.addData("Started", moveAction.started());
-        telemetry.addData("Is done", moveAction.isDone());
+//        telemetry.addData("Started", moveAction.started());
+//        telemetry.addData("Is done", moveAction.isDone());
         telemetry.update();
     }
 
     @Override
     public void stop() {
         super.stop();
+        bot.stop();
     }
 }

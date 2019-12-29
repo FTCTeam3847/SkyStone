@@ -44,7 +44,7 @@ public class DerpyBot implements SkystoneBot {
         headingController = new HeadingController(
                 () -> (double) imu.getAngularOrientation().firstAngle,
                 0.0d,
-                10.0d,
+                4.0d,
                 0.0d);
         mecanum = new MecanumDriveController(headingController);
         vuforiaLocalizer = initVuforia(hardwareMap);
@@ -77,22 +77,23 @@ public class DerpyBot implements SkystoneBot {
 
     @Override
     public void init_loop() {
+        skyStoneLocalizer.getCurrent();
         updateTelemetry();
     }
 
     @Override
     public void start() {
-
     }
 
     @Override
     public void loop() {
+        skyStoneLocalizer.getCurrent();
         updateTelemetry();
     }
 
     @Override
     public void stop() {
-
+        skyStoneLocalizer.stop();
     }
 
     private void updateTelemetry() {

@@ -57,7 +57,7 @@ public class SkyStoneLocalizer implements Sensor<FieldPosition> {
     VuforiaTrackables targetsSkyStone;
     List<VuforiaTrackable> allTrackables = new ArrayList<>();
     private FieldPosition currentFieldPosition = FieldPosition.UNKNOWN;
-    private VuforiaTrackable currentTrackable = null;
+    private VuforiaTrackable currentVisibleTarget = null;
 
 
     public SkyStoneLocalizer(VuforiaLocalizer vuforiaLocalizer) {
@@ -225,11 +225,12 @@ public class SkyStoneLocalizer implements Sensor<FieldPosition> {
     public FieldPosition getCurrent() {
         // check all the trackable targets to see which one (if any) is visible.
         targetVisible = false;
+        VuforiaTrackable visibleTarget = null;
 
         for (VuforiaTrackable trackable : allTrackables) {
             if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
                 targetVisible = true;
-                this.currentTrackable = trackable;
+                visibleTarget = trackable;
 
                 // getUpdatedRobotLocation() will return null if no new information is available since
                 // the last time that call was made, or if the trackable is not currently visible.
@@ -257,7 +258,7 @@ public class SkyStoneLocalizer implements Sensor<FieldPosition> {
         } else {
             this.currentFieldPosition = FieldPosition.UNKNOWN;
         }
-
+        this.currentVisibleTarget = visibleTarget;
         return this.currentFieldPosition;
     }
 
@@ -271,7 +272,7 @@ public class SkyStoneLocalizer implements Sensor<FieldPosition> {
                 Locale.US,
                 "pos: %s, tgt: %s",
                 currentFieldPosition,
-                null == currentTrackable ? "Not visible" : currentTrackable.getName()
+                null == currentVisibleTarget ? "Not visible" : currentVisibleTarget.getName()
         );
     }
 }

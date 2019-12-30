@@ -5,17 +5,15 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.action.MoveAction;
 import org.firstinspires.ftc.teamcode.action.SequentialAction;
+import org.firstinspires.ftc.teamcode.action.SkystoneAction;
 import org.firstinspires.ftc.teamcode.action.TurnToAction;
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
-import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
 import org.firstinspires.ftc.teamcode.gamepad.PushButton;
-import org.firstinspires.ftc.teamcode.polar.PolarCoord;
 
 import static java.lang.Math.PI;
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
 import static java.lang.Math.signum;
-import static org.firstinspires.ftc.teamcode.action.RoboAction.MSEC;
 
 @TeleOp(name = "DerpyOp", group = "1")
 public class DerpyOp extends OpMode {
@@ -29,9 +27,16 @@ public class DerpyOp extends OpMode {
     SkystoneBot bot;
 
     public SequentialAction makeScript() {
-        SequentialAction script = new SequentialAction();
-        script.addAction(new MoveAction(1*MSEC, new MecanumPower(new PolarCoord(0.5, PI / 2), 0), System::currentTimeMillis, bot));
-        script.addAction(new MoveAction(1*MSEC, new MecanumPower(new PolarCoord(0.5, 3 * PI / 2), 0), System::currentTimeMillis, bot));
+        SkystoneAction script = new SkystoneAction(System::currentTimeMillis, bot)
+                .strafe(PI / 2, 3000, .5)
+                .pause(500)
+                .strafe(3 * PI / 2, 3000, .5)
+                .pause(500)
+                .moveForward(3000, .5)
+                .pause(500)
+                .turn(PI/4)
+                .pause(500)
+                .moveBackwards(3000, .5);
         return script;
     }
 
@@ -40,9 +45,9 @@ public class DerpyOp extends OpMode {
         bot = new DerpyBot(hardwareMap, telemetry);
         bot.init();
 
-        MecanumPower mecanumPower = new MecanumPower(new PolarCoord(0.5, 0), 0);
-        moveAction = new MoveAction(1, mecanumPower, System::nanoTime, bot);
-        turnToAction = new TurnToAction(0, bot);
+        //MecanumPower mecanumPower = new MecanumPower(new PolarCoord(0.5, 0), 0);
+        //moveAction = new MoveAction(1, mecanumPower, System::nanoTime, bot);
+        //turnToAction = new TurnToAction(0, bot);
 
         script = makeScript();
     }

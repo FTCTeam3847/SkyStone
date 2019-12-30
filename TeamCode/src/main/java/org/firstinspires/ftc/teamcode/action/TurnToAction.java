@@ -53,7 +53,7 @@ public class TurnToAction implements RoboAction {
 
     @Override
     public boolean isDone() {
-        return false;
+        return isDone;
     }
 
 

@@ -33,7 +33,8 @@ public class TurnToAction implements RoboAction {
 
     @Override
     public void loop() {
-        if (started) {
+
+        if (started && !isDone) {
             if (headingController.getError() != 0) {
                 bot.move(new MecanumPower(PolarCoord.ORIGIN, headingController.getControl()));
             } else {

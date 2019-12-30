@@ -59,6 +59,6 @@ public class SequentialAction implements RoboAction {
         return format(Locale.US,
                 "%s",
                 currentAction
-        );
+        ) + script;
     }
 }

@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.action.MoveAction;
 import org.firstinspires.ftc.teamcode.action.SequentialAction;
-import org.firstinspires.ftc.teamcode.action.SkystoneAction;
+import org.firstinspires.ftc.teamcode.action.DriveTrainAction;
 import org.firstinspires.ftc.teamcode.action.TurnToAction;
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
 import org.firstinspires.ftc.teamcode.gamepad.PushButton;
@@ -27,16 +27,18 @@ public class DerpyOp extends OpMode {
     SkystoneBot bot;
 
     public SequentialAction makeScript() {
-        SkystoneAction script = new SkystoneAction(System::currentTimeMillis, bot)
+        DriveTrainAction script = new DriveTrainAction(System::currentTimeMillis, bot)
                 .strafe(PI / 2, 3000, .5)
                 .pause(500)
                 .strafe(3 * PI / 2, 3000, .5)
                 .pause(500)
                 .moveForward(3000, .5)
                 .pause(500)
-                .turn(PI/4)
+                .turnTo(PI/4)
                 .pause(500)
-                .moveBackwards(3000, .5);
+                .moveBackwards(3000, .5)
+                .pause(500)
+                .turnTo(PI);
         return script;
     }
 
@@ -84,6 +86,7 @@ public class DerpyOp extends OpMode {
 //
         telemetry.addData("script", script);
         telemetry.addData("current heading", "%.2f PI", bot.getFieldRelativeHeading() / PI);
+        telemetry.addData("actualScript", script.toString());
         telemetry.update();
     }
 

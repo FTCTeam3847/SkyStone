@@ -66,7 +66,7 @@ public class MecanumDriveController implements Controller<Void, MecanumPower, Dr
             if (target.turn == 0.0d) {
                 // the user isn't asking to turn, so getLast a
                 // correction value to hold our desired heading
-                turnPower = turnPower(-headingController.getControl());
+                turnPower = turnPower(headingController.getControl());
             } else {
                 turnPower = turnPower(target.turn);
             }

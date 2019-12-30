@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.drive.DrivePower;
@@ -63,7 +64,7 @@ public class BaseOp extends OpMode {
         leftTowerLifter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftTowerLifter.setTargetPosition(0);
         //leftTowerLifter.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftTowerLifter.setDirection(DcMotor.Direction.REVERSE);
+        leftTowerLifter.setDirection(DcMotor.Direction.FORWARD);
         //leftTowerLifter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftTowerLifter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -72,6 +73,7 @@ public class BaseOp extends OpMode {
         rightTowerLifter = hardwareMap.get(DcMotor.class, "right-grabber-lifter");
         rightTowerLifter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightTowerLifter.setTargetPosition(0);
+        rightTowerLifter.setDirection(DcMotor.Direction.REVERSE);
         //rightTowerLifter.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         //rightTowerLifter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightTowerLifter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

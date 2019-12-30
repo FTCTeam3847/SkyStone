@@ -38,11 +38,6 @@ public class TrinketOpMode extends BaseOp {
     TowerGrabber towerGrabber;
 
 
-    double speedLeftUp = 0.30;
-    double speedLeftDown = 0.14;
-    double speedRightUp = 0.30;
-    double speedRightDown = 0.11;
-
     double blockGrabberOpen = 0.8;
     double blockGrabberClosed = 0.5;
 
@@ -170,21 +165,11 @@ public class TrinketOpMode extends BaseOp {
         }
 
         if (gamepad1.b) {
-            towerLifter.lift(speedLeftUp, speedRightUp);
-
-//            leftBlockLifter.setPower(0.5);
-//            rightBlockLifter.setPower(-0.5);
-
+            towerLifter.setPower(1.0d);
         } else if (gamepad1.a) {
-            towerLifter.down(speedLeftDown, speedRightDown);
-
-//            leftBlockLifter.setPower(-0.5);
-//            rightBlockLifter.setPower(0.5);
-
-        } else if (!(gamepad1.left_trigger >= 0.5) && !(gamepad1.right_trigger >= 0.5)) {
-            towerLifter.stop();
-//            leftBlockLifter.setPower(0);
-//            rightBlockLifter.setPower(0);
+            towerLifter.setPower(-1.0d);
+        } else {
+            towerLifter.setPower(0.0d);
         }
 
         driverController.setTarget(
@@ -201,7 +186,7 @@ public class TrinketOpMode extends BaseOp {
 
         move(drivePower);
 
-        telemetry.addData("TowerLifter", "LeftTowerLifter: %d RightTowerLifter: %d", leftTowerLifter.getCurrentPosition(), rightTowerLifter.getCurrentPosition());
+        telemetry.addData("TowerLifter", towerLifter);
 
         telemetry_loop();
         telemetry.update();

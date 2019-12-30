@@ -1,37 +1,49 @@
+// leftPos  Start 0.60, End 0.15
+// rightPos Start 0.25, End 0.70
+
 package org.firstinspires.ftc.teamcode.Trinkets;
 
 import java.util.Locale;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 import static java.lang.String.format;
 
 public class TowerGrabber {
     //Consumer takes a variable and returns a void
-    Consumer<Double> servoLeft;
-    Consumer<Double> servoRight;
-    Supplier<Double> servoLeftSupplier;
-    Supplier<Double> servoRightSupplier;
+    Consumer<Double> setLeftPos;
+    Consumer<Double> setRightPos;
+    Supplier<Double> getLeftPos;
+    Supplier<Double> getRightPos;
 
-
-    double constant = 1;
     double position;
 
-    public TowerGrabber(Consumer<Double> servoLeft,
-                        Consumer<Double> servoRight,
-                        Supplier<Double> servoLeftSupplier,
-                        Supplier<Double> servoRightSupplier) {
-        this.servoLeft = servoLeft;
-        this.servoRight = servoRight;
-        this.servoLeftSupplier = servoLeftSupplier;
-        this.servoRightSupplier = servoRightSupplier;
+    double leftStartPos = 0.60;
+    double leftEndPos = 0.15;
+    double rightStartPos = 0.25;
+    double rightEndPos = 0.70;
+
+    public TowerGrabber(Consumer<Double> setLeftPos,
+                        Consumer<Double> setRightPos,
+                        Supplier<Double> getLeftPos,
+                        Supplier<Double> getRightPos) {
+        this.setLeftPos = setLeftPos;
+        this.setRightPos = setRightPos;
+        this.getLeftPos = getLeftPos;
+        this.getRightPos = getRightPos;
     }
 
-    //accept() takes a variable and returns a void
-    public void setPosition(double pos) {
-        servoLeft.accept(pos * constant); //clockwise
-        servoRight.accept(pos * -constant); //counterclockwise
-        position = pos;
+    public void setPosition(double position) { // from 0.0 to 1.0
+        position = max(min(1.0, position),0.0);
+        setLeftPos.accept(leftStartPos - (position * (leftStartPos - leftEndPos)));
+        setRightPos.accept(rightStartPos + (position * (rightEndPos - rightStartPos)));
+        this.position = position;
+    }
+
+    public double getPosition() {
+        return position;
     }
 
     @Override
@@ -40,8 +52,8 @@ public class TowerGrabber {
                 Locale.ENGLISH,
                 "position: %.2f, left actual: %.2f, right actual: %.2f",
                 position,
-                servoLeftSupplier.get(),
-                servoRightSupplier.get()
+                getLeftPos.get(),
+                getRightPos.get()
         );
     }
 

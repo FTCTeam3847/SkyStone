@@ -21,6 +21,7 @@ import org.firstinspires.ftc.teamcode.gamepad.ToggleButton;
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
 import static java.lang.Math.signum;
+import static org.firstinspires.ftc.teamcode.polar.PolarUtil.normalize;
 
 
 @TeleOp(name = "TrinketOpMode", group = "1")
@@ -34,6 +35,7 @@ public class TrinketOpMode extends BaseOp {
     ToggleButton toggleSlowMode = new ToggleButton(() -> gamepad1.right_stick_button);
   PushButton doEverything = new PushButton(() -> gamepad1.back);
     TowerLifter towerLifter;
+    TowerGrabber towerGrabber;
 
 
     double speedLeftUp = 0.30;
@@ -41,20 +43,13 @@ public class TrinketOpMode extends BaseOp {
     double speedRightUp = 0.30;
     double speedRightDown = 0.11;
 
-    double leftOpen = 0.60;
-    double leftClosed = 0.05;
-    double leftStart = leftOpen - ((leftOpen - leftClosed) / 2);
-    double rightOpen = 0.25;
-    double rightClosed = 0.80;
-    double rightStart = rightOpen + ((rightClosed - rightOpen) / 2);
-
     double blockGrabberOpen = 0.8;
     double blockGrabberClosed = 0.5;
 
     private BNO055IMU initImu(BNO055IMU imu) {
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.mode = BNO055IMU.SensorMode.IMU;
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
         parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.loggingEnabled = false;
         imu.initialize(parameters);
@@ -69,7 +64,7 @@ public class TrinketOpMode extends BaseOp {
         super.init();
         imu = initImu(hardwareMap.get(BNO055IMU.class, "imu"));
         headingController = new HeadingController(
-                () -> (double) imu.getAngularOrientation().firstAngle,
+                () -> normalize((double) imu.getAngularOrientation().firstAngle),
                 0.0d,
                 10.0d,
                 0.0d);
@@ -86,8 +81,13 @@ public class TrinketOpMode extends BaseOp {
         leftTowerLifter.setMode((DcMotor.RunMode.RUN_USING_ENCODER));
         rightTowerLifter.setMode((DcMotor.RunMode.RUN_USING_ENCODER));
 
-        leftTowerGrabber.setPosition(leftStart);
-        rightTowerGrabber.setPosition(rightStart);
+        towerGrabber = new TowerGrabber(
+                leftTowerGrabber::setPosition,
+                rightTowerGrabber::setPosition,
+                leftTowerGrabber::getPosition,
+                rightTowerGrabber::getPosition
+        );
+        towerGrabber.setPosition(0.5);
     }
 
     @Override
@@ -135,29 +135,16 @@ public class TrinketOpMode extends BaseOp {
             grabber.setPosition(blockGrabberClosed);
         }
 
-        double tehSpeeds = 0.005;
+        double tehSpeeds = 0.05;
 
-        if (gamepad2.x) {
-            leftTowerGrabber.setPosition(leftTowerGrabber.getPosition() + tehSpeeds);
-        } else if (gamepad2.y) {
-            leftTowerGrabber.setPosition(leftTowerGrabber.getPosition() - tehSpeeds);
-        }
-
-        if (gamepad2.a) {
-            rightTowerGrabber.setPosition(rightTowerGrabber.getPosition() - tehSpeeds);
-        } else if (gamepad2.b) {
-            rightTowerGrabber.setPosition(rightTowerGrabber.getPosition() + tehSpeeds);
+        if (gamepad1.y) {
+                towerGrabber.setPosition(towerGrabber.getPosition() + tehSpeeds);
         }
 
         if (gamepad1.x) {
-            leftTowerGrabber.setPosition(leftTowerGrabber.getPosition() + tehSpeeds);
-            rightTowerGrabber.setPosition(rightTowerGrabber.getPosition() - tehSpeeds);
+            towerGrabber.setPosition(towerGrabber.getPosition() - tehSpeeds);
         }
 
-        if (gamepad1.y) {
-            leftTowerGrabber.setPosition(leftTowerGrabber.getPosition() - tehSpeeds);
-            rightTowerGrabber.setPosition(rightTowerGrabber.getPosition() + tehSpeeds);
-        }
 
         if (resetEncoder.getCurrent()) {
             leftTowerLifter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

@@ -19,27 +19,45 @@ import static java.lang.Math.signum;
 public class DerpyOp extends OpMode {
 
     PushButton pushButtonX = new PushButton(() -> gamepad1.x);
+    PushButton pushButtonY = new PushButton(() -> gamepad1.y);
+    PushButton pushButtonA = new PushButton(() -> gamepad1.a);
+    PushButton pushButtonB = new PushButton(() -> gamepad1.b);
+
+
 
     MoveAction moveAction;
     TurnToAction turnToAction;
     SequentialAction script;
 
+    SequentialAction scriptY;
+    SequentialAction scriptA;
+    SequentialAction scriptB;
+
+
     SkystoneBot bot;
 
     public SequentialAction makeScript() {
         DriveTrainAction script = new DriveTrainAction(System::currentTimeMillis, bot)
-                .strafe(PI / 2, 3000, .5)
-                .pause(500)
-                .strafe(3 * PI / 2, 3000, .5)
-                .pause(500)
-                .moveForward(3000, .5)
-                .pause(500)
-                .turnTo(PI/4)
-                .pause(500)
-                .moveBackwards(3000, .5)
-                .pause(500)
-                .turnTo(PI);
+                .strafe(3*PI/2, 1000, 1);
         return script;
+    }
+
+    public SequentialAction makeScriptY() {
+        DriveTrainAction scriptY = new DriveTrainAction(System::currentTimeMillis, bot)
+                .strafe(0, 1000, 1);
+        return scriptY;
+    }
+
+    public SequentialAction makeScriptA() {
+        DriveTrainAction scriptA = new DriveTrainAction(System::currentTimeMillis, bot)
+                .strafe(PI, 1000, 1);
+        return scriptA;
+    }
+
+    public SequentialAction makeScriptB() {
+        DriveTrainAction scriptB = new DriveTrainAction(System::currentTimeMillis, bot)
+                .strafe(PI/2, 1000, 1);
+        return scriptB;
     }
 
     @Override
@@ -52,6 +70,10 @@ public class DerpyOp extends OpMode {
         //turnToAction = new TurnToAction(0, bot);
 
         script = makeScript();
+        scriptY = makeScriptY();
+        scriptA = makeScriptA();
+        scriptB = makeScriptB();
+
     }
 
     private static double sensitivity(double base, double exp) {
@@ -70,11 +92,31 @@ public class DerpyOp extends OpMode {
     public void loop() {
         bot.loop();
         script.loop();
+        scriptY.loop();
+        scriptA.loop();
+        scriptB.loop();
+
 
         if (pushButtonX.getCurrent()) {
             script = makeScript();
             script.start();
         }
+
+        if (pushButtonY.getCurrent()) {
+            scriptY = makeScriptY();
+            scriptY.start();
+        }
+
+        if (pushButtonA.getCurrent()) {
+            scriptA = makeScriptA();
+            scriptA.start();
+        }
+
+        if (pushButtonB.getCurrent()) {
+            scriptB = makeScriptB();
+            scriptB.start();
+        }
+
 
 //        MecanumPower mecanumPower = MecanumPower.fromXYTurn(
 //                sensitivity(gamepad1.right_stick_x, SENSITIVITY),

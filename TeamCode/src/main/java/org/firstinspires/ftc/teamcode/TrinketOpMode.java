@@ -10,6 +10,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.teamcode.Trinkets.TowerGrabber;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerLifter;
 import org.firstinspires.ftc.teamcode.controller.HeadingController;
 import org.firstinspires.ftc.teamcode.drive.DrivePower;
@@ -28,9 +29,10 @@ public class TrinketOpMode extends BaseOp {
     public MecanumDriveController driverController;
     HeadingController headingController;
 
-    ToggleButton toggleRunMode = new ToggleButton(() -> gamepad1.right_stick_button);
+    ToggleButton toggleRunMode = new ToggleButton(() -> gamepad1.left_stick_button);
     PushButton resetEncoder = new PushButton(() -> gamepad1.left_stick_button);
-    ToggleButton toggleSlowMode = new ToggleButton(() -> gamepad1.back);
+    ToggleButton toggleSlowMode = new ToggleButton(() -> gamepad1.right_stick_button);
+  PushButton doEverything = new PushButton(() -> gamepad1.back);
     TowerLifter towerLifter;
 
 
@@ -112,10 +114,14 @@ public class TrinketOpMode extends BaseOp {
         super.loop();
         boolean slowMode = toggleSlowMode.getCurrent();
 
-        if (gamepad1.left_bumper) {
+        if (doEverything.getCurrent()) {
+
+        }
+
+        if (gamepad1.left_trigger >= 0.5) {
             leftBlockLifter.setPower(-0.5);
             rightBlockLifter.setPower(0.5);
-        } else if (gamepad1.right_bumper) {
+        } else if (gamepad1.right_trigger >= 0.5) {
             leftBlockLifter.setPower(0.5);
             rightBlockLifter.setPower(-0.5);
         } else if (!gamepad1.a && !gamepad1.b) {
@@ -123,9 +129,9 @@ public class TrinketOpMode extends BaseOp {
             rightBlockLifter.setPower(0);
         }
 
-        if (gamepad1.left_stick_button) {
+        if (gamepad1.left_bumper) {
             grabber.setPosition(blockGrabberOpen);
-        } else if (gamepad1.right_stick_button) {
+        } else if (gamepad1.right_bumper) {
             grabber.setPosition(blockGrabberClosed);
         }
 
@@ -169,29 +175,29 @@ public class TrinketOpMode extends BaseOp {
         }
 
         if (gamepad1.dpad_up) {
-            extender.setPower(-0.8);
+            extender.setPower(-1.0);
         } else if (gamepad1.dpad_down) {
-            extender.setPower(0.8);
+            extender.setPower(1.0);
         } else {
             extender.setPower(0);
         }
 
-        if (gamepad1.a) {
+        if (gamepad1.b) {
             towerLifter.lift(speedLeftUp, speedRightUp);
 
-            leftBlockLifter.setPower(0.5);
-            rightBlockLifter.setPower(-0.5);
+//            leftBlockLifter.setPower(0.5);
+//            rightBlockLifter.setPower(-0.5);
 
-        } else if (gamepad1.b) {
+        } else if (gamepad1.a) {
             towerLifter.down(speedLeftDown, speedRightDown);
 
-            leftBlockLifter.setPower(-0.5);
-            rightBlockLifter.setPower(0.5);
+//            leftBlockLifter.setPower(-0.5);
+//            rightBlockLifter.setPower(0.5);
 
-        } else if (!gamepad1.left_bumper && !gamepad1.right_bumper) {
+        } else if (!(gamepad1.left_trigger >= 0.5) && !(gamepad1.right_trigger >= 0.5)) {
             towerLifter.stop();
-            leftBlockLifter.setPower(0);
-            rightBlockLifter.setPower(0);
+//            leftBlockLifter.setPower(0);
+//            rightBlockLifter.setPower(0);
         }
 
         driverController.setTarget(

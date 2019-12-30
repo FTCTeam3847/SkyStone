@@ -2,12 +2,12 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.teamcode.Trinkets.TowerBuilder;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerGrabber;
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
 import org.firstinspires.ftc.teamcode.controller.HeadingController;
@@ -37,7 +37,7 @@ public class SkottBot implements SkystoneBot {
     private SkyStoneLocalizer skyStoneLocalizer;
     private VuforiaLocalizer vuforiaLocalizer;
 
-    TowerGrabber towerGrabber;
+    TowerBuilder towerBuilder;
 
     public SkottBot(
             HardwareMap hardwareMap,
@@ -89,13 +89,16 @@ public class SkottBot implements SkystoneBot {
         //Primary Port 1
         rightTowerGrabber = hardwareMap.get(Servo.class, "right-grabber");
 
-        towerGrabber = new TowerGrabber(
+        TowerGrabber towerGrabber = new TowerGrabber(
                 leftTowerGrabber::setPosition,
                 rightTowerGrabber::setPosition,
                 leftTowerGrabber::getPosition,
                 rightTowerGrabber::getPosition
         );
-        towerGrabber.setPosition(0.5);
+
+        towerBuilder = new TowerBuilder(towerGrabber);
+
+        towerBuilder.grabber.setPosition(0.5);
     }
 
     @Override
@@ -148,8 +151,8 @@ public class SkottBot implements SkystoneBot {
     }
 
     @Override
-    public TowerGrabber getTowerGrabber() {
-        return towerGrabber;
+    public TowerBuilder getTowerBuilder() {
+        return towerBuilder;
     }
 
 

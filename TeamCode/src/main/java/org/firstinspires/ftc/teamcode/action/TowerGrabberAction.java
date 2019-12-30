@@ -1,9 +1,7 @@
 package org.firstinspires.ftc.teamcode.action;
 
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
-import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
 
-import java.util.Locale;
 import java.util.function.Supplier;
 
 public class TowerGrabberAction extends TimeAction {
@@ -20,7 +18,7 @@ public class TowerGrabberAction extends TimeAction {
     @Override
     public void start() {
         super.start();
-        bot.getTowerGrabber().setPosition(this.position);
+        bot.getTowerBuilder().grabber.setPosition(this.position);
     }
 
 }

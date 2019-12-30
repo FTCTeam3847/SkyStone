@@ -4,6 +4,7 @@ import java.util.Locale;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import static java.lang.Math.*;
 import static java.lang.String.format;
 
 public class TowerLifter {
@@ -42,6 +43,10 @@ public class TowerLifter {
     public void stop() {
         leftPower.accept(0.0);
         rightPower.accept(0.0);
+    }
+
+    public double getPosition () {
+        return min(max(motorLeftSupplier.get()/-3000, 0.0), 1.0);
     }
 
     @Override

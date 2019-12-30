@@ -201,6 +201,7 @@ public class TrinketOpMode extends BaseOp {
 
         move(drivePower);
 
+        telemetry.addData("TowerLifter", "LeftTowerLifter: %d RightTowerLifter: %d", leftTowerLifter.getCurrentPosition(), rightTowerLifter.getCurrentPosition());
 
         telemetry_loop();
         telemetry.update();

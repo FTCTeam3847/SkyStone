@@ -12,6 +12,8 @@ import static java.lang.Math.min;
 import static java.lang.String.format;
 
 public class TowerGrabber {
+    public static TowerGrabber NIL = new TowerGrabber((c) -> {}, (c) -> {}, () -> 0.0d, () -> 0.0d);
+
     //Consumer takes a variable and returns a void
     Consumer<Double> setLeftPos;
     Consumer<Double> setRightPos;

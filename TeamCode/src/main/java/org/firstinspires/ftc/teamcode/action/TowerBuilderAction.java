@@ -16,14 +16,17 @@ public class TowerBuilderAction extends SequentialAction{
 
 
     public TowerBuilderAction open(){
-
-
+        addAction(new TowerGrabberAction(msecTime, 0.0, bot));
         return this;
     }
 
     public TowerBuilderAction close(){
+        addAction(new TowerGrabberAction(msecTime,1.0, bot));
+        return this;
+    }
 
-
+    public TowerBuilderAction pause(long time) {
+        addAction(new PauseAction(time, msecTime, bot));
         return this;
     }
 }

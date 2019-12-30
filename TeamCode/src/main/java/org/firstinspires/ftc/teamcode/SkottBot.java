@@ -2,7 +2,9 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
@@ -17,12 +19,15 @@ import static org.firstinspires.ftc.teamcode.HardwareMapUtils.initImu;
 import static org.firstinspires.ftc.teamcode.HardwareMapUtils.initVuforia;
 import static org.firstinspires.ftc.teamcode.polar.PolarUtil.normalize;
 
-public class DerpyBot implements SkystoneBot {
+public class SkottBot implements SkystoneBot {
 
     public DcMotor leftFrontMotor;
     public DcMotor leftBackMotor;
     public DcMotor rightFrontMotor;
     public DcMotor rightBackMotor;
+
+    public Servo leftTowerGrabber;
+    public Servo rightTowerGrabber;
 
     private final HardwareMap hardwareMap;
     private final Telemetry telemetry;
@@ -32,7 +37,9 @@ public class DerpyBot implements SkystoneBot {
     private SkyStoneLocalizer skyStoneLocalizer;
     private VuforiaLocalizer vuforiaLocalizer;
 
-    public DerpyBot(
+    TowerGrabber towerGrabber;
+
+    public SkottBot(
             HardwareMap hardwareMap,
             Telemetry telemetry
     ) {
@@ -54,7 +61,7 @@ public class DerpyBot implements SkystoneBot {
 
         //Primary Port 3
         leftFrontMotor = hardwareMap.get(DcMotor.class, "motor-left-front");
-        leftFrontMotor.setDirection(DcMotor.Direction.REVERSE);
+        leftFrontMotor.setDirection(DcMotor.Direction.FORWARD);
         leftFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
@@ -66,7 +73,7 @@ public class DerpyBot implements SkystoneBot {
 
         //Primary Port 2
         rightFrontMotor = hardwareMap.get(DcMotor.class, "motor-right-front");
-        rightFrontMotor.setDirection(DcMotor.Direction.FORWARD);
+        rightFrontMotor.setDirection(DcMotor.Direction.REVERSE);
         rightFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
@@ -75,6 +82,20 @@ public class DerpyBot implements SkystoneBot {
         rightBackMotor.setDirection(DcMotor.Direction.FORWARD);
         rightBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        //Primary Port 0
+        leftTowerGrabber = hardwareMap.get(Servo.class, "left-grabber");
+
+        //Primary Port 1
+        rightTowerGrabber = hardwareMap.get(Servo.class, "right-grabber");
+
+        towerGrabber = new TowerGrabber(
+                leftTowerGrabber::setPosition,
+                rightTowerGrabber::setPosition,
+                leftTowerGrabber::getPosition,
+                rightTowerGrabber::getPosition
+        );
+        towerGrabber.setPosition(0.5);
     }
 
     @Override
@@ -124,6 +145,11 @@ public class DerpyBot implements SkystoneBot {
     @Override
     public double getFieldRelativeHeading() {
         return headingController.getCurrent();
+    }
+
+    @Override
+    public TowerGrabber getTowerGrabber() {
+        return towerGrabber;
     }
 
 

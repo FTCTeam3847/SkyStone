@@ -1,13 +1,17 @@
 package org.firstinspires.ftc.teamcode.controller;
 
+import java.util.Locale;
 import java.util.function.Supplier;
 
 import static java.lang.Double.NaN;
+import static java.lang.Double.isNaN;
+import static java.lang.Math.PI;
 import static java.lang.Math.signum;
+import static org.firstinspires.ftc.teamcode.polar.PolarUtil.subtractRadians;
 
 /**
- * Proportional Controller that reads angular input values between -180.0..180.0
- * degrees, and produces control values bounded by [-1.0..-clamp, 0.0, clamp..1.0, NaN].
+ * Proportional Controller that reads angular input values between 0..2·π
+ * radians, and produces control values bounded by [-1.0..-clamp, 0.0, clamp..1.0, NaN].
  * <p>
  * This controller supports:
  * <ul>
@@ -26,14 +30,14 @@ import static java.lang.Math.signum;
  *    imu = initImu();
  *    heading = new HeadingController(
  *         // read the heading angle from the imu
- *         () -> imu.getAngularOrientation().firstAngle,
+ *         () -> normalizeTo2PI(imu.getAngularOrientation().firstAngle),
  *         1.0f, // tolerance
  *         3.0f, // gain
  *         0.1f  // clamp
  *    );
  *
  *    // known starting position of North-East at power-up
- *    heading.calibrateTo(-45.0f);
+ *    heading.calibrateTo(PI/4);
  *  }
  *
  *  void getLast() {
@@ -45,7 +49,7 @@ import static java.lang.Math.signum;
  *    h = heading.getLast();
  *
  *    // we want to turn until facing due West
- *    heading.setTarget(90.0);
+ *    heading.setTarget(PI);
  *
  *    // turning rate of either 0.0f or NaN means stop turning
  *    robot.setTurnRate(heading.setTarget());
@@ -77,8 +81,9 @@ public class HeadingController implements Controller<Double, Double, Double> {
      * Constructs a new [HeadingController] given a supplier of an absolute
      * angle, an error tolerance, a gain value, and a clamp value.
      *
-     * @param absolute  Supplier of an absolute angle reading, e.g. from an IMU.
-     *                  example: `() -> imu.getAngularOrientation().firstAngle`.
+     * @param absolute  Supplier of an absolute angle reading between [0..2·π].
+     *                  example:
+     *                  `() -> normalizeTo2PI(imu.getAngularOrientation().firstAngle`).
      *                  This argument is provided as a Supplier so as to keep
      *                  this class from depending on any specific hardware
      *                  device or simulation environment.
@@ -86,10 +91,10 @@ public class HeadingController implements Controller<Double, Double, Double> {
      *                  errors with smaller absolute values are returned as an
      *                  error of 0.0f.
      * @param gain      Multiplier applied to the control value before clamping.
-     *                  180.0/gain == minimum error value that produces maximum
+     *                  π/gain == minimum error value that produces maximum
      *                  control value.
-     *                  example: gain == 3.0 produces 1.0 control value for all
-     *                  error values > 60.0 degrees.
+     *                  example: gain == 2.0 produces 1.0 control value for all
+     *                  error values > π/2.
      * @param clamp     Minimum absolute value of the control value. Without a
      *                  clamp, a proportional controller may never reach its
      *                  target as the error value asymptotically approaches but
@@ -114,11 +119,11 @@ public class HeadingController implements Controller<Double, Double, Double> {
      * Adjusts the controller's current value based on a provided
      * reference angle.
      *
-     * @param reference angle in degrees between [-180..180]
+     * @param reference angle in radians between [0..2·π]
      */
     public void calibrateTo(double reference) {
         checkAngleArgument(reference);
-        this.zero = subtractAngle(readAbsolute(), reference);
+        this.zero = subtractRadians(readAbsolute(), reference);
     }
 
     /**
@@ -127,7 +132,7 @@ public class HeadingController implements Controller<Double, Double, Double> {
      * value. When set to NaN, [HeadingController#setTarget()]
      * will also provide NaN.
      *
-     * @param target angle in degrees within [-180.0..180.0] or NaN.
+     * @param target angle in radians within [0..2·π] or NaN.
      */
     public void setTarget(Double target) {
         checkAngleArgumentOrNaN(target);
@@ -138,7 +143,7 @@ public class HeadingController implements Controller<Double, Double, Double> {
      * Retrieves the controller's target angle, or NaN if
      * no target angle is requested.
      *
-     * @return angle in degrees within [-180.0..180.0] or NaN
+     * @return angle in radians within [0..2·π] or NaN
      */
     public double getTarget() {
         return target;
@@ -150,7 +155,7 @@ public class HeadingController implements Controller<Double, Double, Double> {
      * called in order for the controller to getCurrent its state.
      * e.g. call from within a main getLast().
      *
-     * @return a value in degrees within [-180.0..180.0].
+     * @return a value in radians within [0..2·π].
      * @see HeadingController#getLast() ()
      * @see HeadingController#calibrateTo(double)
      */
@@ -174,13 +179,13 @@ public class HeadingController implements Controller<Double, Double, Double> {
      * The last known angle, as adjusted by calibration. Does
      * not read from the absolute angle provider.
      *
-     * @return last known angle in degrees between
-     * [-180.0..180.0], as adjusted by calibration.
+     * @return last known angle in radians between
+     * [0..2·π], as adjusted by calibration.
      * @see HeadingController#getCurrent()
      * @see HeadingController#calibrateTo(double)
      */
     public double getLast() {
-        return subtractAngle(getAbsolute(), getZero());
+        return subtractRadians(getAbsolute(), getZero());
     }
 
     /**
@@ -189,7 +194,7 @@ public class HeadingController implements Controller<Double, Double, Double> {
      * the controller's error tolerance. Does not read from the absolute
      * angle provider.
      *
-     * @return A value in degrees [-180.0..-tolerance, 0.0, tolerance..180.0]
+     * @return A value in radians [0.0, tolerance..2·π]
      * @see HeadingController#getCurrent()
      */
     public double getError() {
@@ -197,7 +202,7 @@ public class HeadingController implements Controller<Double, Double, Double> {
     }
 
     /**
-     * The pure proportion of the error term to 180.0.
+     * The pure proportion of the error term to π.
      *
      * @return A value between [-1.0..1.0].
      */
@@ -206,10 +211,10 @@ public class HeadingController implements Controller<Double, Double, Double> {
     }
 
     /**
-     * The offset in degrees from the absolute provider's zero angle to
+     * The offset in radians from the absolute provider's zero angle to
      * the controller's calibrated zero angle.
      *
-     * @return a value within[-180.0..180.0]
+     * @return a value within[0..2·π]
      */
     public double getZero() {
         return zero;
@@ -218,7 +223,7 @@ public class HeadingController implements Controller<Double, Double, Double> {
     /**
      * The last known absolute angle as read from the absolute provider.
      *
-     * @return a value within[-180.0..180.0]
+     * @return a value within[0..2·π]
      */
     public double getAbsolute() {
         return lastAbsolute;
@@ -231,14 +236,14 @@ public class HeadingController implements Controller<Double, Double, Double> {
     }
 
     private static void checkAngleArgumentOrNaN(double given) {
-        if (NaN == given) return;
+        if (isNaN(given)) return;
         checkAngleArgument(given);
     }
 
     private static void checkAngleArgument(double given) {
-        if (given < -180.0f || given > 180.0f)
+        if (given < 0 || given > 2*PI)
             throw new IllegalArgumentException(
-                    "Angle value must be between -180.0..180.0 degrees!"
+                    "Angle value must be between [0..2·π] radians!"
             );
     }
 
@@ -248,32 +253,20 @@ public class HeadingController implements Controller<Double, Double, Double> {
     //   - static since they are stateless logic only
 
 
-    /**
-     * Adds two angles expressed in degrees and returns a new angle between -180.0 and 180.0 degrees.
-     */
-    public static double addAngle(double a, double b) {
-        double tmp = (a + b + 180.0f) % 360.0f;
-        if (tmp < 0.0f) tmp = 360.0f + tmp;
-        return tmp - 180.0f;
-    }
-
-    public static double subtractAngle(double a, double b) {
-        return addAngle(a, -b);
-    }
 
     static double calcAngularError(double desired, double current, double tolerance) {
-        if (NaN == desired) return NaN;
+        if (isNaN(desired)) return NaN;
 
-        double err = subtractAngle(desired, current);
+        double err = subtractRadians(desired, current);
         return (Math.abs(err) < Math.abs(tolerance)) ? 0.0f : err;
     }
 
     static double calcAngularProportion(double err) {
-        return (NaN == err) ? NaN : err / 180.0f;
+        return (isNaN(err)) ? NaN : (1.0-Math.abs((err-PI)/PI))*signum(err-PI);
     }
 
     static double calcControlValue(double proportion, double gain, double min, double max) {
-        if (NaN == proportion) return NaN;
+        if (isNaN(proportion)) return NaN;
         if (0.0f == proportion) return 0.0f;
 
         final double propGain = proportion * gain;
@@ -284,4 +277,15 @@ public class HeadingController implements Controller<Double, Double, Double> {
         else return propGain;
     }
 
+    @Override
+    public String toString() {
+        return String.format(Locale.US,
+                "zero=%.2f·π, abs=%.2f·π, target=%.2f·π, ctrl=%.2f, crnt=%.2f·π",
+                zero/PI,
+                lastAbsolute/PI,
+                target/PI,
+                getControl(),
+                getCurrent()/PI
+        );
+    }
 }

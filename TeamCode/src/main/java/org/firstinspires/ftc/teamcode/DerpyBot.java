@@ -7,14 +7,13 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
-import org.firstinspires.ftc.teamcode.controller.HeadingControllerRadians;
+import org.firstinspires.ftc.teamcode.controller.HeadingController;
 import org.firstinspires.ftc.teamcode.drive.DrivePower;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDriveController;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
 
 import static org.firstinspires.ftc.teamcode.HardwareMapUtils.initImu;
 import static org.firstinspires.ftc.teamcode.HardwareMapUtils.initVuforia;
-import static org.firstinspires.ftc.teamcode.polar.PolarUtil.addRadians;
 import static org.firstinspires.ftc.teamcode.polar.PolarUtil.normalize;
 
 public class DerpyBot implements SkystoneBot {
@@ -28,7 +27,7 @@ public class DerpyBot implements SkystoneBot {
     private final Telemetry telemetry;
     private MecanumDriveController mecanum;
     private BNO055IMU imu;
-    private HeadingControllerRadians headingController;
+    private HeadingController headingController;
     private SkyStoneLocalizer skyStoneLocalizer;
     private VuforiaLocalizer vuforiaLocalizer;
 
@@ -43,7 +42,7 @@ public class DerpyBot implements SkystoneBot {
     @Override
     public void init() {
         imu = initImu(hardwareMap);
-        headingController = new HeadingControllerRadians(
+        headingController = new HeadingController(
                 () -> normalize((double) imu.getAngularOrientation().firstAngle),
                 0.0d,
                 4.0d,

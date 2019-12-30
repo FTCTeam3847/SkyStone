@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.action;
 
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
-import org.firstinspires.ftc.teamcode.controller.HeadingControllerRadians;
+import org.firstinspires.ftc.teamcode.controller.HeadingController;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
 import org.firstinspires.ftc.teamcode.polar.PolarCoord;
 
@@ -14,7 +14,7 @@ public class TurnToAction implements RoboAction {
     private boolean started = false;
     private boolean isDone = false;
     double targetAngle;
-    HeadingControllerRadians headingControllerRadians;
+    HeadingController headingController;
 
     private SkystoneBot bot;
 
@@ -27,15 +27,15 @@ public class TurnToAction implements RoboAction {
     @Override
     public void start() {
         started = true;
-        headingControllerRadians = new HeadingControllerRadians(bot::getFieldRelativeHeading, Math.PI / 16, 1.0, 0.1);
-        headingControllerRadians.setTarget(targetAngle);
+        headingController = new HeadingController(bot::getFieldRelativeHeading, Math.PI / 16, 1.0, 0.1);
+        headingController.setTarget(targetAngle);
     }
 
     @Override
     public void loop() {
         if (started) {
-            if (headingControllerRadians.getError() != 0) {
-                bot.move(new MecanumPower(PolarCoord.ORIGIN, headingControllerRadians.getControl()));
+            if (headingController.getError() != 0) {
+                bot.move(new MecanumPower(PolarCoord.ORIGIN, headingController.getControl()));
             } else {
                 stop();
                 started = false;
@@ -61,7 +61,7 @@ public class TurnToAction implements RoboAction {
     public String toString() {
         return format(Locale.US,
                 "TurnToAction{%s}",
-                headingControllerRadians
+                headingController
         );
     }
 

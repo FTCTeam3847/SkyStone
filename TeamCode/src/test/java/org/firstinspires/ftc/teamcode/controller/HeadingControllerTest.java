@@ -4,17 +4,17 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class HeadingControllerRadiansTest {
+class HeadingControllerTest {
 
     @Test
     void calcAngularError() {
-        assertEquals(0, HeadingControllerRadians.calcAngularError(0,0,3.0));
+        assertEquals(0, HeadingController.calcAngularError(0,0,3.0));
     }
 
     @Test
     void calcAngularProportion()
     {
 
-        assertEquals(0.0, HeadingControllerRadians.calcAngularProportion(0));
+        assertEquals(0.0, HeadingController.calcAngularProportion(0));
     }
 }

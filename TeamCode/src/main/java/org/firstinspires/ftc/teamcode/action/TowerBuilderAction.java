@@ -34,6 +34,11 @@ public class TowerBuilderAction extends SequentialAction {
         return this;
     }
 
+    public TowerBuilderAction extendBlock(double position) {
+        addAction(new BlockExtendAction(position, bot));
+        return this;
+    }
+
     public TowerBuilderAction pause(long time) {
         addAction(new PauseAction(time, msecTime, bot));
         return this;

@@ -6,7 +6,6 @@ import java.util.function.Supplier;
 
 import static com.qualcomm.robotcore.util.Range.clip;
 import static com.qualcomm.robotcore.util.Range.scale;
-import static java.lang.Math.max;
 import static java.lang.String.format;
 
 public class BlockExtender {
@@ -20,7 +19,7 @@ public class BlockExtender {
     Supplier<Double> servoPowerSupplier;
     double position = 0.0d;
     long lastTime = 0L;
-    double MAX_POSITION = 3800.0d;
+    double MAX_POSITION = 3600.0d;
 
     public BlockExtender(Consumer<Double> servoPower, Supplier<Double> servoPowerSupplier) {
         this.servoPower = servoPower;
@@ -30,7 +29,7 @@ public class BlockExtender {
     private void integratePosition() {
         long now = System.nanoTime();
         long duration = now - lastTime;
-        position = max(0.0d, position + (duration * getPower()) / 1_000_000.0d);
+        position = clip(position + (duration * getPower()) / 1_000_000.0d, 0.0d, MAX_POSITION);
         lastTime = now;
     }
 
@@ -46,7 +45,6 @@ public class BlockExtender {
 
     public double getPosition() {
         integratePosition();
-        double position = clip(this.position, 0.0d, MAX_POSITION);
         return scale(position, 0.0d, MAX_POSITION, 0.0d, 1.0d);
     }
 

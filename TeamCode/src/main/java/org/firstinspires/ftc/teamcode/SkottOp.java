@@ -36,8 +36,7 @@ public class SkottOp extends OpMode {
 
     private PairedButtons<Double> towerGrabberButtons = new PairedButtons<>(
             () -> gamepad1.left_bumper, () -> 0.0d,
-            () -> gamepad1.right_bumper, () -> 1.0d,
-            () -> towerGrabber.getPosition()
+            () -> gamepad1.right_bumper, () -> 1.0d
     );
 
     private PairedButtons<Double> towerLifterButtons = new PairedButtons<>(
@@ -118,10 +117,10 @@ public class SkottOp extends OpMode {
         }
 
         if (!script.isRunning()) {
-            towerGrabber.setPosition(towerGrabberButtons.getValue());
-            towerLifter.setPower(towerLifterButtons.getValue());
-            blockLifter.setPower(blockLifterButtons.getValue());
-            blockExtender.setPower(blockExtenderButtons.getValue());
+            towerGrabberButtons.apply(towerGrabber::setPosition);
+            towerLifterButtons.apply(towerLifter::setPower);
+            blockLifterButtons.apply(blockLifter::setPower);
+            blockExtenderButtons.apply(blockExtender::setPower);
 
             MecanumPower mecanumPower = MecanumPower.fromXYTurn(
                     sensitivity(gamepad1.right_stick_x, SENSITIVITY),

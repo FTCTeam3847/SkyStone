@@ -4,44 +4,47 @@ import java.util.Locale;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import static com.qualcomm.robotcore.util.Range.clip;
 import static java.lang.String.format;
 
 public class BlockLifter {
+    public static final BlockLifter NIL = new BlockLifter((x) -> {},(x) -> {},()->0.0d,()->0.0d);
+
+
     //Consumer takes a variable and returns a void
-    Consumer<Double> servoLeft;
-    Consumer<Double> servoRight;
-    Supplier<Double> servoSupplierLeft;
-    Supplier<Double> servoSupplierRight;
+    Consumer<Double> leftPower;
+    Consumer<Double> rightPower;
+    Supplier<Double> leftPowerSupplier;
+    Supplier<Double> rightPowerSupplier;
 
-
-    double constant = 1;
     double power;
 
-    public BlockLifter(Consumer<Double> servoLeft,
-                       Consumer<Double> servoRight,
-                       Supplier<Double> servoSupplierLeft,
-                       Supplier<Double> servoSupplierRight) {
-        this.servoLeft = servoLeft;
-        this.servoRight = servoRight;
-        this.servoSupplierLeft = servoSupplierLeft;
-        this.servoSupplierRight = servoSupplierRight;
+    public BlockLifter(Consumer<Double> leftPower,
+                       Consumer<Double> rightPower,
+                       Supplier<Double> leftPowerSupplier,
+                       Supplier<Double> rightPowerSupplier) {
+        this.leftPower = leftPower;
+        this.rightPower = rightPower;
+        this.leftPowerSupplier = leftPowerSupplier;
+        this.rightPowerSupplier = rightPowerSupplier;
     }
 
     //accept() takes a variable and returns a void
     public void setPower(double power) {
-        servoLeft.accept(power * constant);
-        servoRight.accept(power * constant);
+        power = clip(power, -1.0d, 1.0d);
+        leftPower.accept(power);
+        rightPower.accept(power);
         this.power = power;
     }
 
     @Override
     public String toString() {
         return format(
-                Locale.ENGLISH,
-                "position: %.2f, left actual: %.2f, right actual: %.2f",
+                Locale.US,
+                "pwr:%.2f, L%.2f R%.2f",
                 power,
-                servoSupplierLeft.get(),
-                servoSupplierRight.get()
+                leftPowerSupplier.get(),
+                rightPowerSupplier.get()
         );
     }
 

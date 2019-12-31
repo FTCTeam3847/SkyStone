@@ -36,7 +36,13 @@ public class TrinketOpMode extends BaseOp {
   PushButton doEverything = new PushButton(() -> gamepad1.back);
     TowerLifter towerLifter;
     TowerGrabber towerGrabber;
+    PushButton leftUp = new PushButton(() -> gamepad2.y);
+    PushButton leftDown = new PushButton(() -> gamepad2.x);
+    PushButton rightUp = new PushButton(() -> gamepad2.b);
+    PushButton rightDown = new PushButton(() -> gamepad2.a);
 
+    double leftPower = 0.0d;
+    double rightPower = 0.0d;
 
     double blockGrabberOpen = 0.8;
     double blockGrabberClosed = 0.5;
@@ -94,7 +100,9 @@ public class TrinketOpMode extends BaseOp {
     }
 
     void telemetry_loop() {
-        telemetry.addData("grabber", "l:%.2f, r:%.2f", leftTowerGrabber.getPosition(), rightTowerGrabber.getPosition());
+//        telemetry.addData("leftBlockLifterStd", "%d", leftBlockLifterStd.getPosition());
+        telemetry.addData("leftBlockLifter", "%.2f, %.2f", leftBlockLifter.getPower(), leftPower);
+        telemetry.addData("rightBlockLifter", "%.2f, %.2f", rightBlockLifter.getPower(), rightPower);
     }
 
     private static double sensitivity(double base, double exp) {
@@ -112,6 +120,17 @@ public class TrinketOpMode extends BaseOp {
         if (doEverything.getCurrent()) {
 
         }
+//
+//        if (leftUp.getCurrent()) {
+//            leftBlockLifter.setPower(leftPower += 0.1);
+//        } else if (leftDown.getCurrent()) {
+//            leftBlockLifter.setPower(leftPower -= 0.1);
+//        }
+//        if (rightUp.getCurrent()) {
+//            rightBlockLifter.setPower(rightPower += 0.1);
+//        } else if (rightDown.getCurrent()) {
+//            rightBlockLifter.setPower(rightPower -= 0.1);
+//        }
 
         if (gamepad1.left_trigger >= 0.5) {
             leftBlockLifter.setPower(-0.5);

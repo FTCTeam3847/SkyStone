@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.action.DriveTrainAction;
 import org.firstinspires.ftc.teamcode.action.MoveAction;
 import org.firstinspires.ftc.teamcode.action.SequentialAction;
 import org.firstinspires.ftc.teamcode.action.TowerBuilderAction;
@@ -11,7 +10,6 @@ import org.firstinspires.ftc.teamcode.action.TurnToAction;
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
 import org.firstinspires.ftc.teamcode.gamepad.PushButton;
 
-import static java.lang.Math.PI;
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
 import static java.lang.Math.signum;
@@ -22,7 +20,7 @@ public class SkottOp extends OpMode {
         msStuckDetectInit = 10_000;
     }
 
-    PushButton pushButtonX = new PushButton(() -> gamepad1.x);
+    PushButton buttonRunScript = new PushButton(() -> gamepad2.x);
 
     MoveAction moveAction;
     TurnToAction turnToAction;
@@ -73,9 +71,31 @@ public class SkottOp extends OpMode {
         bot.loop();
         script.loop();
 
-        if (pushButtonX.getCurrent()) {
+        if (buttonRunScript.getCurrent()) {
             script = makeScript();
             script.start();
+        }
+
+        if (gamepad1.b) {
+            bot.getTowerBuilder().lifter.setPower(1.0d);
+        } else if (gamepad1.a) {
+            bot.getTowerBuilder().lifter.setPower(-1.0d);
+        } else {
+            bot.getTowerBuilder().lifter.setPower(0.0d);
+        }
+
+        if (gamepad1.left_trigger != 0.0) {
+            bot.getTowerBuilder().blockLifter.setPower(-gamepad1.left_trigger);
+        } else if (gamepad1.right_trigger != 0.0) {
+            bot.getTowerBuilder().blockLifter.setPower(gamepad1.right_trigger);
+        } else {
+            bot.getTowerBuilder().blockLifter.setPower(0);
+        }
+
+        if (gamepad1.left_bumper) {
+            bot.getTowerBuilder().grabber.setPosition(0.0);
+        } else if (gamepad1.right_bumper) {
+            bot.getTowerBuilder().grabber.setPosition(1.0);
         }
 
 //        MecanumPower mecanumPower = MecanumPower.fromXYTurn(

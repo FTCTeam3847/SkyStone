@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.action;
 
+import org.firstinspires.ftc.teamcode.Trinkets.BlockLifter;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerLifter;
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
 
@@ -7,18 +8,18 @@ import java.util.Locale;
 
 import static java.lang.String.format;
 
-public class TowerLiftAction implements RoboAction {
+public class BlockLiftAction implements RoboAction {
 
     private boolean started = false;
     private boolean isDone = false;
     private double targetPosition;
 
-    private TowerLifter lifter;
+    private BlockLifter lifter;
     private double startPosition;
 
-    public TowerLiftAction(double targetPosition, SkystoneBot bot) {
+    public BlockLiftAction(double targetPosition, SkystoneBot bot) {
         this.targetPosition = targetPosition;
-        this.lifter = bot.getTowerBuilder().lifter;
+        this.lifter = bot.getTowerBuilder().blockLifter;
     }
 
     @Override
@@ -59,7 +60,7 @@ public class TowerLiftAction implements RoboAction {
     @Override
     public String toString() {
         return format(Locale.US,
-                "liftTowerTo{T:%.2f L:%s}",
+                "liftBlockTo{T:%.2f L:%s}",
                 targetPosition,
                 lifter
         );

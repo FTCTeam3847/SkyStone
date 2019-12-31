@@ -24,8 +24,13 @@ public class TowerBuilderAction extends SequentialAction {
         return this;
     }
 
-    public TowerBuilderAction liftTo(double position) {
+    public TowerBuilderAction liftTower(double position) {
         addAction(new TowerLiftAction(position, bot));
+        return this;
+    }
+
+    public TowerBuilderAction liftBlock(double position) {
+        addAction(new BlockLiftAction(position, bot));
         return this;
     }
 

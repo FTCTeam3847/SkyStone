@@ -80,26 +80,28 @@ public class SkottOp extends OpMode {
             script.start();
         }
 
-        if (gamepad1.b) {
-            bot.getTowerBuilder().lifter.setPower(1.0d);
-        } else if (gamepad1.a) {
-            bot.getTowerBuilder().lifter.setPower(-1.0d);
-        } else {
-            bot.getTowerBuilder().lifter.setPower(0.0d);
-        }
+        if (!script.isRunning()) {
+            if (gamepad1.b) {
+                bot.getTowerBuilder().lifter.setPower(1.0d);
+            } else if (gamepad1.a) {
+                bot.getTowerBuilder().lifter.setPower(-1.0d);
+            } else {
+                bot.getTowerBuilder().lifter.setPower(0.0d);
+            }
 
-        if (gamepad1.left_trigger != 0.0) {
-            bot.getTowerBuilder().blockLifter.setPower(-gamepad1.left_trigger);
-        } else if (gamepad1.right_trigger != 0.0) {
-            bot.getTowerBuilder().blockLifter.setPower(gamepad1.right_trigger);
-        } else {
-            bot.getTowerBuilder().blockLifter.setPower(0);
-        }
+            if (gamepad1.left_trigger != 0.0) {
+                bot.getTowerBuilder().blockLifter.setPower(-gamepad1.left_trigger);
+            } else if (gamepad1.right_trigger != 0.0) {
+                bot.getTowerBuilder().blockLifter.setPower(gamepad1.right_trigger);
+            } else {
+                bot.getTowerBuilder().blockLifter.setPower(0);
+            }
 
-        if (gamepad1.left_bumper) {
-            bot.getTowerBuilder().grabber.setPosition(0.0);
-        } else if (gamepad1.right_bumper) {
-            bot.getTowerBuilder().grabber.setPosition(1.0);
+            if (gamepad1.left_bumper) {
+                bot.getTowerBuilder().grabber.setPosition(0.0);
+            } else if (gamepad1.right_bumper) {
+                bot.getTowerBuilder().grabber.setPosition(1.0);
+            }
         }
 
 //        MecanumPower mecanumPower = MecanumPower.fromXYTurn(

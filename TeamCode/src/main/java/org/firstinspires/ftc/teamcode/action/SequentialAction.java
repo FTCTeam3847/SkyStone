@@ -55,6 +55,11 @@ public class SequentialAction implements RoboAction {
     }
 
     @Override
+    public boolean isStarted() {
+        return isStarted;
+    }
+
+    @Override
     public String toString() {
         return format(Locale.US,
                 "%s",

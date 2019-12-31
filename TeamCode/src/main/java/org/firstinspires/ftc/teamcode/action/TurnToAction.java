@@ -57,6 +57,11 @@ public class TurnToAction implements RoboAction {
         return isDone;
     }
 
+    @Override
+    public boolean isStarted() {
+        return started;
+    }
+
 
     @Override
     public String toString() {

@@ -47,6 +47,11 @@ public class TowerLiftAction implements RoboAction {
         return isDone;
     }
 
+    @Override
+    public boolean isStarted() {
+        return started;
+    }
+
     private boolean isComplete() {
         double currentPosition = lifter.getPosition();
 

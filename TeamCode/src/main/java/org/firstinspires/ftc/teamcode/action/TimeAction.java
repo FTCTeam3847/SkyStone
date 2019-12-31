@@ -39,6 +39,11 @@ public abstract class TimeAction implements RoboAction {
         return isDone;
     }
 
+    @Override
+    public boolean isStarted() {
+        return isStarted;
+    }
+
     long runtime() {
         if (isDone) return dur;
         else if (!isStarted) return 0;

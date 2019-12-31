@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.action;
 
+import org.firstinspires.ftc.teamcode.Trinkets.TowerBuilder;
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
 
 import java.util.function.Supplier;
@@ -36,6 +37,11 @@ public class TowerBuilderAction extends SequentialAction {
 
     public TowerBuilderAction extendBlock(double position) {
         addAction(new BlockExtendAction(position, bot));
+        return this;
+    }
+
+    public TowerBuilderAction grabBlock(double position) {
+        addAction(new BlockGrabAction(msecTime, position, bot));
         return this;
     }
 

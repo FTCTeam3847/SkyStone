@@ -30,6 +30,8 @@ public class SkottOp extends OpMode {
 
     public SequentialAction makeScript() {
         TowerBuilderAction script = new TowerBuilderAction(System::currentTimeMillis, bot)
+                .grabBlock(1.0)
+                .pause(500)
                 .open()
                 .pause(500)
                 .close()
@@ -39,6 +41,8 @@ public class SkottOp extends OpMode {
                 .liftBlock(0.8)
                 .pause(500)
                 .extendBlock(1.0)
+                .pause(500)
+                .grabBlock(0.0)
                 .pause(500)
                 .extendBlock(0.0)
                 .pause(500)

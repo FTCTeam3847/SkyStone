@@ -102,6 +102,14 @@ public class SkottOp extends OpMode {
             } else if (gamepad1.right_bumper) {
                 bot.getTowerBuilder().grabber.setPosition(1.0);
             }
+
+            if (gamepad1.dpad_up) {
+                bot.getTowerBuilder().blockExtender.setPower(1.0);
+            } else if (gamepad1.dpad_down) {
+                bot.getTowerBuilder().blockExtender.setPower(-1.0);
+            } else {
+                bot.getTowerBuilder().blockExtender.setPower(0);
+            }
         }
 
 //        MecanumPower mecanumPower = MecanumPower.fromXYTurn(

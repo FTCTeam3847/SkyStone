@@ -3,12 +3,12 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.teamcode.Trinkets.BlockExtender;
 import org.firstinspires.ftc.teamcode.Trinkets.BlockLifter;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerBuilder;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerGrabber;
@@ -41,6 +41,7 @@ public class SkottBot implements SkystoneBot {
     public DcMotor leftTowerLifter;
     public DcMotor rightTowerLifter;
 
+    public CRServo extender;
     public CRServo leftBlockLifter;
     public CRServo rightBlockLifter;
 
@@ -143,13 +144,23 @@ public class SkottBot implements SkystoneBot {
         rightBlockLifter = hardwareMap.get(CRServo.class, "right-extender-lifter");
         rightBlockLifter.setDirection(REVERSE);
 
+        //Primary Port 3
+        extender = hardwareMap.get(CRServo.class, "extender");
+        extender.setDirection(REVERSE);
+
         BlockLifter blockLifter =
                 new BlockLifter(
                         leftBlockLifter::setPower,
                         rightBlockLifter::setPower
                 );
 
-        towerBuilder = new TowerBuilder(towerGrabber, towerLifter, blockLifter);
+        BlockExtender blockExtender =
+                new BlockExtender(
+                        extender::setPower,
+                        extender::getPower
+                );
+
+        towerBuilder = new TowerBuilder(towerGrabber, towerLifter, blockLifter, blockExtender);
 
         towerBuilder.grabber.setPosition(0.5);
         towerBuilder.lifter.setPower(0.0);

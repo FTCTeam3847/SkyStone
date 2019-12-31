@@ -4,35 +4,59 @@ import java.util.Locale;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import static com.qualcomm.robotcore.util.Range.clip;
+import static com.qualcomm.robotcore.util.Range.scale;
+import static java.lang.Math.max;
 import static java.lang.String.format;
 
 public class BlockExtender {
+    private static final Consumer<Double> NOOP = unused -> {
+    };
+    private static final Supplier<Double> NOOPS = () -> 0.0d;
+    public static final BlockExtender NIL = new BlockExtender(NOOP, NOOPS);
+
     //Consumer takes a variable and returns a void
-    Consumer<Double> servo;
-    Supplier<Double> servoSupplier;
+    Consumer<Double> servoPower;
+    Supplier<Double> servoPowerSupplier;
+    double position = 0.0d;
+    long lastTime = 0L;
+    double MAX_POSITION = 3800.0d;
 
-
-    double constant = 1;
-    double position;
-
-    public BlockExtender(Consumer<Double> servo, Supplier<Double> servoSupplier) {
-        this.servo = servo;
-        this.servoSupplier = servoSupplier;
+    public BlockExtender(Consumer<Double> servoPower, Supplier<Double> servoPowerSupplier) {
+        this.servoPower = servoPower;
+        this.servoPowerSupplier = servoPowerSupplier;
     }
 
-    //accept() takes a variable and returns a void
-    public void setPosition(double pos) {
-        servo.accept(pos * constant);
-        position = pos;
+    private void integratePosition() {
+        long now = System.nanoTime();
+        long duration = now - lastTime;
+        position = max(0.0d, position + (duration * getPower()) / 1_000_000.0d);
+        lastTime = now;
+    }
+
+    public void setPower(double power) {
+        power = clip(power, -1.0d, 1.0d);
+        integratePosition();
+        servoPower.accept(power);
+    }
+
+    public double getPower() {
+        return servoPowerSupplier.get();
+    }
+
+    public double getPosition() {
+        integratePosition();
+        double position = clip(this.position, 0.0d, MAX_POSITION);
+        return scale(position, 0.0d, MAX_POSITION, 0.0d, 1.0d);
     }
 
     @Override
     public String toString() {
         return format(
-                Locale.ENGLISH,
-                "position: %.2f, actual: %.2f",
-                position,
-                servoSupplier.get()
+                Locale.US,
+                "pwr:%.2f,pos:%.2f",
+                getPower(),
+                getPosition()
         );
     }
 

@@ -3,11 +3,16 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.action.MoveAction;
+import org.firstinspires.ftc.teamcode.Trinkets.BlockExtender;
+import org.firstinspires.ftc.teamcode.Trinkets.BlockLifter;
+import org.firstinspires.ftc.teamcode.Trinkets.TowerBuilder;
+import org.firstinspires.ftc.teamcode.Trinkets.TowerGrabber;
+import org.firstinspires.ftc.teamcode.Trinkets.TowerLifter;
 import org.firstinspires.ftc.teamcode.action.SequentialAction;
 import org.firstinspires.ftc.teamcode.action.TowerBuilderAction;
-import org.firstinspires.ftc.teamcode.action.TurnToAction;
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
+import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
+import org.firstinspires.ftc.teamcode.gamepad.PairedButtons;
 import org.firstinspires.ftc.teamcode.gamepad.PushButton;
 
 import static java.lang.Math.abs;
@@ -16,44 +21,59 @@ import static java.lang.Math.signum;
 
 @TeleOp(name = "SkottOp", group = "1")
 public class SkottOp extends OpMode {
+
+    private TowerBuilder towerBuilder;
+    private TowerLifter towerLifter;
+    private BlockLifter blockLifter;
+    private TowerGrabber towerGrabber;
+    private BlockExtender blockExtender;
+
     {
         msStuckDetectInit = 10_000;
     }
 
-    PushButton buttonRunScript = new PushButton(() -> gamepad2.x);
+    private PushButton buttonRunScript = new PushButton(() -> gamepad2.x);
 
-    MoveAction moveAction;
-    TurnToAction turnToAction;
+    private PairedButtons<Double> towerGrabberButtons = new PairedButtons<>(
+            () -> gamepad1.left_bumper, () -> 0.0d,
+            () -> gamepad1.right_bumper, () -> 1.0d,
+            () -> towerGrabber.getPosition()
+    );
+
+    private PairedButtons<Double> towerLifterButtons = new PairedButtons<>(
+            () -> gamepad1.b, 1.0d,
+            () -> gamepad1.a, -1.0d,
+            0.0d
+    );
+
+    private PairedButtons<Double> blockLifterButtons = new PairedButtons<>(
+            () -> gamepad1.left_trigger != 0.0f, () -> (double) gamepad1.left_trigger,
+            () -> gamepad1.right_trigger != 0.0f, () -> (double) -gamepad1.right_trigger,
+            () -> 0.0d
+    );
+
+    private PairedButtons<Double> blockExtenderButtons = new PairedButtons<>(
+            () -> gamepad1.dpad_up, 1.0d,
+            () -> gamepad1.dpad_down, -1.0d,
+            0.0d
+    );
+
     SequentialAction script;
 
     SkystoneBot bot;
 
     public SequentialAction makeScript() {
         TowerBuilderAction script = new TowerBuilderAction(System::currentTimeMillis, bot)
-                .grabBlock(1.0)
-                .pause(500)
-                .open()
-                .pause(500)
-                .close()
-                .pause(500)
-                .liftTower(1.0)
-                .pause(500)
-                .liftBlock(0.8)
-                .pause(500)
-                .extendBlock(1.0)
-                .pause(500)
-                .grabBlock(0.0)
-                .pause(500)
-                .extendBlock(0.0)
-                .pause(500)
-                .liftBlock(0.0)
-                .pause(500)
-                .liftTower(0.2)
-                .pause(500)
-                .open()
-                .pause(500)
-                .liftTower(0.0)
-                .pause(500)
+                .releaseTower()
+                .grabTower()
+                .liftTower()
+                .liftBlock()
+                .extendBlock()
+                .releaseBlock()
+                .retractBlock()
+                .lowerBlock()
+                .lowerTower(0.5)
+                .releaseTower()
                 ;
         return script;
     }
@@ -62,6 +82,11 @@ public class SkottOp extends OpMode {
     public void init() {
         bot = new SkottBot(hardwareMap, telemetry);
         bot.init();
+        towerBuilder = bot.getTowerBuilder();
+        towerLifter = towerBuilder.towerLifter;
+        blockLifter = towerBuilder.blockLifter;
+        towerGrabber = towerBuilder.towerGrabber;
+        blockExtender = towerBuilder.blockExtender;
 
         //MecanumPower mecanumPower = new MecanumPower(new PolarCoord(0.5, 0), 0);
         //moveAction = new MoveAction(1, mecanumPower, System::nanoTime, bot);
@@ -93,45 +118,20 @@ public class SkottOp extends OpMode {
         }
 
         if (!script.isRunning()) {
-            if (gamepad1.b) {
-                bot.getTowerBuilder().lifter.setPower(1.0d);
-            } else if (gamepad1.a) {
-                bot.getTowerBuilder().lifter.setPower(-1.0d);
-            } else {
-                bot.getTowerBuilder().lifter.setPower(0.0d);
-            }
+            towerGrabber.setPosition(towerGrabberButtons.getValue());
+            towerLifter.setPower(towerLifterButtons.getValue());
+            blockLifter.setPower(blockLifterButtons.getValue());
+            blockExtender.setPower(blockExtenderButtons.getValue());
 
-            if (gamepad1.left_trigger != 0.0) {
-                bot.getTowerBuilder().blockLifter.setPower(-gamepad1.left_trigger);
-            } else if (gamepad1.right_trigger != 0.0) {
-                bot.getTowerBuilder().blockLifter.setPower(gamepad1.right_trigger);
-            } else {
-                bot.getTowerBuilder().blockLifter.setPower(0);
-            }
+            MecanumPower mecanumPower = MecanumPower.fromXYTurn(
+                    sensitivity(gamepad1.right_stick_x, SENSITIVITY),
+                    sensitivity(-gamepad1.right_stick_y, SENSITIVITY),
+                    sensitivity(gamepad1.left_stick_x, SENSITIVITY)
+            );
 
-            if (gamepad1.left_bumper) {
-                bot.getTowerBuilder().grabber.setPosition(0.0);
-            } else if (gamepad1.right_bumper) {
-                bot.getTowerBuilder().grabber.setPosition(1.0);
-            }
-
-            if (gamepad1.dpad_up) {
-                bot.getTowerBuilder().blockExtender.setPower(1.0);
-            } else if (gamepad1.dpad_down) {
-                bot.getTowerBuilder().blockExtender.setPower(-1.0);
-            } else {
-                bot.getTowerBuilder().blockExtender.setPower(0);
-            }
+            bot.move(mecanumPower);
         }
 
-//        MecanumPower mecanumPower = MecanumPower.fromXYTurn(
-//                sensitivity(gamepad1.right_stick_x, SENSITIVITY),
-//                sensitivity(-gamepad1.right_stick_y, SENSITIVITY),
-//                sensitivity(gamepad1.left_stick_x, SENSITIVITY)
-//        );
-//
-//        bot.move(mecanumPower);
-//
         telemetry.addData("script", script);
         telemetry.update();
     }

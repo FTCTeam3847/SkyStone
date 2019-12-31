@@ -18,7 +18,7 @@ public class TowerLiftAction implements RoboAction {
 
     public TowerLiftAction(double targetPosition, SkystoneBot bot) {
         this.targetPosition = targetPosition;
-        this.lifter = bot.getTowerBuilder().lifter;
+        this.lifter = bot.getTowerBuilder().towerLifter;
     }
 
     @Override

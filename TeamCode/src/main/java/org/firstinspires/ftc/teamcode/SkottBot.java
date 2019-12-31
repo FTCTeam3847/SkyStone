@@ -173,9 +173,6 @@ public class SkottBot implements SkystoneBot {
                 );
 
         towerBuilder = new TowerBuilder(towerGrabber, towerLifter, blockLifter, blockExtender, blockGrabber);
-
-        towerBuilder.grabber.setPosition(0.5);
-        towerBuilder.lifter.setPower(0.0);
     }
 
     @Override

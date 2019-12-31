@@ -13,8 +13,8 @@ public class TowerBuilder {
             BlockGrabber.NIL
     );
 
-    public final TowerGrabber grabber;
-    public final TowerLifter lifter;
+    public final TowerGrabber towerGrabber;
+    public final TowerLifter towerLifter;
     public final BlockLifter blockLifter;
     public final BlockExtender blockExtender;
     public final BlockGrabber blockGrabber;
@@ -22,13 +22,13 @@ public class TowerBuilder {
 
     public TowerBuilder(
             TowerGrabber towerGrabber,
-            TowerLifter lifter,
+            TowerLifter towerLifter,
             BlockLifter blockLifter,
             BlockExtender blockExtender,
             BlockGrabber blockGrabber
     ) {
-        this.grabber = towerGrabber;
-        this.lifter = lifter;
+        this.towerGrabber = towerGrabber;
+        this.towerLifter = towerLifter;
         this.blockLifter = blockLifter;
         this.blockExtender = blockExtender;
         this.blockGrabber = blockGrabber;
@@ -38,8 +38,8 @@ public class TowerBuilder {
     public String toString() {
         return format(Locale.US,
                 "G{%s}, L{%s}, BL{%s}, BX{%s}, BG{%s}",
-                grabber,
-                lifter,
+                towerGrabber,
+                towerLifter,
                 blockLifter,
                 blockExtender,
                 blockGrabber

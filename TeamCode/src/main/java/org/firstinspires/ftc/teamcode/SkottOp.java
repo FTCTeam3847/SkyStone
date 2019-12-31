@@ -46,8 +46,8 @@ public class SkottOp extends OpMode {
     );
 
     private PairedButtons<Double> blockLifterButtons = new PairedButtons<>(
-            () -> gamepad1.left_trigger != 0.0f, () -> (double) gamepad1.left_trigger,
-            () -> gamepad1.right_trigger != 0.0f, () -> (double) -gamepad1.right_trigger,
+            () -> gamepad1.left_trigger != 0.0d, () -> (double) gamepad1.left_trigger,
+            () -> gamepad1.right_trigger != 0.0d, () -> (double) -gamepad1.right_trigger,
             () -> 0.0d
     );
 
@@ -86,10 +86,6 @@ public class SkottOp extends OpMode {
         blockLifter = towerBuilder.blockLifter;
         towerGrabber = towerBuilder.towerGrabber;
         blockExtender = towerBuilder.blockExtender;
-
-        //MecanumPower mecanumPower = new MecanumPower(new PolarCoord(0.5, 0), 0);
-        //moveAction = new MoveAction(1, mecanumPower, System::nanoTime, bot);
-        //turnToAction = new TurnToAction(0, bot);
 
         script = makeScript();
     }

@@ -48,6 +48,10 @@ public class SkottOp extends OpMode {
                 .pause(500)
                 .liftBlock(0.0)
                 .pause(500)
+                .liftTower(0.2)
+                .pause(500)
+                .open()
+                .pause(500)
                 .liftTower(0.0)
                 .pause(500)
                 ;

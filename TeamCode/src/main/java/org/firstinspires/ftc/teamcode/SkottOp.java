@@ -18,6 +18,9 @@ import static java.lang.Math.signum;
 
 @TeleOp(name = "SkottOp", group = "1")
 public class SkottOp extends OpMode {
+    {
+        msStuckDetectInit = 10_000;
+    }
 
     PushButton pushButtonX = new PushButton(() -> gamepad1.x);
 
@@ -33,13 +36,11 @@ public class SkottOp extends OpMode {
                 .pause(500)
                 .close()
                 .pause(500)
-                .open()
+                .liftTo(1.0)
                 .pause(500)
-                .close()
+                .liftTo(0.0)
                 .pause(500)
-                .open()
-                .pause(500)
-                .close();
+                ;
         return script;
     }
 
@@ -86,8 +87,6 @@ public class SkottOp extends OpMode {
 //        bot.move(mecanumPower);
 //
         telemetry.addData("script", script);
-        telemetry.addData("current heading", "%.2f PI", bot.getFieldRelativeHeading() / PI);
-        telemetry.addData("actualScript", script.toString());
         telemetry.update();
     }
 

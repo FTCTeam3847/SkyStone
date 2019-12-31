@@ -8,6 +8,8 @@ import static java.lang.Math.*;
 import static java.lang.String.format;
 
 public class TowerLifter {
+    public static final TowerLifter NIL = new TowerLifter((x) -> {},(x) -> {},()->0,()->0);
+
     private final Consumer<Double> leftPower;
     private final Consumer<Double> rightPower;
     private final Supplier<Integer> leftPosition;
@@ -63,8 +65,8 @@ public class TowerLifter {
     public String toString() {
         return format(
                 Locale.ENGLISH,
-                "%.2f,%.2f l{%.2f,%d} r{%.2f,%d}",
-                power, getPosition(),
+                "pwr:%.2f,pos:%.2f L%.2f,%d R%.2f,%d",
+                getPower(), getPosition(),
                 leftPwr(power), leftPosition.get(),
                 rightPwr(power), rightPosition.get()
         );

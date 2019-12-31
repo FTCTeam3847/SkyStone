@@ -17,6 +17,9 @@ import static java.lang.Math.signum;
 
 @TeleOp(name = "DerpyOp", group = "1")
 public class DerpyOp extends OpMode {
+    {
+        msStuckDetectInit = 10_000;
+    }
 
     PushButton pushButtonX = new PushButton(() -> gamepad1.x);
     PushButton pushButtonY = new PushButton(() -> gamepad1.y);

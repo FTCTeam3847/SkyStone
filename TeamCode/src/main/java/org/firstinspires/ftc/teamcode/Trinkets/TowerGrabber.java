@@ -52,7 +52,7 @@ public class TowerGrabber {
     public String toString() {
         return format(
                 Locale.ENGLISH,
-                "position: %.2f, left actual: %.2f, right actual: %.2f",
+                "%.2f L%.2f R%.2f",
                 position,
                 getLeftPos.get(),
                 getRightPos.get()

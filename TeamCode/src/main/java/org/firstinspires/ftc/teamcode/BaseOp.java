@@ -10,6 +10,9 @@ import org.firstinspires.ftc.teamcode.drive.DrivePower;
 
 
 public class BaseOp extends OpMode {
+    {
+        msStuckDetectInit = 10_000;
+    }
 
     //drivetrain
     public DcMotor leftFrontMotor;

@@ -4,7 +4,7 @@ import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
 
 import java.util.function.Supplier;
 
-public class TowerBuilderAction extends SequentialAction{
+public class TowerBuilderAction extends SequentialAction {
     private final Supplier<Long> msecTime;
     private final SkystoneBot bot;
 
@@ -14,14 +14,18 @@ public class TowerBuilderAction extends SequentialAction{
         this.bot = bot;
     }
 
-
-    public TowerBuilderAction open(){
-        addAction(new TowerGrabberAction(msecTime, 0.0, bot));
+    public TowerBuilderAction open() {
+        addAction(new TowerGrabAction(msecTime, 0.0, bot));
         return this;
     }
 
-    public TowerBuilderAction close(){
-        addAction(new TowerGrabberAction(msecTime,1.0, bot));
+    public TowerBuilderAction close() {
+        addAction(new TowerGrabAction(msecTime, 1.0, bot));
+        return this;
+    }
+
+    public TowerBuilderAction liftTo(double position) {
+        addAction(new TowerLiftAction(position, bot));
         return this;
     }
 
@@ -29,5 +33,4 @@ public class TowerBuilderAction extends SequentialAction{
         addAction(new PauseAction(time, msecTime, bot));
         return this;
     }
-
 }

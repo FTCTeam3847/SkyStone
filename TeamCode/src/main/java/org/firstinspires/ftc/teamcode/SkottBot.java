@@ -9,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerBuilder;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerGrabber;
+import org.firstinspires.ftc.teamcode.Trinkets.TowerLifter;
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
 import org.firstinspires.ftc.teamcode.controller.HeadingController;
 import org.firstinspires.ftc.teamcode.drive.DrivePower;
@@ -28,6 +29,8 @@ public class SkottBot implements SkystoneBot {
 
     public Servo leftTowerGrabber;
     public Servo rightTowerGrabber;
+    public DcMotor leftTowerLifter;
+    public DcMotor rightTowerLifter;
 
     private final HardwareMap hardwareMap;
     private final Telemetry telemetry;
@@ -96,9 +99,33 @@ public class SkottBot implements SkystoneBot {
                 rightTowerGrabber::getPosition
         );
 
-        towerBuilder = new TowerBuilder(towerGrabber);
+        //Secondary Port 0
+        leftTowerLifter = hardwareMap.get(DcMotor.class, "left-grabber-lifter");
+        leftTowerLifter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftTowerLifter.setTargetPosition(0);
+        leftTowerLifter.setDirection(DcMotor.Direction.FORWARD);
+        leftTowerLifter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftTowerLifter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        //Secondary Port 1
+        rightTowerLifter = hardwareMap.get(DcMotor.class, "right-grabber-lifter");
+        rightTowerLifter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightTowerLifter.setTargetPosition(0);
+        rightTowerLifter.setDirection(DcMotor.Direction.REVERSE);
+        rightTowerLifter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightTowerLifter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        TowerLifter towerLifter =
+                new TowerLifter(
+                        leftTowerLifter::setPower,
+                        rightTowerLifter::setPower,
+                        leftTowerLifter::getCurrentPosition,
+                        rightTowerLifter::getCurrentPosition
+                );
+        towerBuilder = new TowerBuilder(towerGrabber, towerLifter);
 
         towerBuilder.grabber.setPosition(0.5);
+        towerBuilder.lifter.setPower(0.0);
     }
 
     @Override
@@ -124,7 +151,8 @@ public class SkottBot implements SkystoneBot {
 
     private void updateTelemetry() {
         telemetry.addData("localizer", skyStoneLocalizer);
-        telemetry.addData("heading controller", headingController);
+        telemetry.addData("heading", headingController);
+        telemetry.addData("tower", towerBuilder);
     }
 
     private void move4(double leftFront, double leftBack, double rightFront, double rightBack) {

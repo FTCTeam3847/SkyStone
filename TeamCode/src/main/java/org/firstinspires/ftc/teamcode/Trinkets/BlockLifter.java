@@ -17,10 +17,9 @@ public class BlockLifter {
     Consumer<Double> leftPower;
     Consumer<Double> rightPower;
 
-    double power = 0.0d;
-    double position = 0.0d;
-    long lastTime = 0L;
-    double MAX_POSITION = 2200.0d;
+    private double power = 0.0d;
+    private static final double MAX_POSITION = 2200.0d;
+    private final PositionIntegrator position = new PositionIntegrator(System::nanoTime, 0.0d, MAX_POSITION);
 
     public BlockLifter(Consumer<Double> leftPower,
                        Consumer<Double> rightPower
@@ -30,16 +29,9 @@ public class BlockLifter {
 
     }
 
-    private void integratePosition() {
-        long now = System.nanoTime();
-        long duration = now - lastTime;
-        position = max(0.0d, position + (duration * this.power) / 1_000_000.0d);
-        lastTime = now;
-    }
-
     public void setPower(double power) {
         power = clip(power, -1.0d, 1.0d);
-        integratePosition();
+        position.setVelocity(power);
         leftPower.accept(power);
         rightPower.accept(power);
         this.power = power;
@@ -50,9 +42,7 @@ public class BlockLifter {
     }
 
     public double getPosition() {
-        integratePosition();
-        double position = clip(this.position, 0.0d, MAX_POSITION);
-        return scale(position, 0.0d, MAX_POSITION, 0.0d, 1.0d);
+        return position.getPosition();
     }
 
     @Override

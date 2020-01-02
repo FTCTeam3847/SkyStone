@@ -53,6 +53,7 @@ public class HeadingLocalizer implements Localizer<Double> {
     public void calibrate(Double reference) {
         checkAngleArgument(reference);
         this.zero = subtractRadians(readAbsolute(), reference);
+        update();
     }
 
     private double readAbsolute() {

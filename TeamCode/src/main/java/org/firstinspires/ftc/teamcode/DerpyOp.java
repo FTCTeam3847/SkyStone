@@ -8,6 +8,8 @@ import org.firstinspires.ftc.teamcode.action.SequentialAction;
 import org.firstinspires.ftc.teamcode.action.DriveTrainAction;
 import org.firstinspires.ftc.teamcode.action.TurnToAction;
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
+import org.firstinspires.ftc.teamcode.controller.FieldPosition;
+import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
 import org.firstinspires.ftc.teamcode.gamepad.PushButton;
 
 import static java.lang.Math.PI;
@@ -26,6 +28,9 @@ public class DerpyOp extends OpMode {
     PushButton pushButtonA = new PushButton(() -> gamepad1.a);
     PushButton pushButtonB = new PushButton(() -> gamepad1.b);
 
+    PushButton pushButtonLeftBumper = new PushButton(() -> gamepad1.left_bumper);
+
+
 
 
     MoveAction moveAction;
@@ -37,7 +42,7 @@ public class DerpyOp extends OpMode {
     SequentialAction scriptB;
 
 
-    SkystoneBot bot;
+    DerpyBot bot;
 
     public SequentialAction makeScript() {
         DriveTrainAction script = new DriveTrainAction(System::currentTimeMillis, bot)
@@ -94,44 +99,51 @@ public class DerpyOp extends OpMode {
     @Override
     public void loop() {
         bot.loop();
-        script.loop();
-        scriptY.loop();
-        scriptA.loop();
-        scriptB.loop();
 
+        MecanumPower mecanumPower = MecanumPower.fromXYTurn(
+                sensitivity(gamepad1.right_stick_x, SENSITIVITY),
+                sensitivity(-gamepad1.right_stick_y, SENSITIVITY),
+                sensitivity(gamepad1.left_stick_x, SENSITIVITY)
+        );
+        bot.getMecanumDrive().setPower(mecanumPower);
 
-        if (pushButtonX.getCurrent()) {
-            script = makeScript();
-            script.start();
-        }
-
-        if (pushButtonY.getCurrent()) {
-            scriptY = makeScriptY();
-            scriptY.start();
-        }
-
-        if (pushButtonA.getCurrent()) {
-            scriptA = makeScriptA();
-            scriptA.start();
-        }
-
-        if (pushButtonB.getCurrent()) {
-            scriptB = makeScriptB();
-            scriptB.start();
-        }
-
-
-//        MecanumPower mecanumPower = MecanumPower.fromXYTurn(
-//                sensitivity(gamepad1.right_stick_x, SENSITIVITY),
-//                sensitivity(-gamepad1.right_stick_y, SENSITIVITY),
-//                sensitivity(gamepad1.left_stick_x, SENSITIVITY)
-//        );
+//        script.loop();
+//        scriptY.loop();
+//        scriptA.loop();
+//        scriptB.loop();
 //
-//        bot.setPower(mecanumPower);
 //
-        telemetry.addData("script", script);
-        telemetry.addData("current heading", "%.2f PI", bot.getFieldRelativeHeading() / PI);
-        telemetry.addData("actualScript", script.toString());
+//        if (pushButtonX.getCurrent()) {
+//            script = makeScript();
+//            script.start();
+//        }
+//
+//        if (pushButtonY.getCurrent()) {
+//            scriptY = makeScriptY();
+//            scriptY.start();
+//        }
+//
+//        if (pushButtonA.getCurrent()) {
+//            scriptA = makeScriptA();
+//            scriptA.start();
+//        }
+//
+//        if (pushButtonB.getCurrent()) {
+//            scriptB = makeScriptB();
+//            scriptB.start();
+//        }
+//
+        if (pushButtonLeftBumper.getCurrent()) {
+            bot.headingLocalizer.calibrate(0.0);
+            bot.mecanumLocalizer.calibrate(FieldPosition.ORIGIN);
+        }
+
+
+
+//
+//        telemetry.addData("script", script);
+//        telemetry.addData("current heading", "%.2f PI", bot.getFieldRelativeHeading() / PI);
+//        telemetry.addData("actualScript", script.toString());
         telemetry.update();
     }
 

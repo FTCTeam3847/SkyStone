@@ -10,8 +10,10 @@ import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
 import org.firstinspires.ftc.teamcode.controller.HeadingController;
 import org.firstinspires.ftc.teamcode.controller.HeadingLocalizer;
 import org.firstinspires.ftc.teamcode.drive.DrivePower;
+import org.firstinspires.ftc.teamcode.drive.mecanum.LocalizingMecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDriveController;
+import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumLocalizer;
 
 import static org.firstinspires.ftc.teamcode.HardwareMapUtils.initImu;
 import static org.firstinspires.ftc.teamcode.HardwareMapUtils.initVuforia;
@@ -28,10 +30,11 @@ public class DerpyBot implements SkystoneBot {
     private final Telemetry telemetry;
     private MecanumDrive mecanum;
     private BNO055IMU imu;
-    private HeadingLocalizer headingLocalizer;
-    private HeadingController headingController;
-    private SkyStoneLocalizer skyStoneLocalizer;
-    private VuforiaLocalizer vuforiaLocalizer;
+    HeadingLocalizer headingLocalizer;
+    HeadingController headingController;
+    SkyStoneLocalizer skyStoneLocalizer;
+    MecanumLocalizer mecanumLocalizer;
+    VuforiaLocalizer vuforiaLocalizer;
 
     public DerpyBot(
             HardwareMap hardwareMap,
@@ -52,7 +55,10 @@ public class DerpyBot implements SkystoneBot {
                 0.0d,
                 4.0d,
                 0.0d);
-        mecanum = new MecanumDriveController(headingController, this::move);
+        MecanumDriveController drive = new MecanumDriveController(headingController, this::move);
+        mecanumLocalizer = new MecanumLocalizer(System::nanoTime, headingLocalizer::getLast, 28.6); //25.6
+        mecanum= new LocalizingMecanumDrive(drive, mecanumLocalizer);
+
         vuforiaLocalizer = initVuforia(hardwareMap);
         skyStoneLocalizer = new SkyStoneLocalizer(vuforiaLocalizer);
 
@@ -103,8 +109,9 @@ public class DerpyBot implements SkystoneBot {
     }
 
     private void updateTelemetry() {
-        telemetry.addData("localizer", skyStoneLocalizer);
-        telemetry.addData("heading controller", headingController);
+        telemetry.addData("skystone", skyStoneLocalizer);
+        telemetry.addData("heading", headingLocalizer);
+        telemetry.addData("mecanum", mecanumLocalizer);
     }
 
     private void move4(double leftFront, double leftBack, double rightFront, double rightBack) {

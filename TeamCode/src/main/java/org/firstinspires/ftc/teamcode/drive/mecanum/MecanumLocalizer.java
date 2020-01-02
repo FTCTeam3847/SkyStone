@@ -3,7 +3,9 @@ package org.firstinspires.ftc.teamcode.drive.mecanum;
 import org.firstinspires.ftc.teamcode.controller.FieldPosition;
 import org.firstinspires.ftc.teamcode.controller.Localizer;
 import org.firstinspires.ftc.teamcode.polar.PolarCoord;
+import org.firstinspires.ftc.teamcode.polar.PolarUtil;
 
+import java.util.Locale;
 import java.util.function.Supplier;
 
 import static java.lang.Math.abs;
@@ -15,9 +17,8 @@ public class MecanumLocalizer implements Localizer<FieldPosition> {
 
     private FieldPosition positionOfLastUpdate = FieldPosition.ORIGIN;
     private long timeOfLastUpdate;
-    private MecanumPower currentPower;
-    private FieldPosition lastUpdated;
-    private double currentHeading;
+    private MecanumPower currentPower = MecanumPower.ZERO;
+    private FieldPosition lastUpdated = FieldPosition.ORIGIN;
 
     public MecanumLocalizer(Supplier<Long> nanoTime, Supplier<Double> heading, double maxVelocityInchesPerSecond) {
         this.nanoTime = nanoTime;
@@ -32,13 +33,13 @@ public class MecanumLocalizer implements Localizer<FieldPosition> {
         long now = nanoTime.get();
         positionOfLastUpdate = update(now);
         currentPower = mecanumPower;
-        currentHeading = heading;
     }
 
     @Override
     public void calibrate(FieldPosition fieldPosition) {
         timeOfLastUpdate = nanoTime.get();
         positionOfLastUpdate = new FieldPosition(fieldPosition.polarCoord, heading.get());
+        lastUpdated = positionOfLastUpdate;
     }
 
     @Override
@@ -54,15 +55,24 @@ public class MecanumLocalizer implements Localizer<FieldPosition> {
     private FieldPosition update(Long nanoTime) {
         long duration = nanoTime - timeOfLastUpdate;
 
-        // TODO use math here, and return a real updated FieldPosition
+        double directionOfTravel = currentPower.strafe.theta + heading.get();
+        double velocityOfTravel = currentPower.strafe.radius * maxVelocityInchesPerSecond;
+        double radiusOfTravel = velocityOfTravel * duration / 1_000_000_000.0d;
+        PolarCoord deltaPosition = new PolarCoord(radiusOfTravel, directionOfTravel);
 
+        PolarCoord netVector = PolarUtil.add(deltaPosition, getLast().polarCoord);
+
+        lastUpdated = new FieldPosition(netVector, heading.get());
         timeOfLastUpdate = nanoTime;
-        lastUpdated = new FieldPosition(PolarCoord.ORIGIN, currentHeading);
         return lastUpdated;
     }
 
     private boolean isClose(double h1, double h2) {
         return abs(h2-h1) > 0.001;
+    }
+
+    public String toString () {
+        return getLast().toString();
     }
 
 }

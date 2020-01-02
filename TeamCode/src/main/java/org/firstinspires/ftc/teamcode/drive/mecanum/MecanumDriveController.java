@@ -12,7 +12,7 @@ import static org.firstinspires.ftc.teamcode.polar.PolarUtil.addRadians;
 import static org.firstinspires.ftc.teamcode.polar.PolarUtil.fromXY;
 import static org.firstinspires.ftc.teamcode.polar.PolarUtil.subtractRadians;
 
-public class MecanumDriveController implements Controller<Void, MecanumPower, DrivePower> {
+public class MecanumDriveController implements Controller<MecanumPower, DrivePower> {
     private final HeadingController headingController;
 
     public MecanumDriveController(HeadingController headingController) {
@@ -80,10 +80,5 @@ public class MecanumDriveController implements Controller<Void, MecanumPower, Dr
     @Override
     public void setTarget(MecanumPower target) {
         this.target = target;
-    }
-
-    @Override
-    public Void getCurrent() {
-        return null;
     }
 }

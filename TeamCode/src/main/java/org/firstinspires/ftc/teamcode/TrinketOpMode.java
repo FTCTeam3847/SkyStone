@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerGrabber;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerLifter;
 import org.firstinspires.ftc.teamcode.controller.HeadingController;
+import org.firstinspires.ftc.teamcode.controller.HeadingLocalizer;
 import org.firstinspires.ftc.teamcode.drive.DrivePower;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDriveController;
 import org.firstinspires.ftc.teamcode.gamepad.PushButton;
@@ -28,6 +29,7 @@ import static org.firstinspires.ftc.teamcode.polar.PolarUtil.normalize;
 public class TrinketOpMode extends BaseOp {
     public BNO055IMU imu;
     public MecanumDriveController driverController;
+    HeadingLocalizer headingLocalizer;
     HeadingController headingController;
 
     ToggleButton toggleRunMode = new ToggleButton(() -> gamepad1.left_stick_button);
@@ -64,8 +66,11 @@ public class TrinketOpMode extends BaseOp {
 
         super.init();
         imu = initImu(hardwareMap.get(BNO055IMU.class, "imu"));
+        headingLocalizer = new HeadingLocalizer(
+                () -> normalize((double) imu.getAngularOrientation().firstAngle)
+        );
         headingController = new HeadingController(
-                () -> normalize((double) imu.getAngularOrientation().firstAngle),
+                headingLocalizer::getCurrent,
                 0.0d,
                 10.0d,
                 0.0d);

@@ -8,7 +8,7 @@ import java.util.function.Supplier;
 import static org.firstinspires.ftc.teamcode.polar.PolarUtil.subtract;
 import static org.firstinspires.ftc.teamcode.polar.PolarUtil.subtractRadians;
 
-public class PositionController implements Controller<PolarCoord, FieldPosition, PolarCoord> {
+public class PositionController implements Controller<FieldPosition, PolarCoord> {
     private final Supplier<FieldPosition> fieldPositionSupplier;
     private FieldPosition targetFieldPosition;
     private PolarCoord runningAverage;

@@ -66,24 +66,17 @@ import static org.firstinspires.ftc.teamcode.polar.PolarUtil.subtractRadians;
  * the Java standard library. This makes the class easily testable, and
  * and easily embeddable into a simulation environment.
  */
-public class HeadingController implements Controller<Double, Double, Double> {
-    private double zero;
-    private double lastAbsolute;
+public class HeadingController implements Controller<Double, Double> {
+    private Supplier<Double> heading;
 
     private double target = NaN;
 
-    private final Supplier<Double> absolute;
     private final double tolerance;
     private final double gain;
     private final double clamp;
 
     /**
-     * Constructs a new [HeadingController] given a supplier of an absolute
-     * angle, an error tolerance, a gain value, and a clamp value.
-     *
-     * @param absolute  Supplier of an absolute angle reading between [0..2·π].
-     *                  example:
-     *                  `() -> normalizeTo2PI(imu.getAngularOrientation().firstAngle`).
+     * @param heading   Supplier of heading in radians between [0..2·π].
      *                  This argument is provided as a Supplier so as to keep
      *                  this class from depending on any specific hardware
      *                  device or simulation environment.
@@ -104,26 +97,15 @@ public class HeadingController implements Controller<Double, Double, Double> {
      *                  command a turn slower than 10% max rate.
      */
     public HeadingController(
-            Supplier<Double> absolute,
+            Supplier<Double> heading,
             double tolerance,
             double gain,
             double clamp
     ) {
-        this.absolute = absolute;
+        this.heading = heading;
         this.tolerance = tolerance;
         this.gain = gain;
         this.clamp = clamp;
-    }
-
-    /**
-     * Adjusts the controller's current value based on a provided
-     * reference angle.
-     *
-     * @param reference angle in radians between [0..2·π]
-     */
-    public void calibrateTo(double reference) {
-        checkAngleArgument(reference);
-        this.zero = subtractRadians(readAbsolute(), reference);
     }
 
     /**
@@ -150,18 +132,12 @@ public class HeadingController implements Controller<Double, Double, Double> {
     }
 
     /**
-     * Reads from the absolute angle provider, and returns the
-     * calibration-adjusted current angle. This method must be
-     * called in order for the controller to getCurrent its state.
-     * e.g. call from within a main getLast().
+     * Returns the current angle.
      *
      * @return a value in radians within [0..2·π].
-     * @see HeadingController#getLast() ()
-     * @see HeadingController#calibrateTo(double)
      */
     public Double getCurrent() {
-        readAbsolute();
-        return getLast();
+        return heading.get();
     }
 
     /**
@@ -176,29 +152,15 @@ public class HeadingController implements Controller<Double, Double, Double> {
     }
 
     /**
-     * The last known angle, as adjusted by calibration. Does
-     * not read from the absolute angle provider.
-     *
-     * @return last known angle in radians between
-     * [0..2·π], as adjusted by calibration.
-     * @see HeadingController#getCurrent()
-     * @see HeadingController#calibrateTo(double)
-     */
-    public double getLast() {
-        return subtractRadians(getAbsolute(), getZero());
-    }
-
-    /**
      * Returns the controller's error term - the difference between the
      * target and current angles, or 0.0f if the difference is less than
-     * the controller's error tolerance. Does not read from the absolute
-     * angle provider.
+     * the controller's error tolerance. Does not update the localizer.
      *
      * @return A value in radians [0.0, tolerance..2·π]
-     * @see HeadingController#getCurrent()
+     * @see #getCurrent()
      */
     public double getError() {
-        return calcAngularError(getTarget(), getLast(), tolerance);
+        return calcAngularError(getTarget(), heading.get(), tolerance);
     }
 
     /**
@@ -208,31 +170,6 @@ public class HeadingController implements Controller<Double, Double, Double> {
      */
     public double getProportion() {
         return calcAngularProportion(getError());
-    }
-
-    /**
-     * The offset in radians from the absolute provider's zero angle to
-     * the controller's calibrated zero angle.
-     *
-     * @return a value within[0..2·π]
-     */
-    public double getZero() {
-        return zero;
-    }
-
-    /**
-     * The last known absolute angle as read from the absolute provider.
-     *
-     * @return a value within[0..2·π]
-     */
-    public double getAbsolute() {
-        return lastAbsolute;
-    }
-
-    private double readAbsolute() {
-        this.lastAbsolute = absolute.get();
-        checkAngleArgument(this.lastAbsolute);
-        return this.lastAbsolute;
     }
 
     private static void checkAngleArgumentOrNaN(double given) {
@@ -280,12 +217,9 @@ public class HeadingController implements Controller<Double, Double, Double> {
     @Override
     public String toString() {
         return String.format(Locale.US,
-                "zero=%.2f·π, abs=%.2f·π, target=%.2f·π, ctrl=%.2f, crnt=%.2f·π",
-                zero/PI,
-                lastAbsolute/PI,
+                "tgt=%.2f·π, ctrl=%.2f",
                 target/PI,
-                getControl(),
-                getCurrent()/PI
+                getControl()
         );
     }
 }

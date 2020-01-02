@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.Trinkets.TowerGrabber;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerLifter;
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
 import org.firstinspires.ftc.teamcode.controller.HeadingController;
+import org.firstinspires.ftc.teamcode.controller.HeadingLocalizer;
 import org.firstinspires.ftc.teamcode.drive.DrivePower;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDriveController;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
@@ -52,6 +53,7 @@ public class SkottBot implements SkystoneBot {
     private final Telemetry telemetry;
     private MecanumDriveController mecanum;
     private BNO055IMU imu;
+    private HeadingLocalizer headingLocalizer;
     private HeadingController headingController;
     private SkyStoneLocalizer skyStoneLocalizer;
     private VuforiaLocalizer vuforiaLocalizer;
@@ -69,8 +71,11 @@ public class SkottBot implements SkystoneBot {
     @Override
     public void init() {
         imu = initImu(hardwareMap);
+        headingLocalizer = new HeadingLocalizer(
+                () -> normalize((double) imu.getAngularOrientation().firstAngle)
+        );
         headingController = new HeadingController(
-                () -> normalize((double) imu.getAngularOrientation().firstAngle),
+                headingLocalizer::getCurrent,
                 0.0d,
                 4.0d,
                 0.0d);
@@ -224,7 +229,7 @@ public class SkottBot implements SkystoneBot {
 
     @Override
     public double getFieldRelativeHeading() {
-        return headingController.getCurrent();
+        return headingLocalizer.getCurrent();
     }
 
     @Override

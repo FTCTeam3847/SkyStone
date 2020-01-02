@@ -10,8 +10,8 @@ import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
 import org.firstinspires.ftc.teamcode.controller.HeadingController;
 import org.firstinspires.ftc.teamcode.controller.HeadingLocalizer;
 import org.firstinspires.ftc.teamcode.drive.DrivePower;
+import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDriveController;
-import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
 
 import static org.firstinspires.ftc.teamcode.HardwareMapUtils.initImu;
 import static org.firstinspires.ftc.teamcode.HardwareMapUtils.initVuforia;
@@ -26,7 +26,7 @@ public class DerpyBot implements SkystoneBot {
 
     private final HardwareMap hardwareMap;
     private final Telemetry telemetry;
-    private MecanumDriveController mecanum;
+    private MecanumDrive mecanum;
     private BNO055IMU imu;
     private HeadingLocalizer headingLocalizer;
     private HeadingController headingController;
@@ -124,7 +124,7 @@ public class DerpyBot implements SkystoneBot {
     }
 
     @Override
-    public MecanumDriveController getMecanumDrive() {
+    public MecanumDrive getMecanumDrive() {
         return mecanum;
     }
 

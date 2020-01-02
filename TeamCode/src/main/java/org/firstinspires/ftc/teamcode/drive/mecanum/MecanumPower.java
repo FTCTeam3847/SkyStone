@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.drive.mecanum;
 import org.firstinspires.ftc.teamcode.polar.PolarCoord;
 
 import java.util.Locale;
+import java.util.Objects;
 
 import static java.lang.Math.PI;
 import static java.lang.String.format;
@@ -32,5 +33,19 @@ public class MecanumPower {
 
     public MecanumPower scale(double scale) {
         return new MecanumPower(new PolarCoord(strafe.radius * scale, strafe.theta), turn * scale);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MecanumPower that = (MecanumPower) o;
+        return Double.compare(that.turn, turn) == 0 &&
+                Objects.equals(strafe, that.strafe);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(strafe, turn);
     }
 }

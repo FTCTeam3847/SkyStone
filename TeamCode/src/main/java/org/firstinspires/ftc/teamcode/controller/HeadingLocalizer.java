@@ -11,10 +11,11 @@ public class HeadingLocalizer implements Localizer<Double> {
     private double lastAbsolute;
 
     private final Supplier<Double> absolute;
-    private double current;
+    private double lastUpdated;
 
     public HeadingLocalizer(Supplier<Double> absolute) {
         this.absolute = absolute;
+        update();
     }
 
     /**
@@ -28,9 +29,18 @@ public class HeadingLocalizer implements Localizer<Double> {
      */
     @Override
     public Double getCurrent() {
+        return update();
+    }
+
+    @Override
+    public Double getLast() {
+        return lastUpdated;
+    }
+
+    private double update() {
         readAbsolute();
-        current = subtractRadians(lastAbsolute, zero);
-        return current;
+        lastUpdated = subtractRadians(lastAbsolute, zero);
+        return lastUpdated;
     }
 
     /**
@@ -61,8 +71,8 @@ public class HeadingLocalizer implements Localizer<Double> {
     @Override
     public String toString() {
         return String.format(Locale.US,
-                "crnt=%.2f·π, abs=%.2f·π, zero=%.2f·π",
-                current / PI,
+                "%.2f·π, abs=%.2f·π, zero=%.2f·π",
+                lastUpdated / PI,
                 lastAbsolute / PI,
                 zero / PI
         );

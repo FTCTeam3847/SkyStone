@@ -15,11 +15,15 @@ import org.firstinspires.ftc.teamcode.Trinkets.TowerBuilder;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerGrabber;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerLifter;
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
+import org.firstinspires.ftc.teamcode.controller.FieldPosition;
 import org.firstinspires.ftc.teamcode.controller.HeadingController;
 import org.firstinspires.ftc.teamcode.controller.HeadingLocalizer;
+import org.firstinspires.ftc.teamcode.controller.Localizer;
 import org.firstinspires.ftc.teamcode.drive.DrivePower;
+import org.firstinspires.ftc.teamcode.drive.mecanum.LocalizingMecanumDrive;
+import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDriveController;
-import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
+import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumLocalizer;
 
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_USING_ENCODER;
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_WITHOUT_ENCODER;
@@ -51,12 +55,13 @@ public class SkottBot implements SkystoneBot {
 
     private final HardwareMap hardwareMap;
     private final Telemetry telemetry;
-    private MecanumDriveController mecanum;
     private BNO055IMU imu;
-    private HeadingLocalizer headingLocalizer;
     private HeadingController headingController;
-    private SkyStoneLocalizer skyStoneLocalizer;
+    private Localizer<Double> headingLocalizer;
+    private MecanumDrive mecanum;
+    private MecanumLocalizer mecanumLocalizer;
     private VuforiaLocalizer vuforiaLocalizer;
+    private SkyStoneLocalizer skyStoneLocalizer;
 
     TowerBuilder towerBuilder;
 
@@ -75,11 +80,19 @@ public class SkottBot implements SkystoneBot {
                 () -> normalize((double) imu.getAngularOrientation().firstAngle)
         );
         headingController = new HeadingController(
-                headingLocalizer::getCurrent,
+                headingLocalizer::getLast,
                 0.0d,
                 4.0d,
-                0.0d);
-        mecanum = new MecanumDriveController(headingController, this::move);
+                0.0d
+        );
+        MecanumLocalizer mecanumLocalizer = new MecanumLocalizer(
+                System::nanoTime,
+                headingLocalizer::getLast,
+                35.0
+        );
+        this.mecanumLocalizer = mecanumLocalizer;
+        MecanumDrive mDrive = new MecanumDriveController(headingController, this::setDrivePower);
+        mecanum = new LocalizingMecanumDrive(mDrive, mecanumLocalizer);
         vuforiaLocalizer = initVuforia(hardwareMap);
         skyStoneLocalizer = new SkyStoneLocalizer(vuforiaLocalizer);
 
@@ -192,6 +205,8 @@ public class SkottBot implements SkystoneBot {
 
     @Override
     public void loop() {
+        headingLocalizer.getCurrent();
+        mecanumLocalizer.getCurrent();
         skyStoneLocalizer.getCurrent();
         updateTelemetry();
     }
@@ -202,22 +217,20 @@ public class SkottBot implements SkystoneBot {
     }
 
     private void updateTelemetry() {
-        telemetry.addData("localizer", skyStoneLocalizer);
-        telemetry.addData("heading", headingController);
-        telemetry.addData("tower", towerBuilder);
-        telemetry.addData("leftTowerLifter", "%.2f", leftTowerLifter.getPower());
-        telemetry.addData("rightTowerLifter", "%.2f", rightTowerLifter.getPower());
+        telemetry.addData("heading", headingLocalizer);
+        telemetry.addData("skyStoneLocalizer", skyStoneLocalizer);
+        telemetry.addData("mecanumLocalizer", mecanumLocalizer);
     }
 
-    private void move4(double leftFront, double leftBack, double rightFront, double rightBack) {
+    private void setPower4(double leftFront, double leftBack, double rightFront, double rightBack) {
         leftFrontMotor.setPower(leftFront);
         leftBackMotor.setPower(leftBack);
         rightFrontMotor.setPower(rightFront);
         rightBackMotor.setPower(rightBack);
     }
 
-    private void move(DrivePower drivePower) {
-        move4(drivePower.leftFront, drivePower.leftBack, drivePower.rightFront, drivePower.rightBack);
+    private void setDrivePower(DrivePower drivePower) {
+        setPower4(drivePower.leftFront, drivePower.leftBack, drivePower.rightFront, drivePower.rightBack);
     }
 
     @Override
@@ -226,7 +239,7 @@ public class SkottBot implements SkystoneBot {
     }
 
     @Override
-    public MecanumDriveController getMecanumDrive() {
+    public MecanumDrive getMecanumDrive() {
         return mecanum;
     }
 

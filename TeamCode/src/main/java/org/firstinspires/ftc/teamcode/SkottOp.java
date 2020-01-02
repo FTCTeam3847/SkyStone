@@ -131,6 +131,7 @@ public class SkottOp extends OpMode {
         }
 
         telemetry.addData("slowMode", slowMode);
+        telemetry.addData("tower", towerBuilder);
         telemetry.addData("script", script);
         telemetry.update();
     }

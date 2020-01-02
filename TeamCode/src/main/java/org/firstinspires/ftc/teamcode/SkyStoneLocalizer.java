@@ -8,6 +8,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.controller.FieldPosition;
+import org.firstinspires.ftc.teamcode.controller.Localizer;
 import org.firstinspires.ftc.teamcode.controller.Sensor;
 import org.firstinspires.ftc.teamcode.polar.PolarUtil;
 
@@ -23,7 +24,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 import static org.firstinspires.ftc.teamcode.polar.PolarUtil.fromXY;
 
-public class SkyStoneLocalizer implements Sensor<FieldPosition> {
+public class SkyStoneLocalizer implements Localizer<FieldPosition> {
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
     private static final boolean PHONE_IS_PORTRAIT = true;
     private VuforiaLocalizer vuforiaLocalizer;
@@ -260,6 +261,16 @@ public class SkyStoneLocalizer implements Sensor<FieldPosition> {
         }
         this.currentVisibleTarget = visibleTarget;
         return this.currentFieldPosition;
+    }
+
+    @Override
+    public FieldPosition getLast() {
+        return this.currentFieldPosition;
+    }
+
+    @Override
+    public void calibrate(FieldPosition fieldPosition) {
+        // This is an absolute localizer - no need to calibrate.
     }
 
     public void stop() {

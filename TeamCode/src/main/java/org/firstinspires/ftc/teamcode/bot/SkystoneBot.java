@@ -5,7 +5,10 @@ import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDrive;
 
 public interface SkystoneBot extends Bot {
     double getFieldRelativeHeading();
-    MecanumDrive getMecanumDrive();
+
+    default MecanumDrive getMecanumDrive() {
+        return MecanumDrive.NIL;
+    }
 
     default TowerBuilder getTowerBuilder() {
         return TowerBuilder.NIL;

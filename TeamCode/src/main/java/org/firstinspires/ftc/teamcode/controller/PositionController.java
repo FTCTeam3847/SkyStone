@@ -5,8 +5,7 @@ import org.firstinspires.ftc.teamcode.polar.PolarUtil;
 
 import java.util.function.Supplier;
 
-import static org.firstinspires.ftc.teamcode.polar.PolarUtil.fromTo;
-import static org.firstinspires.ftc.teamcode.polar.PolarUtil.fromXY;
+import static org.firstinspires.ftc.teamcode.polar.PolarUtil.subtract;
 import static org.firstinspires.ftc.teamcode.polar.PolarUtil.subtractRadians;
 
 public class PositionController implements Controller<PolarCoord, FieldPosition, PolarCoord> {
@@ -43,7 +42,7 @@ public class PositionController implements Controller<PolarCoord, FieldPosition,
             return runningAverage;
         }
 
-        return fromTo(currentFieldPosition.polarCoord, targetFieldPosition.polarCoord);
+        return subtract(currentFieldPosition.polarCoord, targetFieldPosition.polarCoord);
     }
 
     public PolarCoord getControl() {

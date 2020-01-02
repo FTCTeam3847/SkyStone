@@ -8,14 +8,19 @@ import net.jqwik.api.Provide;
 
 import org.firstinspires.ftc.teamcode.polar.PolarCoord;
 import org.firstinspires.ftc.teamcode.polar.PolarUtil;
+import org.junit.jupiter.api.Test;
 
 import static java.lang.Math.PI;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
+import static org.firstinspires.ftc.teamcode.polar.PolarUtil.ORIGIN;
+import static org.firstinspires.ftc.teamcode.polar.PolarUtil.add;
+import static org.firstinspires.ftc.teamcode.polar.PolarUtil.subtract;
 import static org.firstinspires.ftc.teamcode.polar.PolarUtil.subtractRadians;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class PolarUtilTest {
     @Property
@@ -27,8 +32,8 @@ class PolarUtilTest {
     ) {
         PolarCoord p1 = new PolarCoord(r1, t1);
         PolarCoord p2 = new PolarCoord(r2, t2);
-        PolarCoord fromP1ToP2 = PolarUtil.fromTo(p1, p2);
-        PolarCoord fromP2ToP1 = PolarUtil.fromTo(p2, p1);
+        PolarCoord fromP1ToP2 = PolarUtil.subtract(p1, p2);
+        PolarCoord fromP2ToP1 = PolarUtil.subtract(p2, p1);
         if (p1.equals(p2)) {
             assertThat(fromP1ToP2, is(equalTo(fromP2ToP1)));
             assertThat(
@@ -59,6 +64,38 @@ class PolarUtilTest {
     }
 
     public static org.hamcrest.Matcher<java.lang.Double> closeTo(double operand) {
-        return org.hamcrest.number.IsCloseTo.closeTo(operand, 0.0001);
+        return org.hamcrest.number.IsCloseTo.closeTo(operand, 0.001);
+    }
+
+
+    PolarCoord NE = new PolarCoord(1.0, 1*PI/4);
+    PolarCoord NW = new PolarCoord(1.0, 3*PI/4);
+    PolarCoord SW = new PolarCoord(1.0, 5*PI/4);
+    PolarCoord SE = new PolarCoord(1.0, 7*PI/4);
+
+    @Test
+    void testAdd() {
+        PolarCoord a = add(ORIGIN, NE);
+        assertEquals(NE, a);
+
+        PolarCoord b = add(a, NW);
+        assertThat(b.radius, is(closeTo(sqrt(2))));
+        assertThat(b.theta, is(closeTo(PI/2)));
+
+        PolarCoord c = add(b, SW);
+        assertThat(c.radius, is(closeTo(1.0d)));
+        assertThat(c.theta, is(closeTo(3*PI/4)));
+
+        PolarCoord d = add(c, SE);
+        assertThat(d.radius, is(closeTo(ORIGIN.radius)));
+    }
+
+    @Test
+    void outAndBack() {
+        PolarCoord a = add(ORIGIN, NE);
+        PolarCoord b = add(a, NW);
+        PolarCoord actual = subtract(b, a);
+        assertThat(actual.radius, is(closeTo(1.0d)));
+        assertThat(actual.theta, is(closeTo(SE.theta)));
     }
 }

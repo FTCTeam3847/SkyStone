@@ -29,7 +29,7 @@ public class PolarUtil {
         return new PolarCoord(radius, theta);
     }
 
-    public static PolarCoord fromTo(PolarCoord from, PolarCoord to) {
+    public static PolarCoord subtract(PolarCoord from, PolarCoord to) {
         if (from.equals(to)) {
             return ORIGIN;
         } else if (from.radius == 0.0d && to.radius == 0.0d) {
@@ -47,6 +47,29 @@ public class PolarUtil {
 
         double distance = sqrt(pow(toY - fromY, 2) + pow(toX - fromX, 2));
         double theta = normalize(atan2(toY - fromY, toX - fromX));
+
+        return new PolarCoord(distance, theta);
+    }
+
+    public static PolarCoord add(PolarCoord from, PolarCoord to) {
+        if (from.equals(to)) {
+            return from;
+        } else if (from.radius == 0.0d) {
+            return to;
+        } else if (to.radius == 0.0d) {
+            return from;
+        }
+
+        double fromX = from.radius * cos(from.theta);
+        double fromY = from.radius * sin(from.theta);
+
+        double toX = to.radius * cos(to.theta);
+        double toY = to.radius * sin(to.theta);
+        double x = fromX + toX;
+        double y = fromY + toY;
+
+        double distance = sqrt(pow(y, 2) + pow(x, 2));
+        double theta = normalize(atan2(y, x));
 
         return new PolarCoord(distance, theta);
     }

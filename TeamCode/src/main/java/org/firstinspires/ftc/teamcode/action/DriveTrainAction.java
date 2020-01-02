@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode.action;
 
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
+import org.firstinspires.ftc.teamcode.controller.FieldPosition;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
+import org.firstinspires.ftc.teamcode.polar.CartesianCoord;
 import org.firstinspires.ftc.teamcode.polar.PolarCoord;
+import org.firstinspires.ftc.teamcode.polar.PolarUtil;
 
 import java.util.function.Supplier;
 
@@ -39,5 +42,16 @@ public class DriveTrainAction extends SequentialAction {
         addAction(new TurnToAction(targetAngle, bot));
         return this;
     }
+
+    public DriveTrainAction moveTo(CartesianCoord destination) {
+        addAction(new MoveToAction(new FieldPosition(PolarUtil.fromCartesian(destination), 0), bot));
+        return this;
+    }
+
+    public DriveTrainAction moveTo(PolarCoord destination) {
+        addAction(new MoveToAction(new FieldPosition(destination, 0), bot));
+        return this;
+    }
+
 
 }

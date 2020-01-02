@@ -3,14 +3,13 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.action.DriveTrainAction;
 import org.firstinspires.ftc.teamcode.action.MoveAction;
 import org.firstinspires.ftc.teamcode.action.SequentialAction;
-import org.firstinspires.ftc.teamcode.action.DriveTrainAction;
 import org.firstinspires.ftc.teamcode.action.TurnToAction;
-import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
 import org.firstinspires.ftc.teamcode.controller.FieldPosition;
-import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
 import org.firstinspires.ftc.teamcode.gamepad.PushButton;
+import org.firstinspires.ftc.teamcode.polar.PolarCoord;
 
 import static java.lang.Math.PI;
 import static java.lang.Math.abs;
@@ -31,8 +30,6 @@ public class DerpyOp extends OpMode {
     PushButton pushButtonLeftBumper = new PushButton(() -> gamepad1.left_bumper);
 
 
-
-
     MoveAction moveAction;
     TurnToAction turnToAction;
     SequentialAction script;
@@ -46,7 +43,7 @@ public class DerpyOp extends OpMode {
 
     public SequentialAction makeScript() {
         DriveTrainAction script = new DriveTrainAction(System::currentTimeMillis, bot)
-                .strafe(3*PI/2, 1000, 1);
+                .strafe(3 * PI / 2, 1000, 1);
         return script;
     }
 
@@ -64,7 +61,10 @@ public class DerpyOp extends OpMode {
 
     public SequentialAction makeScriptB() {
         DriveTrainAction scriptB = new DriveTrainAction(System::currentTimeMillis, bot)
-                .strafe(PI/2, 1000, 1);
+                .moveTo(new PolarCoord(60, 0.7 * PI))
+                .pause(500)
+                .moveTo(new PolarCoord(60, 0.3 * PI))
+                ;
         return scriptB;
     }
 
@@ -100,44 +100,44 @@ public class DerpyOp extends OpMode {
     public void loop() {
         bot.loop();
 
-        MecanumPower mecanumPower = MecanumPower.fromXYTurn(
-                sensitivity(gamepad1.right_stick_x, SENSITIVITY),
-                sensitivity(-gamepad1.right_stick_y, SENSITIVITY),
-                sensitivity(gamepad1.left_stick_x, SENSITIVITY)
-        );
-        bot.getMecanumDrive().setPower(mecanumPower);
 
+//        MecanumPower mecanumPower = MecanumPower.fromXYTurn(
+//                sensitivity(gamepad1.right_stick_x, SENSITIVITY),
+//                sensitivity(-gamepad1.right_stick_y, SENSITIVITY),
+//                sensitivity(gamepad1.left_stick_x, SENSITIVITY)
+//        );
+//        bot.getMecanumDrive().setPower(mecanumPower);
+//
 //        script.loop();
 //        scriptY.loop();
 //        scriptA.loop();
-//        scriptB.loop();
-//
-//
-//        if (pushButtonX.getCurrent()) {
-//            script = makeScript();
-//            script.start();
-//        }
-//
-//        if (pushButtonY.getCurrent()) {
-//            scriptY = makeScriptY();
-//            scriptY.start();
-//        }
-//
-//        if (pushButtonA.getCurrent()) {
-//            scriptA = makeScriptA();
-//            scriptA.start();
-//        }
-//
-//        if (pushButtonB.getCurrent()) {
-//            scriptB = makeScriptB();
-//            scriptB.start();
-//        }
-//
-        if (pushButtonLeftBumper.getCurrent()) {
-            bot.headingLocalizer.calibrate(0.0);
-            bot.mecanumLocalizer.calibrate(FieldPosition.ORIGIN);
+        scriptB.loop();
+        telemetry.addData("script", scriptB);
+
+
+        if (pushButtonX.getCurrent()) {
+            script = makeScript();
+            script.start();
         }
 
+        if (pushButtonY.getCurrent()) {
+            scriptY = makeScriptY();
+            scriptY.start();
+        }
+
+        if (pushButtonA.getCurrent()) {
+            scriptA = makeScriptA();
+            scriptA.start();
+        }
+
+        if (pushButtonB.getCurrent()) {
+            scriptB = makeScriptB();
+            scriptB.start();
+        }
+
+        if (pushButtonLeftBumper.getCurrent()) {
+            bot.combinedLocalizer.calibrate(FieldPosition.ORIGIN);
+        }
 
 
 //

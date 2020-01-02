@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.controller;
 
+import org.firstinspires.ftc.teamcode.polar.CartesianCoord;
 import org.firstinspires.ftc.teamcode.polar.PolarCoord;
+import org.firstinspires.ftc.teamcode.polar.PolarUtil;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -25,6 +27,10 @@ public class FieldPosition {
     public FieldPosition(PolarCoord polarCoord, double heading) {
         this.polarCoord = polarCoord;
         this.heading = heading;
+    }
+
+    public FieldPosition(CartesianCoord cartesianCoord, double heading) {
+        this(PolarUtil.fromCartesian(cartesianCoord), heading);
     }
 
     @Override

@@ -57,11 +57,14 @@ public class SkottBot implements SkystoneBot {
     private final Telemetry telemetry;
     private BNO055IMU imu;
     private HeadingController headingController;
-    private Localizer<Double> headingLocalizer;
+    private HeadingLocalizer headingLocalizer;
     private MecanumDrive mecanum;
     private MecanumLocalizer mecanumLocalizer;
     private VuforiaLocalizer vuforiaLocalizer;
     private SkyStoneLocalizer skyStoneLocalizer;
+
+    private CombinedLocalizer combinedLocalizer;
+
 
     TowerBuilder towerBuilder;
 
@@ -95,6 +98,9 @@ public class SkottBot implements SkystoneBot {
         mecanum = new LocalizingMecanumDrive(mDrive, mecanumLocalizer);
         vuforiaLocalizer = initVuforia(hardwareMap);
         skyStoneLocalizer = new SkyStoneLocalizer(vuforiaLocalizer);
+
+        combinedLocalizer = new CombinedLocalizer(headingLocalizer, mecanumLocalizer, skyStoneLocalizer);
+
 
         //Primary Port 3
         leftFrontMotor = hardwareMap.get(DcMotor.class, "motor-left-front");
@@ -236,6 +242,11 @@ public class SkottBot implements SkystoneBot {
     @Override
     public double getFieldRelativeHeading() {
         return headingLocalizer.getCurrent();
+    }
+
+    @Override
+    public Localizer<FieldPosition> getLocalizer() {
+        return combinedLocalizer;
     }
 
     @Override

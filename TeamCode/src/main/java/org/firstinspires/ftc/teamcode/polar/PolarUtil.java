@@ -29,21 +29,27 @@ public class PolarUtil {
         return new PolarCoord(radius, theta);
     }
 
-    public static PolarCoord subtract(PolarCoord from, PolarCoord to) {
-        if (from.equals(to)) {
+    public static CartesianCoord toXY(PolarCoord polarCoord){
+        double x = polarCoord.radius * Math.cos(polarCoord.theta);
+        double y = polarCoord.radius * Math.sin(polarCoord.theta);
+        return new CartesianCoord(x, y);
+    }
+
+    public static PolarCoord subtract(PolarCoord thiz, PolarCoord minusThat) {
+        if (thiz.equals(minusThat)) {
             return ORIGIN;
-        } else if (from.radius == 0.0d && to.radius == 0.0d) {
-            if (from.theta > to.theta) {
-                return new PolarCoord(0.0d, to.theta);
+        } else if (thiz.radius == 0.0d && minusThat.radius == 0.0d) {
+            if (thiz.theta > minusThat.theta) {
+                return new PolarCoord(0.0d, minusThat.theta);
             }
-            return new PolarCoord(0.0d, addRadians(from.theta, PI));
+            return new PolarCoord(0.0d, addRadians(thiz.theta, PI));
         }
 
-        double fromX = from.radius * cos(from.theta);
-        double fromY = from.radius * sin(from.theta);
+        double fromX = thiz.radius * cos(thiz.theta);
+        double fromY = thiz.radius * sin(thiz.theta);
 
-        double toX = to.radius * cos(to.theta);
-        double toY = to.radius * sin(to.theta);
+        double toX = minusThat.radius * cos(minusThat.theta);
+        double toY = minusThat.radius * sin(minusThat.theta);
 
         double distance = sqrt(pow(toY - fromY, 2) + pow(toX - fromX, 2));
         double theta = normalize(atan2(toY - fromY, toX - fromX));
@@ -51,20 +57,20 @@ public class PolarUtil {
         return new PolarCoord(distance, theta);
     }
 
-    public static PolarCoord add(PolarCoord from, PolarCoord to) {
-        if (from.equals(to)) {
-            return from;
-        } else if (from.radius == 0.0d) {
-            return to;
-        } else if (to.radius == 0.0d) {
-            return from;
+    public static PolarCoord add(PolarCoord thiz, PolarCoord plusThat) {
+        if (thiz.equals(plusThat)) {
+            return thiz;
+        } else if (thiz.radius == 0.0d) {
+            return plusThat;
+        } else if (plusThat.radius == 0.0d) {
+            return thiz;
         }
 
-        double fromX = from.radius * cos(from.theta);
-        double fromY = from.radius * sin(from.theta);
+        double fromX = thiz.radius * cos(thiz.theta);
+        double fromY = thiz.radius * sin(thiz.theta);
 
-        double toX = to.radius * cos(to.theta);
-        double toY = to.radius * sin(to.theta);
+        double toX = plusThat.radius * cos(plusThat.theta);
+        double toY = plusThat.radius * sin(plusThat.theta);
         double x = fromX + toX;
         double y = fromY + toY;
 
@@ -72,5 +78,9 @@ public class PolarUtil {
         double theta = normalize(atan2(y, x));
 
         return new PolarCoord(distance, theta);
+    }
+
+    public static PolarCoord fromCartesian(CartesianCoord destination) {
+        return fromXY(destination.x, destination.y);
     }
 }

@@ -58,7 +58,7 @@ public class SkyStoneLocalizer implements Localizer<FieldPosition> {
     VuforiaTrackables targetsSkyStone;
     List<VuforiaTrackable> allTrackables = new ArrayList<>();
     private FieldPosition currentFieldPosition = FieldPosition.UNKNOWN;
-    private VuforiaTrackable currentVisibleTarget = null;
+    VuforiaTrackable currentVisibleTarget = null;
 
 
     public SkyStoneLocalizer(VuforiaLocalizer vuforiaLocalizer) {

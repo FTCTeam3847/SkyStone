@@ -19,7 +19,7 @@
 //public class PositionControllerOpMode extends BaseOp {
 //    SkyStoneLocalizer skyStoneLocalizer = new SkyStoneLocalizer();
 //    VuforiaLocalizer vuforiaLocalizer;
-//    PositionController positionController;
+//    FieldPositionController positionController;
 //    public BNO055IMU imu;
 //    public MecanumDriveController mecanum;
 //    public FieldPosition lastFieldPosition;
@@ -52,7 +52,7 @@
 //
 //        this.vuforiaLocalizer = ClassFactory.getInstance().createVuforia(parameters);
 //        skyStoneLocalizer.init(vuforiaLocalizer);
-//        positionController = new PositionController(() -> skyStoneLocalizer.loop());
+//        positionController = new FieldPositionController(() -> skyStoneLocalizer.loop());
 //
 //    }
 //

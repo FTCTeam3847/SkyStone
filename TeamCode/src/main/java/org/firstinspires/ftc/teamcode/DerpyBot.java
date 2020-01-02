@@ -7,13 +7,17 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
+import org.firstinspires.ftc.teamcode.controller.FieldPosition;
 import org.firstinspires.ftc.teamcode.controller.HeadingController;
 import org.firstinspires.ftc.teamcode.controller.HeadingLocalizer;
+import org.firstinspires.ftc.teamcode.controller.Localizer;
 import org.firstinspires.ftc.teamcode.drive.DrivePower;
 import org.firstinspires.ftc.teamcode.drive.mecanum.LocalizingMecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDriveController;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumLocalizer;
+import org.firstinspires.ftc.teamcode.polar.CartesianCoord;
+import org.firstinspires.ftc.teamcode.polar.PolarUtil;
 
 import static org.firstinspires.ftc.teamcode.HardwareMapUtils.initImu;
 import static org.firstinspires.ftc.teamcode.HardwareMapUtils.initVuforia;
@@ -34,6 +38,10 @@ public class DerpyBot implements SkystoneBot {
     HeadingController headingController;
     SkyStoneLocalizer skyStoneLocalizer;
     MecanumLocalizer mecanumLocalizer;
+
+    CombinedLocalizer combinedLocalizer;
+    FieldPosition lastLoc = FieldPosition.ORIGIN;
+
     VuforiaLocalizer vuforiaLocalizer;
 
     public DerpyBot(
@@ -62,6 +70,10 @@ public class DerpyBot implements SkystoneBot {
         vuforiaLocalizer = initVuforia(hardwareMap);
         skyStoneLocalizer = new SkyStoneLocalizer(vuforiaLocalizer);
 
+
+        combinedLocalizer = new CombinedLocalizer(headingLocalizer, mecanumLocalizer, skyStoneLocalizer);
+
+
         //Primary Port 3
         leftFrontMotor = hardwareMap.get(DcMotor.class, "motor-left-front");
         leftFrontMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -89,7 +101,7 @@ public class DerpyBot implements SkystoneBot {
 
     @Override
     public void init_loop() {
-        skyStoneLocalizer.getCurrent();
+        combinedLocalizer.getCurrent();
         updateTelemetry();
     }
 
@@ -99,7 +111,7 @@ public class DerpyBot implements SkystoneBot {
 
     @Override
     public void loop() {
-        skyStoneLocalizer.getCurrent();
+        lastLoc = combinedLocalizer.getCurrent();
         updateTelemetry();
     }
 
@@ -112,6 +124,9 @@ public class DerpyBot implements SkystoneBot {
         telemetry.addData("skystone", skyStoneLocalizer);
         telemetry.addData("heading", headingLocalizer);
         telemetry.addData("mecanum", mecanumLocalizer);
+
+        telemetry.addData("xy", PolarUtil.toXY(lastLoc.polarCoord));
+        telemetry.addData("combined", combinedLocalizer);
     }
 
     private void move4(double leftFront, double leftBack, double rightFront, double rightBack) {
@@ -128,6 +143,11 @@ public class DerpyBot implements SkystoneBot {
     @Override
     public double getFieldRelativeHeading() {
         return headingLocalizer.getCurrent();
+    }
+
+    @Override
+    public Localizer<FieldPosition> getLocalizer() {
+        return combinedLocalizer;
     }
 
     @Override

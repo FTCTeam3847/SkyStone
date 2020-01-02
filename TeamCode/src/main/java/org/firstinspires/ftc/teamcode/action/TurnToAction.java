@@ -36,14 +36,14 @@ public class TurnToAction implements RoboAction {
 
         if (started && !isDone) {
             if (headingController.getError() != 0) {
-                bot.move(new MecanumPower(PolarCoord.ORIGIN, headingController.getControl()));
+                bot.getMecanumDrive().setPower(new MecanumPower(PolarCoord.ORIGIN, headingController.getControl()));
             } else {
                 stop();
                 started = false;
-                bot.move(MecanumPower.ZERO);
+                bot.getMecanumDrive().setPower(MecanumPower.ZERO);
             }
         } else {
-            bot.move(new MecanumPower(PolarCoord.ORIGIN, 0));
+            bot.getMecanumDrive().setPower(new MecanumPower(PolarCoord.ORIGIN, 0));
         }
     }
 

@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.controller.HeadingController;
 import org.firstinspires.ftc.teamcode.controller.HeadingLocalizer;
 import org.firstinspires.ftc.teamcode.drive.DrivePower;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDriveController;
+import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
 import org.firstinspires.ftc.teamcode.gamepad.PushButton;
 import org.firstinspires.ftc.teamcode.gamepad.ToggleButton;
 
@@ -28,20 +29,21 @@ import static org.firstinspires.ftc.teamcode.polar.PolarUtil.normalize;
 @TeleOp(name = "TrinketOpMode", group = "1")
 public class TrinketOpMode extends BaseOp {
     public BNO055IMU imu;
-    public MecanumDriveController driverController;
+    public MecanumDriveController mecanum;
     HeadingLocalizer headingLocalizer;
     HeadingController headingController;
 
     ToggleButton toggleRunMode = new ToggleButton(() -> gamepad1.left_stick_button);
     PushButton resetEncoder = new PushButton(() -> gamepad1.left_stick_button);
     ToggleButton toggleSlowMode = new ToggleButton(() -> gamepad1.right_stick_button);
-  PushButton doEverything = new PushButton(() -> gamepad1.back);
+    PushButton doEverything = new PushButton(() -> gamepad1.back);
     TowerLifter towerLifter;
     TowerGrabber towerGrabber;
     PushButton leftUp = new PushButton(() -> gamepad2.y);
     PushButton leftDown = new PushButton(() -> gamepad2.x);
     PushButton rightUp = new PushButton(() -> gamepad2.b);
     PushButton rightDown = new PushButton(() -> gamepad2.a);
+    boolean slowMode;
 
     double leftPower = 0.0d;
     double rightPower = 0.0d;
@@ -74,7 +76,7 @@ public class TrinketOpMode extends BaseOp {
                 0.0d,
                 10.0d,
                 0.0d);
-        driverController = new MecanumDriveController(headingController);
+        mecanum = new MecanumDriveController(headingController, this::move);
         towerLifter =
                 new TowerLifter(
                         leftTowerLifter::setPower,
@@ -120,7 +122,7 @@ public class TrinketOpMode extends BaseOp {
     @Override
     public void loop() {
         super.loop();
-        boolean slowMode = toggleSlowMode.getCurrent();
+        slowMode = toggleSlowMode.getCurrent();
 
         if (doEverything.getCurrent()) {
 
@@ -157,7 +159,7 @@ public class TrinketOpMode extends BaseOp {
         double tehSpeeds = 0.05;
 
         if (gamepad1.y) {
-                towerGrabber.setPosition(towerGrabber.getPosition() + tehSpeeds);
+            towerGrabber.setPosition(towerGrabber.getPosition() + tehSpeeds);
         }
 
         if (gamepad1.x) {
@@ -196,23 +198,19 @@ public class TrinketOpMode extends BaseOp {
             towerLifter.setPower(0.0d);
         }
 
-        driverController.setTarget(
+        mecanum.setPower(MecanumPower.fromXYTurn(
                 sensitivity(gamepad1.right_stick_x, SENSITIVITY),
                 sensitivity(-gamepad1.right_stick_y, SENSITIVITY),
                 sensitivity(gamepad1.left_stick_x, SENSITIVITY)
-        );
-
-
-        DrivePower drivePower;
-        drivePower = driverController.getControl();
-
-        drivePower = slowMode ? drivePower.scale(0.5) : drivePower;
-
-        move(drivePower);
+        ));
 
         telemetry.addData("TowerLifter", towerLifter);
 
         telemetry_loop();
         telemetry.update();
+    }
+
+    public void move(DrivePower drivePower) {
+        super.move(slowMode ? drivePower.scale(0.5) : drivePower);
     }
 }

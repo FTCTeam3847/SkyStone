@@ -21,14 +21,14 @@ public class MoveAction extends TimeAction {
     public void loop() {
         super.loop();
         if (!isDone()) {
-            bot.move(mecanumPower);
+            bot.getMecanumDrive().setPower(mecanumPower);
         }
     }
 
     @Override
     public void stop() {
         super.stop();
-        bot.move(MecanumPower.ZERO);
+        bot.getMecanumDrive().setPower(MecanumPower.ZERO);
     }
 
     @Override

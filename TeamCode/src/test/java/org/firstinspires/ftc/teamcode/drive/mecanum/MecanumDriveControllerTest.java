@@ -5,6 +5,8 @@ import org.firstinspires.ftc.teamcode.drive.DrivePower;
 import org.firstinspires.ftc.teamcode.polar.PolarCoord;
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 import static java.lang.Math.round;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -17,13 +19,13 @@ import static org.hamcrest.Matchers.is;
  * to write and understand, however will only test the specific
  * conditions, or examples, that the developer thinks of.
  *
- * Here I've written a test around the MecanumDriveController.
+ * Here I've written a test around the MecanumDrive.
  * As it turns out, the code has a bug! Oh noes!
  *
  * Your challenge:
  *   1. Run the test below and inspect the test output.
  *
- *   2. See if you can fix the MecanumDriveController
+ *   2. See if you can fix the MecanumDrive
  *      to provide full power to the wheels during
  *      basic maneuvers.
  *
@@ -64,130 +66,140 @@ class MecanumDriveControllerTest {
 
     @Test
     void driveForwardFull() {
-        MecanumDriveController driveController = new MecanumDriveController(FIXED_HEADING);
+        AtomicReference<DrivePower> actual = new AtomicReference<>();
+        MecanumDriveController driveController = new MecanumDriveController(FIXED_HEADING, actual::set);
         DrivePower forward = new DrivePower(FORWARD, FORWARD, FORWARD, FORWARD);
 
-        driveController.setTarget(ZERO, UP, ZERO);
+        driveController.setPower(ZERO, UP, ZERO);
         assertThat(
                 "Forward should power all wheels forward at full power",
-                round2(driveController.getControl()),
+                round2(actual.get()),
                 is(equalTo(forward))
         );
     }
 
     @Test
     void driveBackwardFull() {
-        MecanumDriveController driveController = new MecanumDriveController(FIXED_HEADING);
+        AtomicReference<DrivePower> actual = new AtomicReference<>();
+        MecanumDriveController driveController = new MecanumDriveController(FIXED_HEADING, actual::set);
         DrivePower backward = new DrivePower(BACKWARD, BACKWARD, BACKWARD, BACKWARD);
 
-        driveController.setTarget(ZERO, DOWN, ZERO);
+        driveController.setPower(ZERO, DOWN, ZERO);
         assertThat(
                 "Backward should power all wheels backward at negative full power",
-                round2(driveController.getControl()),
+                round2(actual.get()),
                 is(equalTo(backward))
         );
     }
 
     @Test
     void strafeLeftFull() {
-        MecanumDriveController driveController = new MecanumDriveController(FIXED_HEADING);
+        AtomicReference<DrivePower> actual = new AtomicReference<>();
+        MecanumDriveController driveController = new MecanumDriveController(FIXED_HEADING, actual::set);
         DrivePower left = new DrivePower(FORWARD, BACKWARD, BACKWARD, FORWARD);
 
-        driveController.setTarget(LEFT, ZERO, ZERO);
+        driveController.setPower(LEFT, ZERO, ZERO);
         assertThat(
                 "Left should provide full power to RF and LB, and negative full power to LF and RB.",
-                round2(driveController.getControl()),
+                round2(actual.get()),
                 is(equalTo(left))
         );
     }
 
     @Test
     void strafeRightFull() {
-        MecanumDriveController driveController = new MecanumDriveController(FIXED_HEADING);
+        AtomicReference<DrivePower> actual = new AtomicReference<>();
+        MecanumDriveController driveController = new MecanumDriveController(FIXED_HEADING, actual::set);
         DrivePower right = new DrivePower(BACKWARD, FORWARD, FORWARD, BACKWARD);
 
-        driveController.setTarget(RIGHT, ZERO, ZERO);
+        driveController.setPower(RIGHT, ZERO, ZERO);
         assertThat(
                 "Left should provide full power to LF and RB, and negative full power to RF and LB.",
-                round2(driveController.getControl()),
+                round2(actual.get()),
                 is(equalTo(right))
         );
     }
 
     @Test
     void turnLeftFull() {
-        MecanumDriveController driveController = new MecanumDriveController(FIXED_HEADING);
+        AtomicReference<DrivePower> actual = new AtomicReference<>();
+        MecanumDriveController driveController = new MecanumDriveController(FIXED_HEADING, actual::set);
         DrivePower turnLeft = new DrivePower(FORWARD, FORWARD, BACKWARD, BACKWARD);
 
-        driveController.setTarget(ZERO, ZERO, LEFT);
+        driveController.setPower(ZERO, ZERO, LEFT);
         assertThat(
                 "Turn left should provide full power to the right wheels, and negative full power to the left wheels.",
-                round2(driveController.getControl()),
+                round2(actual.get()),
                 is(equalTo(turnLeft))
         );
     }
 
     @Test
     void turnRightFull() {
-        MecanumDriveController driveController = new MecanumDriveController(FIXED_HEADING);
+        AtomicReference<DrivePower> actual = new AtomicReference<>();
+        MecanumDriveController driveController = new MecanumDriveController(FIXED_HEADING, actual::set);
         DrivePower turnRight = new DrivePower(BACKWARD, BACKWARD, FORWARD, FORWARD);
 
-        driveController.setTarget(ZERO, ZERO, RIGHT);
+        driveController.setPower(ZERO, ZERO, RIGHT);
         assertThat(
                 "Turn left should provide full power to the left wheels, and negative full power to the right wheels.",
-                round2(driveController.getControl()),
+                round2(actual.get()),
                 is(equalTo(turnRight))
         );
     }
 
     @Test
     void strafeRightFullAndTurnRightFull() {
-        MecanumDriveController driveController = new MecanumDriveController(FIXED_HEADING);
+        AtomicReference<DrivePower> actual = new AtomicReference<>();
+        MecanumDriveController driveController = new MecanumDriveController(FIXED_HEADING, actual::set);
         DrivePower strafeRightAndTurnRight = new DrivePower(BACKWARD, ZERO, FORWARD, ZERO);
 
-        driveController.setTarget(RIGHT, ZERO, RIGHT);
+        driveController.setPower(RIGHT, ZERO, RIGHT);
         assertThat(
                 "...",
-                round2(driveController.getControl()),
+                round2(actual.get()),
                 is(equalTo(strafeRightAndTurnRight))
         );
     }
 
     @Test
     void strafeRightFullAndTurnLeftFull() {
-        MecanumDriveController driveController = new MecanumDriveController(FIXED_HEADING);
+        AtomicReference<DrivePower> actual = new AtomicReference<>();
+        MecanumDriveController driveController = new MecanumDriveController(FIXED_HEADING, actual::set);
         DrivePower strafeRightAndTurnRight = new DrivePower(ZERO, FORWARD, ZERO, BACKWARD);
 
-        driveController.setTarget(RIGHT, ZERO, LEFT);
+        driveController.setPower(RIGHT, ZERO, LEFT);
         assertThat(
                 "...",
-                round2(driveController.getControl()),
+                round2(actual.get()),
                 is(equalTo(strafeRightAndTurnRight))
         );
     }
 
     @Test
     void strafeLeftFullAndTurnRightFull() {
-        MecanumDriveController driveController = new MecanumDriveController(FIXED_HEADING);
+        AtomicReference<DrivePower> actual = new AtomicReference<>();
+        MecanumDriveController driveController = new MecanumDriveController(FIXED_HEADING, actual::set);
         DrivePower strafeRightAndTurnRight = new DrivePower(ZERO, BACKWARD, ZERO, FORWARD);
 
-        driveController.setTarget(LEFT, ZERO, RIGHT);
+        driveController.setPower(LEFT, ZERO, RIGHT);
         assertThat(
                 "...",
-                round2(driveController.getControl()),
+                round2(actual.get()),
                 is(equalTo(strafeRightAndTurnRight))
         );
     }
 
     @Test
     void strafeLeftFullAndTurnLeftFull() {
-        MecanumDriveController driveController = new MecanumDriveController(FIXED_HEADING);
+        AtomicReference<DrivePower> actual = new AtomicReference<>();
+        MecanumDriveController driveController = new MecanumDriveController(FIXED_HEADING, actual::set);
         DrivePower strafeRightAndTurnRight = new DrivePower(FORWARD, ZERO, BACKWARD, ZERO);
 
-        driveController.setTarget(LEFT, ZERO, LEFT);
+        driveController.setPower(LEFT, ZERO, LEFT);
         assertThat(
                 "...",
-                round2(driveController.getControl()),
+                round2(actual.get()),
                 is(equalTo(strafeRightAndTurnRight))
         );
     }

@@ -21,7 +21,7 @@
 //    VuforiaLocalizer vuforiaLocalizer;
 //    PositionController positionController;
 //    public BNO055IMU imu;
-//    public MecanumDriveController driverController;
+//    public MecanumDriveController mecanum;
 //    public FieldPosition lastFieldPosition;
 //
 //    @Override
@@ -33,7 +33,7 @@
 //                2.0d,
 //                1.0d,
 //                0.1d);
-//        driverController = new MecanumDriveController(headingController);
+//        mecanum = new MecanumDriveController(headingController);
 //        int cameraMonitorViewId =
 //                hardwareMap
 //                        .appContext
@@ -113,18 +113,18 @@
 //            }
 //
 //            telemetry.addData("strafe(bot)", strafe);
-//            DrivePower drivepower = driverController.update(strafe, 0).scale(0.5);
+//            DrivePower drivepower = mecanum.update(strafe, 0).scale(0.5);
 //            telemetry.addData("drivepower", drivepower);
-//            move(drivepower);
+//            setPower(drivepower);
 //            if (!strafe.equals(PolarUtil.ORIGIN)) {
 //                telemetry.addData("strafe(bot)", strafe);
-//                DrivePower drivepower = driverController.update(strafe, 0).scale(0.5);
+//                DrivePower drivepower = mecanum.update(strafe, 0).scale(0.5);
 //                telemetry.addData("drivepower", drivepower);
 //
 //                telemetry.addData("numValues", positionController.getNumValues());
 //                telemetry.addData("runningAverage", positionController.getRunningAverage());
 //
-//                move(drivepower);
+//                setPower(drivepower);
 //            }
 //
 //        }

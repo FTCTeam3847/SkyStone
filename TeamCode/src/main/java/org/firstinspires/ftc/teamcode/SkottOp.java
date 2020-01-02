@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
 import org.firstinspires.ftc.teamcode.gamepad.PairedButtons;
 import org.firstinspires.ftc.teamcode.gamepad.PushButton;
+import org.firstinspires.ftc.teamcode.gamepad.ToggleButton;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
@@ -21,7 +22,7 @@ import static java.lang.Math.signum;
 
 @TeleOp(name = "SkottOp", group = "1")
 public class SkottOp extends OpMode {
-
+    private SkystoneBot bot;
     private TowerBuilder towerBuilder;
     private TowerLifter towerLifter;
     private BlockLifter blockLifter;
@@ -33,6 +34,7 @@ public class SkottOp extends OpMode {
     }
 
     private PushButton buttonRunScript = new PushButton(() -> gamepad2.x);
+    private ToggleButton toggleSlowMode = new ToggleButton(() -> gamepad1.right_stick_button);
 
     private PairedButtons<Double> towerGrabberButtons = new PairedButtons<>(
             () -> gamepad1.left_bumper, () -> 0.0d,
@@ -58,8 +60,6 @@ public class SkottOp extends OpMode {
     );
 
     SequentialAction script;
-
-    SkystoneBot bot;
 
     public SequentialAction makeScript() {
         TowerBuilderAction script = new TowerBuilderAction(System::currentTimeMillis, bot)
@@ -106,6 +106,7 @@ public class SkottOp extends OpMode {
     public void loop() {
         bot.loop();
         script.loop();
+        boolean slowMode = toggleSlowMode.getCurrent();
 
         if (buttonRunScript.getCurrent()) {
             script = makeScript();
@@ -124,9 +125,12 @@ public class SkottOp extends OpMode {
                     sensitivity(gamepad1.left_stick_x, SENSITIVITY)
             );
 
-            bot.move(mecanumPower);
+            mecanumPower = slowMode ? mecanumPower.scale(0.5) : mecanumPower;
+
+            bot.getMecanumDrive().setPower(mecanumPower);
         }
 
+        telemetry.addData("slowMode", slowMode);
         telemetry.addData("script", script);
         telemetry.update();
     }

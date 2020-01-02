@@ -29,4 +29,8 @@ public class MecanumPower {
     public String toString() {
         return format(Locale.US, "strafe=%s, turn=%.2f", strafe, turn);
     }
+
+    public MecanumPower scale(double scale) {
+        return new MecanumPower(new PolarCoord(strafe.radius * scale, strafe.theta), turn * scale);
+    }
 }

@@ -79,7 +79,7 @@ public class SkottBot implements SkystoneBot {
                 0.0d,
                 4.0d,
                 0.0d);
-        mecanum = new MecanumDriveController(headingController);
+        mecanum = new MecanumDriveController(headingController, this::move);
         vuforiaLocalizer = initVuforia(hardwareMap);
         skyStoneLocalizer = new SkyStoneLocalizer(vuforiaLocalizer);
 
@@ -221,15 +221,13 @@ public class SkottBot implements SkystoneBot {
     }
 
     @Override
-    public void move(MecanumPower mecanumPower) {
-        mecanum.setTarget(mecanumPower);
-        move(mecanum.getControl());
-    }
-
-
-    @Override
     public double getFieldRelativeHeading() {
         return headingLocalizer.getCurrent();
+    }
+
+    @Override
+    public MecanumDriveController getMecanumDrive() {
+        return mecanum;
     }
 
     @Override

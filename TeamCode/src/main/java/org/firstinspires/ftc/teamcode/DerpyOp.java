@@ -127,7 +127,7 @@ public class DerpyOp extends OpMode {
 //                sensitivity(gamepad1.left_stick_x, SENSITIVITY)
 //        );
 //
-//        bot.move(mecanumPower);
+//        bot.setPower(mecanumPower);
 //
         telemetry.addData("script", script);
         telemetry.addData("current heading", "%.2f PI", bot.getFieldRelativeHeading() / PI);

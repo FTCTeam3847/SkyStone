@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.teamcode.Trinkets.TowerGrabber;
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
 import org.firstinspires.ftc.teamcode.controller.HeadingController;
 import org.firstinspires.ftc.teamcode.controller.HeadingLocalizer;
@@ -53,7 +52,7 @@ public class DerpyBot implements SkystoneBot {
                 0.0d,
                 4.0d,
                 0.0d);
-        mecanum = new MecanumDriveController(headingController);
+        mecanum = new MecanumDriveController(headingController, this::move);
         vuforiaLocalizer = initVuforia(hardwareMap);
         skyStoneLocalizer = new SkyStoneLocalizer(vuforiaLocalizer);
 
@@ -120,15 +119,13 @@ public class DerpyBot implements SkystoneBot {
     }
 
     @Override
-    public void move(MecanumPower mecanumPower) {
-        mecanum.setTarget(mecanumPower);
-        move(mecanum.getControl());
-    }
-
-
-    @Override
     public double getFieldRelativeHeading() {
         return headingLocalizer.getCurrent();
+    }
+
+    @Override
+    public MecanumDriveController getMecanumDrive() {
+        return mecanum;
     }
 
 

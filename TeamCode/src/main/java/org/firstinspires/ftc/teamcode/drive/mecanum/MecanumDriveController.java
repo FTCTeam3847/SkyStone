@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode.drive.mecanum;
 
-import org.firstinspires.ftc.teamcode.controller.Controller;
 import org.firstinspires.ftc.teamcode.controller.HeadingController;
 import org.firstinspires.ftc.teamcode.drive.DrivePower;
 import org.firstinspires.ftc.teamcode.polar.PolarCoord;
+
+import java.util.function.Consumer;
 
 import static java.lang.Math.PI;
 import static java.lang.Math.cos;
@@ -12,17 +13,29 @@ import static org.firstinspires.ftc.teamcode.polar.PolarUtil.addRadians;
 import static org.firstinspires.ftc.teamcode.polar.PolarUtil.fromXY;
 import static org.firstinspires.ftc.teamcode.polar.PolarUtil.subtractRadians;
 
-public class MecanumDriveController implements Controller<MecanumPower, DrivePower> {
+public class MecanumDriveController implements MecanumDrive {
     private final HeadingController headingController;
+    private final Consumer<DrivePower> drive;
 
-    public MecanumDriveController(HeadingController headingController) {
+    public MecanumDriveController(HeadingController headingController, Consumer<DrivePower> drive) {
         this.headingController = headingController;
+        this.drive = drive;
     }
 
     private static double QTR_PI = PI / 4;
     private static double ROOT_2_OVER_2 = sin(QTR_PI);
     private double lastTurn;
-    private MecanumPower target;
+
+    public void setPower(MecanumPower target) {
+        DrivePower drivePower = calculateDrivePower(target);
+        drive.accept(drivePower);
+    }
+
+    public void setPower(double strafe_x, double strafe_y, double turn) {
+        PolarCoord xypolar = fromXY(strafe_x, strafe_y);
+        PolarCoord strafe = new PolarCoord(xypolar.radius, subtractRadians(xypolar.theta, 2 * QTR_PI));
+        setPower(new MecanumPower(strafe, turn));
+    }
 
     private static DrivePower turnPower(double turn) {
         if (Double.isFinite(turn)) {
@@ -39,46 +52,36 @@ public class MecanumDriveController implements Controller<MecanumPower, DrivePow
         return new DrivePower(rflb, rblf, rblf, rflb);
     }
 
-    public void setTarget(double strafe_x, double strafe_y, double turn) {
-        PolarCoord xypolar = fromXY(strafe_x, strafe_y);
-        PolarCoord strafe = new PolarCoord(xypolar.radius, subtractRadians(xypolar.theta, 2 * QTR_PI));
-        target = new MecanumPower(strafe, turn);
-    }
-
-    public DrivePower getControl() {
+    private DrivePower calculateDrivePower(MecanumPower mecanumPower) {
         double currentAngle = headingController.getCurrent();
 
         DrivePower drivePower;
 
-        if (target.strafe.radius == 0.0d && target.turn == 0.0d) {
+        if (mecanumPower.strafe.radius == 0.0d && mecanumPower.turn == 0.0d) {
             // we're stopped
             headingController.setTarget(currentAngle);
             drivePower = DrivePower.ZERO;
         } else {
             // we're moving
-            if (target.turn == 0.0d && lastTurn != 0.0d) {
+            if (mecanumPower.turn == 0.0d && lastTurn != 0.0d) {
                 // the user just stopped turning, so hold this angle
                 headingController.setTarget(currentAngle);
             }
 
-            DrivePower strafePower = strafePower(target.strafe);
+            DrivePower strafePower = strafePower(mecanumPower.strafe);
             DrivePower turnPower;
-            if (target.turn == 0.0d) {
+            if (mecanumPower.turn == 0.0d) {
                 // the user isn't asking to turn, so getLast a
                 // correction value to hold our desired heading
                 turnPower = turnPower(headingController.getControl());
             } else {
-                turnPower = turnPower(target.turn);
+                turnPower = turnPower(mecanumPower.turn);
             }
 
             drivePower = DrivePower.combine(strafePower, turnPower);
         }
-        lastTurn = target.turn;
+        lastTurn = mecanumPower.turn;
         return drivePower;
     }
 
-    @Override
-    public void setTarget(MecanumPower target) {
-        this.target = target;
-    }
 }

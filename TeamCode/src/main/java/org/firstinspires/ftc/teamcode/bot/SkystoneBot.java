@@ -1,12 +1,11 @@
 package org.firstinspires.ftc.teamcode.bot;
 
 import org.firstinspires.ftc.teamcode.Trinkets.TowerBuilder;
-import org.firstinspires.ftc.teamcode.Trinkets.TowerGrabber;
-import org.firstinspires.ftc.teamcode.action.TowerBuilderAction;
-import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDrive;
+import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDriveController;
 
-public interface SkystoneBot extends Bot, MecanumDrive {
+public interface SkystoneBot extends Bot {
     double getFieldRelativeHeading();
+    MecanumDriveController getMecanumDrive();
 
     default TowerBuilder getTowerBuilder() {
         return TowerBuilder.NIL;

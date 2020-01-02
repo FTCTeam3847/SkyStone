@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.gamepad.PushButton;
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
 import static java.lang.Math.signum;
+import static org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower.*;
 
 @TeleOp(name = "SkottOp", group = "1")
 public class SkottOp extends OpMode {
@@ -28,11 +29,24 @@ public class SkottOp extends OpMode {
     private TowerGrabber towerGrabber;
     private BlockExtender blockExtender;
 
+    private double testSpeed = 0.5d;
+    private long testStart = 0L;
+    private long testDuration = 0L;
+
     {
         msStuckDetectInit = 10_000;
     }
 
-    private PushButton buttonRunScript = new PushButton(() -> gamepad2.x);
+    private PushButton buttonRunScript = new PushButton(() -> gamepad2.back);
+    private PushButton increment = new PushButton(() -> gamepad2.right_bumper);
+    private PushButton decrement = new PushButton(() -> gamepad2.left_bumper);
+
+    private PairedButtons<Double> testSpeedButtons = new PairedButtons<>(
+            decrement::getCurrent, () -> -0.02d,
+            increment::getCurrent, () -> 0.02d
+    );
+
+    private PushButton testStarted = new PushButton(() -> gamepad2.a || gamepad2.b || gamepad2.x || gamepad2.y || gamepad2.dpad_up || gamepad2.dpad_down || gamepad2.dpad_left || gamepad2.dpad_left);
 
     private PairedButtons<Double> towerGrabberButtons = new PairedButtons<>(
             () -> gamepad1.left_bumper, () -> 0.0d,
@@ -72,8 +86,7 @@ public class SkottOp extends OpMode {
                 .retractBlock()
                 .lowerBlock()
                 .lowerTower(0.5)
-                .releaseTower()
-                ;
+                .releaseTower();
         return script;
     }
 
@@ -104,6 +117,8 @@ public class SkottOp extends OpMode {
 
     @Override
     public void loop() {
+        telemetry.addData("testSpeed", "%.2f", testSpeed);
+
         bot.loop();
         script.loop();
 
@@ -117,13 +132,37 @@ public class SkottOp extends OpMode {
             towerLifterButtons.apply(towerLifter::setPower);
             blockLifterButtons.apply(blockLifter::setPower);
             blockExtenderButtons.apply(blockExtender::setPower);
+            testSpeedButtons.apply(delta -> testSpeed += delta);
 
-            MecanumPower mecanumPower = MecanumPower.fromXYTurn(
-                    sensitivity(gamepad1.right_stick_x, SENSITIVITY),
-                    sensitivity(-gamepad1.right_stick_y, SENSITIVITY),
-                    sensitivity(gamepad1.left_stick_x, SENSITIVITY)
-            );
+            MecanumPower mecanumPower = ZERO;
 
+            if (testStarted.getCurrent()) {
+                testStart = System.currentTimeMillis();
+            }
+
+            if (gamepad2.dpad_up) {
+                mecanumPower = fwd(testSpeed);
+            } else if (gamepad2.dpad_down) {
+                mecanumPower = backwd(testSpeed);
+            } else if (gamepad2.dpad_left) {
+                mecanumPower = left(testSpeed);
+            } else if (gamepad2.dpad_right) {
+                mecanumPower = right(testSpeed);
+            } else if (gamepad2.x) {
+                mecanumPower = fwdleft(testSpeed);
+            } else if (gamepad2.a) {
+                mecanumPower = bkwdleft(testSpeed);
+            } else if (gamepad2.b) {
+                mecanumPower = bkwdright(testSpeed);
+            } else if (gamepad2.y) {
+                mecanumPower = fwdright(testSpeed);
+            } else {
+                mecanumPower = fromXYTurn(
+                        sensitivity(gamepad1.right_stick_x, SENSITIVITY),
+                        sensitivity(-gamepad1.right_stick_y, SENSITIVITY),
+                        sensitivity(gamepad1.left_stick_x, SENSITIVITY)
+                );
+            }
             bot.move(mecanumPower);
         }
 

@@ -200,8 +200,8 @@ public class SkottBot implements SkystoneBot {
         telemetry.addData("localizer", skyStoneLocalizer);
         telemetry.addData("heading", headingController);
         telemetry.addData("tower", towerBuilder);
-        telemetry.addData("leftTowerLifter", "%.2f", leftTowerLifter.getPower());
-        telemetry.addData("rightTowerLifter", "%.2f", rightTowerLifter.getPower());
+//        telemetry.addData("leftTowerLifter", "%.2f", leftTowerLifter.getPower());
+//        telemetry.addData("rightTowerLifter", "%.2f", rightTowerLifter.getPower());
     }
 
     private void move4(double leftFront, double leftBack, double rightFront, double rightBack) {

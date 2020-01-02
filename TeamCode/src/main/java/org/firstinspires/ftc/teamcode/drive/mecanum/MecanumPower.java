@@ -25,6 +25,37 @@ public class MecanumPower {
         return new MecanumPower(strafe, turn);
     }
 
+    public static MecanumPower fwdleft(double power) {
+        return new MecanumPower(new PolarCoord(power, 1*PI/4), 0);
+    }
+
+    public static MecanumPower bkwdleft(double power) {
+        return new MecanumPower(new PolarCoord(power, 3*PI/4), 0);
+    }
+
+    public static MecanumPower bkwdright(double power) {
+        return new MecanumPower(new PolarCoord(power, 5*PI/4), 0);
+    }
+
+    public static MecanumPower fwdright(double power) {
+        return new MecanumPower(new PolarCoord(power, 7*PI/4), 0);
+    }
+
+    public static MecanumPower left(double power) {
+        return fromXYTurn(-power, 0.0, 0.0);
+    }
+        public static MecanumPower right(double power) {
+        return fromXYTurn(power, 0.0, 0.0);
+    }
+
+    public static MecanumPower fwd(double power) {
+        return fromXYTurn(0.0, power, 0.0);
+    }
+        public static MecanumPower backwd(double power) {
+        return fromXYTurn(0.0, -power, 0.0);
+    }
+
+
     @Override
     public String toString() {
         return format(Locale.US, "strafe=%s, turn=%.2f", strafe, turn);

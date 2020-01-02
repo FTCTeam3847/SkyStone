@@ -36,7 +36,7 @@ class TowerLifterTest {
                 right::getPosition
         );
 
-        tl.lift(0.5 ,-0.5);
+        tl.setPower(0.5);
 
         assertEquals(0.5, left.speed);
         assertEquals(-0.5, right.speed);

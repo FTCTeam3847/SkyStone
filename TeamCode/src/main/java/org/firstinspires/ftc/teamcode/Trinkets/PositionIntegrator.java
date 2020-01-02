@@ -47,7 +47,7 @@ public class PositionIntegrator {
     }
 
     private void checkVelocity(double velocity) {
-        if (velocity < 1.0d || velocity > 1.0d)
+        if (velocity < -1.0d || velocity > 1.0d)
             throw new IllegalArgumentException(format(
                     US,
                     "velocity %.2f is outside allowable range [-1.0..1.0]",

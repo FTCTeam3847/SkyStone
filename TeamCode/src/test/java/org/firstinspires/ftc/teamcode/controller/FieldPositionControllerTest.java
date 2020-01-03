@@ -11,10 +11,10 @@ import static org.junit.jupiter.api.Assertions.*;
 class FieldPositionControllerTest {
 
     FieldPosition currentFieldPosition = new FieldPosition(new CartesianCoord(48, 48), 0);
-
+    FieldPosition targetFieldPosition = new FieldPosition(new CartesianCoord(-48, 48), 0);
 
     @Test
     void getControl() {
-
+        assertEquals();
     }
 }

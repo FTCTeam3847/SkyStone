@@ -83,4 +83,5 @@ public class PolarUtil {
     public static PolarCoord fromCartesian(CartesianCoord destination) {
         return fromXY(destination.x, destination.y);
     }
+
 }

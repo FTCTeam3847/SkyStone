@@ -30,13 +30,15 @@ public class CombinedLocalizer implements Localizer<FieldPosition> {
 
         FieldPosition bestGuess;
 
-        if(skyStoneLocalizer.currentVisibleTarget != null)
-        {
-            calibrate(skyStoneGuess);
-            bestGuess = skyStoneGuess;
-        } else{
-            bestGuess = mecanumGuess;
-        }
+//        if(skyStoneLocalizer.currentVisibleTarget != null)
+//        {
+//            calibrate(skyStoneGuess);
+//            bestGuess = skyStoneGuess;
+//        } else{
+//            bestGuess = mecanumGuess;
+//        }
+        bestGuess = mecanumGuess;
+
 
         currentPosition = bestGuess;
         return bestGuess;

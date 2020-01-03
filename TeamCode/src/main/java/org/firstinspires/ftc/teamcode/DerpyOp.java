@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.action.SequentialAction;
 import org.firstinspires.ftc.teamcode.action.TurnToAction;
 import org.firstinspires.ftc.teamcode.controller.FieldPosition;
 import org.firstinspires.ftc.teamcode.gamepad.PushButton;
+import org.firstinspires.ftc.teamcode.polar.CartesianCoord;
 import org.firstinspires.ftc.teamcode.polar.PolarCoord;
 
 import static java.lang.Math.PI;
@@ -55,16 +56,27 @@ public class DerpyOp extends OpMode {
 
     public SequentialAction makeScriptA() {
         DriveTrainAction scriptA = new DriveTrainAction(System::currentTimeMillis, bot)
-                .strafe(PI, 1000, 1);
+                .moveTo(new CartesianCoord(-48, 48))
+                .moveTo(new CartesianCoord(48, 48))
+                .moveTo(new CartesianCoord(48, 0))
+                .moveTo(new CartesianCoord(-48, 0));
         return scriptA;
     }
 
     public SequentialAction makeScriptB() {
         DriveTrainAction scriptB = new DriveTrainAction(System::currentTimeMillis, bot)
-                .moveTo(new PolarCoord(60, 0.7 * PI))
+                .moveTo(new PolarCoord(68, .25 * PI))
                 .pause(500)
-                .moveTo(new PolarCoord(60, 0.3 * PI))
+                .turnTo(5*PI/4)
+                .pause(500)
+                .moveTo(new PolarCoord(68, 0.75 * PI))
+                .pause(500)
+                .turnTo(PI/3)
+                .pause(500)
+                .moveTo(new PolarCoord(30, PI))
+                .turnTo(0)
                 ;
+        ;
         return scriptB;
     }
 
@@ -110,7 +122,7 @@ public class DerpyOp extends OpMode {
 //
 //        script.loop();
 //        scriptY.loop();
-//        scriptA.loop();
+        scriptA.loop();
         scriptB.loop();
         telemetry.addData("script", scriptB);
 
@@ -131,6 +143,7 @@ public class DerpyOp extends OpMode {
         }
 
         if (pushButtonB.getCurrent()) {
+            bot.combinedLocalizer.calibrate(new FieldPosition(new PolarCoord(68, 3*PI/4),PI));
             scriptB = makeScriptB();
             scriptB.start();
         }

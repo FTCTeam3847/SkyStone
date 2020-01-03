@@ -179,7 +179,7 @@ public class SkottBot implements SkystoneBot {
 
         //Primary Port 3
         extender = hardwareMap.get(CRServo.class, "extender");
-        extender.setDirection(REVERSE);
+        extender.setDirection(FORWARD);
 
         BlockExtender blockExtender =
                 new BlockExtender(

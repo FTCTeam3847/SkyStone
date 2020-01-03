@@ -19,7 +19,7 @@ public class BlockExtender {
     Supplier<Double> servoPowerSupplier;
     double position = 0.0d;
     long lastTime = 0L;
-    double MAX_POSITION = 3600.0d;
+    double MAX_POSITION = 1720.0d;
 
     public BlockExtender(Consumer<Double> servoPower, Supplier<Double> servoPowerSupplier) {
         this.servoPower = servoPower;
@@ -52,9 +52,10 @@ public class BlockExtender {
     public String toString() {
         return format(
                 Locale.US,
-                "pwr:%.2f,pos:%.2f",
+                "pwr:%.2f,pos:%.2f,absPos:%.2f",
                 getPower(),
-                getPosition()
+                getPosition(),
+                position
         );
     }
 

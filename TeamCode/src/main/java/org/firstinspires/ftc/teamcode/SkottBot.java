@@ -11,6 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.Trinkets.BlockExtender;
 import org.firstinspires.ftc.teamcode.Trinkets.BlockGrabber;
 import org.firstinspires.ftc.teamcode.Trinkets.BlockLifter;
+import org.firstinspires.ftc.teamcode.Trinkets.CapstoneLifter;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerBuilder;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerGrabber;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerLifter;
@@ -52,6 +53,8 @@ public class SkottBot implements SkystoneBot {
     public CRServo extender;
     public CRServo leftBlockLifter;
     public CRServo rightBlockLifter;
+
+    public  Servo capstoneLifterServo;
 
     private final HardwareMap hardwareMap;
     private final Telemetry telemetry;
@@ -196,7 +199,15 @@ public class SkottBot implements SkystoneBot {
                         grabber::getPosition
                 );
 
-        towerBuilder = new TowerBuilder(towerGrabber, towerLifter, blockLifter, blockExtender, blockGrabber);
+        capstoneLifterServo = hardwareMap.get(Servo.class, "capstone-lifter");
+
+        CapstoneLifter capstoneLifter =
+                new CapstoneLifter(
+                        capstoneLifterServo::setPosition,
+                        capstoneLifterServo::getPosition
+                );
+
+        towerBuilder = new TowerBuilder(towerGrabber, towerLifter, blockLifter, blockExtender, blockGrabber, capstoneLifter);
     }
 
     @Override

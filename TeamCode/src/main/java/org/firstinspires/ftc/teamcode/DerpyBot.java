@@ -66,7 +66,7 @@ public class DerpyBot implements SkystoneBot {
                 4.0d,
                 0.0d);
         MecanumDriveController drive = new MecanumDriveController(headingController, this::move);
-        mecanumLocalizer = new MecanumLocalizer(System::nanoTime, headingLocalizer::getLast, 32); //derpy-28.6, 25.6
+        mecanumLocalizer = new MecanumLocalizer(System::nanoTime, headingLocalizer::getLast, 28.6); //derpy-28.6, 25.6
         mecanum= new LocalizingMecanumDrive(drive, mecanumLocalizer);
 
         vuforiaLocalizer = initVuforia(hardwareMap);

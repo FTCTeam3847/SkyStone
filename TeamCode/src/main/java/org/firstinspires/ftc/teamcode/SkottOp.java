@@ -63,16 +63,17 @@ public class SkottOp extends OpMode {
 
     public SequentialAction makeScript() {
         TowerBuilderAction script = new TowerBuilderAction(System::currentTimeMillis, bot)
-                .releaseTower()
-                .grabTower()
-                .liftTower()
-                .liftBlock()
-                .extendBlock()
-                .releaseBlock()
-                .retractBlock()
-                .lowerBlock()
-                .lowerTower(0.5)
-                .releaseTower()
+//                .releaseTower()
+//                .grabTower()
+//                .liftTower()
+//                .liftBlock()
+//                .extendBlock()
+//                .releaseBlock()
+//                .retractBlock()
+//                .lowerBlock()
+//                .lowerTower(0.5)
+//                .releaseTower()
+                .all()
                 ;
         return script;
     }

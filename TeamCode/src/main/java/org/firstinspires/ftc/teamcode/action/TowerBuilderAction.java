@@ -88,8 +88,37 @@ public class TowerBuilderAction extends SequentialAction {
         addAction(new PauseAction(time, msecTime, bot));
         return this;
     }
+
     public TowerBuilderAction pause() {
         pause(250);
         return this;
     }
+
+    public TowerBuilderAction parallel(RoboAction... actions) {
+        ParallelAction parallelAction = new ParallelAction();
+        for (RoboAction action : actions) {
+            parallelAction.addAction(action);
+        }
+        addAction(parallelAction);
+        return this;
+    }
+
+    public TowerBuilderAction all() {
+        ParallelAction script = new ParallelAction();
+        script.addAction(releaseTower());
+        script.addAction(grabTower());
+        script.addAction(liftTower());
+        script.addAction(liftBlock());
+        script.addAction(extendBlock());
+        script.addAction(releaseBlock());
+        script.addAction(retractBlock());
+        script.addAction(lowerBlock());
+        script.addAction(lowerTower(0.5));
+        script.addAction(releaseTower());
+
+        addAction(script);
+        return this;
+    }
+
+
 }

@@ -5,6 +5,7 @@ import org.firstinspires.ftc.teamcode.controller.HeadingLocalizer;
 import org.firstinspires.ftc.teamcode.controller.Localizer;
 import org.firstinspires.ftc.teamcode.drive.mecanum.LocalizingMecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumLocalizer;
+import org.firstinspires.ftc.teamcode.polar.PolarCoord;
 
 import java.lang.reflect.Field;
 import java.util.Locale;
@@ -17,6 +18,8 @@ public class CombinedLocalizer implements Localizer<FieldPosition> {
     private final MecanumLocalizer mecanumLocalizer;
     private final SkyStoneLocalizer skyStoneLocalizer;
 
+    private long loopCount = 0;
+
     public CombinedLocalizer(HeadingLocalizer headingLocalizer, MecanumLocalizer mecanumLocalizer, SkyStoneLocalizer skyStoneLocalizer) {
         this.headingLocalizer = headingLocalizer;
         this.mecanumLocalizer = mecanumLocalizer;
@@ -25,22 +28,27 @@ public class CombinedLocalizer implements Localizer<FieldPosition> {
 
     @Override
     public FieldPosition getCurrent() {
+        double headingGuess = headingLocalizer.getCurrent();
         FieldPosition mecanumGuess = mecanumLocalizer.getCurrent();
-        FieldPosition skyStoneGuess = skyStoneLocalizer.getCurrent();
-
+        FieldPosition skyStoneGuess = FieldPosition.UNKNOWN;
+        if(loopCount % 10 == 0)
+        {
+            skyStoneGuess = skyStoneLocalizer.getCurrent();
+        }
         FieldPosition bestGuess;
 
-//        if(skyStoneLocalizer.currentVisibleTarget != null)
-//        {
-//            calibrate(skyStoneGuess);
-//            bestGuess = skyStoneGuess;
-//        } else{
-//            bestGuess = mecanumGuess;
-//        }
-        bestGuess = mecanumGuess;
+        if(!skyStoneGuess.equals(FieldPosition.UNKNOWN))
+        {
+            calibrate(skyStoneGuess);
+            bestGuess = skyStoneGuess;
+        } else{
+            bestGuess = mecanumGuess;
+        }
 
 
         currentPosition = bestGuess;
+
+        loopCount++;
         return bestGuess;
     }
 
@@ -51,7 +59,7 @@ public class CombinedLocalizer implements Localizer<FieldPosition> {
 
     @Override
     public void calibrate(FieldPosition fieldPosition) {
-        headingLocalizer.calibrate(fieldPosition.heading);
+        //eadingLocalizer.calibrate(fieldPosition.heading);
         mecanumLocalizer.calibrate(fieldPosition);
     }
 

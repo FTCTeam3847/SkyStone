@@ -30,7 +30,7 @@ public class SequentialAction implements RoboAction {
 
     @Override
     public void loop() {
-        if (!isStarted) return;
+        if (!isStarted || isDone) return;
 
         if (null == currentAction || currentAction.isDone()) {
             if (currentAction != null) currentAction.stop();
@@ -46,6 +46,10 @@ public class SequentialAction implements RoboAction {
 
     @Override
     public void stop() {
+        if(currentAction != null)
+        {
+            currentAction.stop();
+        }
         isDone = true;
     }
 

@@ -35,7 +35,7 @@ public class HardwareMapUtils {
         parameters.vuforiaLicenseKey = GameConstants.VUFORIA_KEY;
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
 
-        parameters.useExtendedTracking = true; //Disables extended tracking on vuforia
+        parameters.useExtendedTracking = false; //Disables extended tracking on vuforia
 
         return ClassFactory.getInstance().createVuforia(parameters);
     }

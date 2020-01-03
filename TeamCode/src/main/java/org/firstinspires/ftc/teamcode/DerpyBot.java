@@ -16,7 +16,6 @@ import org.firstinspires.ftc.teamcode.drive.mecanum.LocalizingMecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDriveController;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumLocalizer;
-import org.firstinspires.ftc.teamcode.polar.CartesianCoord;
 import org.firstinspires.ftc.teamcode.polar.PolarUtil;
 
 import static org.firstinspires.ftc.teamcode.HardwareMapUtils.initImu;
@@ -44,6 +43,9 @@ public class DerpyBot implements SkystoneBot {
 
     VuforiaLocalizer vuforiaLocalizer;
 
+
+    long lapse;
+
     public DerpyBot(
             HardwareMap hardwareMap,
             Telemetry telemetry
@@ -59,12 +61,12 @@ public class DerpyBot implements SkystoneBot {
                 () -> normalize((double) imu.getAngularOrientation().firstAngle)
         );
         headingController = new HeadingController(
-                headingLocalizer::getCurrent,
+                () -> normalize((double) imu.getAngularOrientation().firstAngle),
                 0.0d,
                 4.0d,
                 0.0d);
         MecanumDriveController drive = new MecanumDriveController(headingController, this::move);
-        mecanumLocalizer = new MecanumLocalizer(System::nanoTime, headingLocalizer::getLast, 28.6); //25.6
+        mecanumLocalizer = new MecanumLocalizer(System::nanoTime, headingLocalizer::getLast, 32); //derpy-28.6, 25.6
         mecanum= new LocalizingMecanumDrive(drive, mecanumLocalizer);
 
         vuforiaLocalizer = initVuforia(hardwareMap);
@@ -111,8 +113,11 @@ public class DerpyBot implements SkystoneBot {
 
     @Override
     public void loop() {
+        long startTime = System.nanoTime();
         lastLoc = combinedLocalizer.getCurrent();
         updateTelemetry();
+        long endTime = System.nanoTime();
+        lapse = (endTime-startTime)/1_000_000_000;
     }
 
     @Override
@@ -125,8 +130,10 @@ public class DerpyBot implements SkystoneBot {
         telemetry.addData("heading", headingLocalizer);
         telemetry.addData("mecanum", mecanumLocalizer);
 
-        telemetry.addData("xy", PolarUtil.toXY(lastLoc.polarCoord));
+        //telemetry.addData("xy", PolarUtil.toXY(lastLoc.polarCoord));
         telemetry.addData("combined", combinedLocalizer);
+
+        telemetry.addData("time", lapse);
     }
 
     private void move4(double leftFront, double leftBack, double rightFront, double rightBack) {

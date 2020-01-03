@@ -8,6 +8,8 @@ import org.firstinspires.ftc.teamcode.action.MoveAction;
 import org.firstinspires.ftc.teamcode.action.SequentialAction;
 import org.firstinspires.ftc.teamcode.action.TurnToAction;
 import org.firstinspires.ftc.teamcode.controller.FieldPosition;
+import org.firstinspires.ftc.teamcode.controller.HeadingLocalizer;
+import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
 import org.firstinspires.ftc.teamcode.gamepad.PushButton;
 import org.firstinspires.ftc.teamcode.polar.CartesianCoord;
 import org.firstinspires.ftc.teamcode.polar.PolarCoord;
@@ -28,16 +30,18 @@ public class DerpyOp extends OpMode {
     PushButton pushButtonA = new PushButton(() -> gamepad1.a);
     PushButton pushButtonB = new PushButton(() -> gamepad1.b);
 
+    PushButton dPadUp = new PushButton(() -> gamepad1.dpad_up);
+    PushButton dPadDown = new PushButton(() -> gamepad1.dpad_down);
+    PushButton dPadLeft = new PushButton(() -> gamepad1.dpad_left);
+    PushButton dPadRight = new PushButton(() -> gamepad1.dpad_right);
+
+
     PushButton pushButtonLeftBumper = new PushButton(() -> gamepad1.left_bumper);
 
 
     MoveAction moveAction;
     TurnToAction turnToAction;
     SequentialAction script;
-
-    SequentialAction scriptY;
-    SequentialAction scriptA;
-    SequentialAction scriptB;
 
 
     DerpyBot bot;
@@ -50,7 +54,9 @@ public class DerpyOp extends OpMode {
 
     public SequentialAction makeScriptY() {
         DriveTrainAction scriptY = new DriveTrainAction(System::currentTimeMillis, bot)
-                .strafe(0, 1000, 1);
+                .moveTo(new PolarCoord(68, .75*PI))
+                .pause(500)
+                .moveTo(new PolarCoord(68, .25*PI));
         return scriptY;
     }
 
@@ -65,16 +71,36 @@ public class DerpyOp extends OpMode {
 
     public SequentialAction makeScriptB() {
         DriveTrainAction scriptB = new DriveTrainAction(System::currentTimeMillis, bot)
-                .moveTo(new PolarCoord(68, .25 * PI))
+                .moveTo(new PolarCoord(60, 0.21 * PI)) //rear blue
                 .pause(500)
-                .turnTo(5*PI/4)
+                .turnTo(0.0)
                 .pause(500)
-                .moveTo(new PolarCoord(68, 0.75 * PI))
+                .turnTo(PI / 2)
                 .pause(500)
-                .turnTo(PI/3)
+                .moveTo(new PolarCoord(60, 0.30 * PI)) //home blue 2
                 .pause(500)
-                .moveTo(new PolarCoord(30, PI))
-                .turnTo(0)
+                .turnTo(PI / 2)
+                .pause(500)
+                .moveTo(new PolarCoord(60, 0.70 * PI)) //home blue 1
+                .pause(500)
+                .turnTo(PI / 2)
+                .pause(500)
+                .turnTo(PI)
+                .pause(500)
+                .moveTo(new PolarCoord(61, 0.8 * PI)) //front blue
+                .pause(500)
+                .turnTo(PI)
+                .pause(500)
+                .moveTo(new PolarCoord(50, PI)) //front red
+                .pause(500)
+                .turnTo(PI)
+                .pause(500)
+                .turnTo(3 * PI / 2)
+                .pause(500)
+                .moveTo(new PolarCoord(36, PI)) //home red 1
+                .pause(500)
+                .turnTo(3 * PI / 2)
+                .pause(500)
                 ;
         ;
         return scriptB;
@@ -90,9 +116,6 @@ public class DerpyOp extends OpMode {
         //turnToAction = new TurnToAction(0, bot);
 
         script = makeScript();
-        scriptY = makeScriptY();
-        scriptA = makeScriptA();
-        scriptB = makeScriptB();
 
     }
 
@@ -111,41 +134,56 @@ public class DerpyOp extends OpMode {
     @Override
     public void loop() {
         bot.loop();
+        script.loop();
 
 
-//        MecanumPower mecanumPower = MecanumPower.fromXYTurn(
-//                sensitivity(gamepad1.right_stick_x, SENSITIVITY),
-//                sensitivity(-gamepad1.right_stick_y, SENSITIVITY),
-//                sensitivity(gamepad1.left_stick_x, SENSITIVITY)
-//        );
-//        bot.getMecanumDrive().setPower(mecanumPower);
-//
-//        script.loop();
-//        scriptY.loop();
-        scriptA.loop();
-        scriptB.loop();
-        telemetry.addData("script", scriptB);
 
+        if (!script.isRunning()) {
+            if (gamepad1.dpad_up) {
+                bot.getMecanumDrive().setPower(new MecanumPower(new PolarCoord(.5, 0),0));
+            }
+            else if (gamepad1.dpad_down) {
+                bot.getMecanumDrive().setPower(new MecanumPower(new PolarCoord(.5, PI),0));
+            }
+            else if (gamepad1.dpad_left) {
+                bot.getMecanumDrive().setPower(new MecanumPower(new PolarCoord(.5, PI/2),0));
+            }
+            else if (gamepad1.dpad_right) {
+                bot.getMecanumDrive().setPower(new MecanumPower(new PolarCoord(.5, 3*PI/2),0));
+            }
+            else {
+                MecanumPower mecanumPower = MecanumPower.fromXYTurn(
+                        sensitivity(gamepad1.right_stick_x, SENSITIVITY),
+                        sensitivity(-gamepad1.right_stick_y, SENSITIVITY),
+                        sensitivity(gamepad1.left_stick_x, SENSITIVITY)
+                );
+                bot.getMecanumDrive().setPower(mecanumPower);
+            }
+
+        }
 
         if (pushButtonX.getCurrent()) {
-            script = makeScript();
-            script.start();
+            script.stop();
+            bot.getMecanumDrive().setPower(MecanumPower.ZERO);
         }
 
         if (pushButtonY.getCurrent()) {
-            scriptY = makeScriptY();
-            scriptY.start();
+            //bot.combinedLocalizer.calibrate(new FieldPosition(new PolarCoord(37, 1.11*PI),3*PI/2));
+
+            script = makeScriptY();
+            script.start();
         }
 
         if (pushButtonA.getCurrent()) {
-            scriptA = makeScriptA();
-            scriptA.start();
+            script = makeScriptA();
+            script.start();
         }
 
         if (pushButtonB.getCurrent()) {
-            bot.combinedLocalizer.calibrate(new FieldPosition(new PolarCoord(68, 3*PI/4),PI));
-            scriptB = makeScriptB();
-            scriptB.start();
+            //bot.combinedLocalizer.calibrate(new FieldPosition(new PolarCoord(68, 3*PI/4),PI));
+            bot.headingLocalizer.calibrate(0.0);
+            script = makeScriptB();
+            script.start();
         }
 
         if (pushButtonLeftBumper.getCurrent()) {
@@ -153,10 +191,9 @@ public class DerpyOp extends OpMode {
         }
 
 
-//
-//        telemetry.addData("script", script);
-//        telemetry.addData("current heading", "%.2f PI", bot.getFieldRelativeHeading() / PI);
-//        telemetry.addData("actualScript", script.toString());
+
+
+        telemetry.addData("script", script);
         telemetry.update();
     }
 

@@ -9,7 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.controller.FieldPosition;
 import org.firstinspires.ftc.teamcode.controller.Localizer;
-import org.firstinspires.ftc.teamcode.controller.Sensor;
+import org.firstinspires.ftc.teamcode.polar.PolarCoord;
 import org.firstinspires.ftc.teamcode.polar.PolarUtil;
 
 import java.util.ArrayList;
@@ -23,6 +23,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 import static org.firstinspires.ftc.teamcode.polar.PolarUtil.fromXY;
+import static org.firstinspires.ftc.teamcode.polar.PolarUtil.subtract;
 
 public class SkyStoneLocalizer implements Localizer<FieldPosition> {
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
@@ -57,8 +58,16 @@ public class SkyStoneLocalizer implements Localizer<FieldPosition> {
 
     VuforiaTrackables targetsSkyStone;
     List<VuforiaTrackable> allTrackables = new ArrayList<>();
+
     private FieldPosition currentFieldPosition = FieldPosition.UNKNOWN;
-    VuforiaTrackable currentVisibleTarget = null;
+
+    private FieldPosition lastMeasuredFieldPosition;
+    private VuforiaTrackable lastMeasuredVisibleTarget;
+    private double lastMeasuredDistanceFromTarget;
+
+    private FieldPosition lastTrustedFieldPosition;
+    private VuforiaTrackable lastTrustedVisibleTarget;
+    private double lastTrustedDistanceFromTarget;
 
 
     public SkyStoneLocalizer(VuforiaLocalizer vuforiaLocalizer) {
@@ -226,12 +235,11 @@ public class SkyStoneLocalizer implements Localizer<FieldPosition> {
     public FieldPosition getCurrent() {
         // check all the trackable targets to see which one (if any) is visible.
         targetVisible = false;
-        VuforiaTrackable visibleTarget = null;
 
         for (VuforiaTrackable trackable : allTrackables) {
             if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
                 targetVisible = true;
-                visibleTarget = trackable;
+                lastMeasuredVisibleTarget = trackable;
 
                 // getUpdatedRobotLocation() will return null if no new information is available since
                 // the last time that call was made, or if the trackable is not currently visible.
@@ -243,6 +251,7 @@ public class SkyStoneLocalizer implements Localizer<FieldPosition> {
             }
         }
 
+
         if (null != lastLocation && targetVisible) {
             // Provide feedback as to where the robot is located (if we know).
             // express position (translation) of robot in inches.
@@ -250,17 +259,34 @@ public class SkyStoneLocalizer implements Localizer<FieldPosition> {
 
             Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, RADIANS);
             double heading = PolarUtil.normalize(rotation.thirdAngle);
-            this.currentFieldPosition = new FieldPosition(
+            lastMeasuredFieldPosition = new FieldPosition(
                     fromXY(
                             translation.get(0) / mmPerInch,
                             translation.get(1) / mmPerInch),
                     heading
             );
+
+            OpenGLMatrix image = lastMeasuredVisibleTarget.getLocation();
+            VectorF imageTranslation = image.getTranslation();
+            PolarCoord imageLocation = fromXY(
+                    imageTranslation.get(0) / mmPerInch,
+                    imageTranslation.get(1) / mmPerInch
+            );
+            lastMeasuredDistanceFromTarget = subtract(lastMeasuredFieldPosition.polarCoord, imageLocation).radius;
+            //only use the field position if the image is within a trustable range
+            if (lastMeasuredDistanceFromTarget < 36) {
+                lastTrustedVisibleTarget = lastMeasuredVisibleTarget;
+                lastTrustedDistanceFromTarget = lastMeasuredDistanceFromTarget;
+                lastTrustedFieldPosition = lastMeasuredFieldPosition;
+                currentFieldPosition = lastTrustedFieldPosition;
+            } else {
+                currentFieldPosition = FieldPosition.UNKNOWN;
+            }
         } else {
-            this.currentFieldPosition = FieldPosition.UNKNOWN;
+            currentFieldPosition = FieldPosition.UNKNOWN;
         }
-        this.currentVisibleTarget = visibleTarget;
-        return this.currentFieldPosition;
+
+        return currentFieldPosition;
     }
 
     @Override
@@ -281,9 +307,10 @@ public class SkyStoneLocalizer implements Localizer<FieldPosition> {
     public String toString() {
         return String.format(
                 Locale.US,
-                "pos: %s, tgt: %s",
+                "c:%s\nt:%s %s @ %.2f\nm:%s %s @ %.2f",
                 currentFieldPosition,
-                null == currentVisibleTarget ? "Not visible" : currentVisibleTarget.getName()
+                lastTrustedFieldPosition, null == lastTrustedVisibleTarget ? "None" : lastTrustedVisibleTarget.getName(), lastTrustedDistanceFromTarget,
+                lastMeasuredFieldPosition, null == lastMeasuredVisibleTarget ? "None" : lastMeasuredVisibleTarget.getName(), lastMeasuredDistanceFromTarget
         );
     }
 }

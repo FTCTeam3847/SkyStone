@@ -55,7 +55,7 @@ public class MecanumLocalizer implements Localizer<FieldPosition> {
     private FieldPosition update(Long nanoTime) {
         long duration = nanoTime - timeOfLastUpdate;
 
-        double directionOfTravel = currentPower.strafe.theta + heading.get();
+        double directionOfTravel = PolarUtil.addRadians(currentPower.strafe.theta, heading.get());
         double velocityOfTravel = currentPower.strafe.radius * maxVelocityInchesPerSecond;
         double radiusOfTravel = velocityOfTravel * duration / 1_000_000_000.0d;
         PolarCoord deltaPosition = new PolarCoord(radiusOfTravel, directionOfTravel);

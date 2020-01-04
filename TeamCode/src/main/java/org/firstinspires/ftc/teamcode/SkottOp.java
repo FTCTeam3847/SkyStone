@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Trinkets.BlockExtender;
+import org.firstinspires.ftc.teamcode.Trinkets.BlockGrabber;
 import org.firstinspires.ftc.teamcode.Trinkets.BlockLifter;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerBuilder;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerGrabber;
@@ -28,6 +29,7 @@ public class SkottOp extends OpMode {
     private BlockLifter blockLifter;
     private TowerGrabber towerGrabber;
     private BlockExtender blockExtender;
+    private BlockGrabber blockGrabber;
 
     {
         msStuckDetectInit = 10_000;
@@ -86,6 +88,7 @@ public class SkottOp extends OpMode {
         blockLifter = towerBuilder.blockLifter;
         towerGrabber = towerBuilder.towerGrabber;
         blockExtender = towerBuilder.blockExtender;
+        blockGrabber = towerBuilder.blockGrabber;
 
         script = makeScript();
     }
@@ -114,7 +117,7 @@ public class SkottOp extends OpMode {
         }
 
         if (!script.isRunning()) {
-            towerGrabberButtons.apply(towerGrabber::setPosition);
+            towerGrabberButtons.apply(blockGrabber::setPosition);
             towerLifterButtons.apply(towerLifter::setPower);
             blockLifterButtons.apply(blockLifter::setPower);
             blockExtenderButtons.apply(blockExtender::setPower);

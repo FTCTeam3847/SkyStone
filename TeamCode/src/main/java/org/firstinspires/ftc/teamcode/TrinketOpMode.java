@@ -7,6 +7,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -27,6 +28,7 @@ import static org.firstinspires.ftc.teamcode.polar.PolarUtil.normalize;
 
 
 @TeleOp(name = "TrinketOpMode", group = "1")
+@Disabled // obsolete now
 public class TrinketOpMode extends BaseOp {
     public BNO055IMU imu;
     public MecanumDriveController mecanum;

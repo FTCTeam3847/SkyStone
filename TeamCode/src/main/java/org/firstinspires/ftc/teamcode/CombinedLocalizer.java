@@ -11,16 +11,16 @@ public class CombinedLocalizer implements Localizer<FieldPosition> {
 
     FieldPosition currentPosition;
 
-    private final HeadingLocalizer headingLocalizer;
-    private final MecanumLocalizer mecanumLocalizer;
-    private final SkyStoneLocalizer skyStoneLocalizer;
+    private final Localizer<Double> headingLocalizer;
+    private final Localizer<FieldPosition> mecanumLocalizer;
+    private final Localizer<FieldPosition> skyStoneLocalizer;
 
     private long loopCount = 0;
 
-    public CombinedLocalizer(HeadingLocalizer headingLocalizer, MecanumLocalizer mecanumLocalizer, SkyStoneLocalizer skyStoneLocalizer) {
+    public CombinedLocalizer(Localizer<Double> headingLocalizer, Localizer<FieldPosition> mecanumLocalizer, Localizer<FieldPosition> skyStoneLocalizer) {
         this.headingLocalizer = headingLocalizer;
         this.mecanumLocalizer = mecanumLocalizer;
-        this.skyStoneLocalizer = skyStoneLocalizer;
+        this.skyStoneLocalizer = new BufferingLocalizer(skyStoneLocalizer);
     }
 
     @Override

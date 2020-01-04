@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
 import org.firstinspires.ftc.teamcode.controller.FieldPosition;
 import org.firstinspires.ftc.teamcode.controller.HeadingController;
@@ -50,6 +51,7 @@ public class DerpyBot implements SkystoneBot {
     VuforiaLocalizer vuforiaLocalizer;
     private BufferingLocalizer bufferingLocalizer;
 
+    private TFObjectDetector tfod;
 
     public DerpyBot(
             HardwareMap hardwareMap,
@@ -59,6 +61,9 @@ public class DerpyBot implements SkystoneBot {
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
         this.nanoTime = nanoTime;
+
+        initTfod();
+        tfod.activate();
     }
 
     @Override
@@ -180,4 +185,22 @@ public class DerpyBot implements SkystoneBot {
     public double getAutonomousSpeed() {
         return 0.5;
     }
+
+    private void initTfod() {
+        String TFOD_MODEL_ASSET = "Skystone.tflite";
+        String LABEL_FIRST_ELEMENT = "Stone";
+        String LABEL_SECOND_ELEMENT = "Skystone";
+        int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
+                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+        tfodParameters.minimumConfidence = 0.7;
+        tfodParameters.useObjectTracker = true;
+        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforiaLocalizer);
+        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
+    }
+
+    public TFObjectDetector getTfod() {
+        return tfod;
+    }
+
 }

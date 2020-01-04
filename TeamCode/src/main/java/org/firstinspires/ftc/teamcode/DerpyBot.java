@@ -48,6 +48,7 @@ public class DerpyBot implements SkystoneBot {
     FieldPosition lastLoc = FieldPosition.ORIGIN;
 
     VuforiaLocalizer vuforiaLocalizer;
+    private BufferingLocalizer bufferingLocalizer;
 
 
     public DerpyBot(
@@ -77,9 +78,10 @@ public class DerpyBot implements SkystoneBot {
 
         vuforiaLocalizer = initVuforia(hardwareMap);
         skyStoneLocalizer = new SkyStoneLocalizer(vuforiaLocalizer);
+        bufferingLocalizer = new BufferingLocalizer(skyStoneLocalizer);
 
 
-        combinedLocalizer = new CombinedLocalizer(headingLocalizer, mecanumLocalizer, skyStoneLocalizer);
+        combinedLocalizer = new CombinedLocalizer(headingLocalizer, mecanumLocalizer, bufferingLocalizer);
 
 
         //Primary Port 3
@@ -138,11 +140,12 @@ public class DerpyBot implements SkystoneBot {
     }
 
     private void updateTelemetry() {
+        telemetry.addData("combined", combinedLocalizer);
+        telemetry.addData("buffering", bufferingLocalizer);
         telemetry.addData("skystone", skyStoneLocalizer);
         telemetry.addData("heading", headingLocalizer);
         telemetry.addData("mecanum", mecanumLocalizer);
 
-        telemetry.addData("combined", combinedLocalizer);
 
         telemetry.addData("loop", "%.2fsec", loopDuration);
     }

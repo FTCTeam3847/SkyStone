@@ -20,7 +20,7 @@ public class CombinedLocalizer implements Localizer<FieldPosition> {
     public CombinedLocalizer(Localizer<Double> headingLocalizer, Localizer<FieldPosition> mecanumLocalizer, Localizer<FieldPosition> skyStoneLocalizer) {
         this.headingLocalizer = headingLocalizer;
         this.mecanumLocalizer = mecanumLocalizer;
-        this.skyStoneLocalizer = new BufferingLocalizer(skyStoneLocalizer);
+        this.skyStoneLocalizer = skyStoneLocalizer;
     }
 
     @Override

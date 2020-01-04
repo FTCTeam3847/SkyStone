@@ -119,7 +119,7 @@ public class SkottOp extends OpMode {
             blockLifterButtons.apply(blockLifter::setPower);
             blockExtenderButtons.apply(blockExtender::setPower);
 
-            MecanumPower mecanumPower = MecanumPower.fromXYTurn(
+            MecanumPower mecanumPower = MecanumPower.fromGamepadXYTurn(
                     sensitivity(gamepad1.right_stick_x, SENSITIVITY),
                     sensitivity(-gamepad1.right_stick_y, SENSITIVITY),
                     sensitivity(gamepad1.left_stick_x, SENSITIVITY)

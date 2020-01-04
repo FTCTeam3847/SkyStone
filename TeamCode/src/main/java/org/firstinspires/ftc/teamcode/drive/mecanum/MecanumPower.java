@@ -7,16 +7,21 @@ import java.util.Objects;
 
 import static java.lang.Math.PI;
 import static java.lang.String.format;
+import static org.firstinspires.ftc.teamcode.polar.PolarCoord.polar;
 import static org.firstinspires.ftc.teamcode.polar.PolarUtil.fromXY;
 import static org.firstinspires.ftc.teamcode.polar.PolarUtil.subtractRadians;
 
 public class MecanumPower {
-    public static final MecanumPower ZERO = new MecanumPower(new PolarCoord(0, 0), 0);
+    public static final MecanumPower ZERO = mecanumPower(0, 0, 0);
     public final PolarCoord strafe;
     public final double turn;
 
-    public MecanumPower(double radius, double theta, double turn) {
-        this(new PolarCoord(radius, theta), turn);
+    public static MecanumPower mecanumPower(double radius, double theta, double turn) {
+        return mecanumPower(polar(radius, theta), turn);
+    }
+
+    public static MecanumPower mecanumPower(PolarCoord strafe, double turn) {
+        return new MecanumPower(strafe, turn);
     }
 
     public MecanumPower(PolarCoord strafe, double turn) {
@@ -24,9 +29,9 @@ public class MecanumPower {
         this.turn = turn;
     }
 
-    public static MecanumPower fromXYTurn(double strafe_x, double strafe_y, double turn) {
+    public static MecanumPower fromGamepadXYTurn(double strafe_x, double strafe_y, double turn) {
         PolarCoord xypolar = fromXY(strafe_x, strafe_y);
-        PolarCoord strafe = new PolarCoord(xypolar.radius, subtractRadians(xypolar.theta, PI / 2));
+        PolarCoord strafe = polar(xypolar.radius, subtractRadians(xypolar.theta, PI / 2));
         return new MecanumPower(strafe, turn);
     }
 
@@ -36,7 +41,7 @@ public class MecanumPower {
     }
 
     public MecanumPower scale(double scale) {
-        return new MecanumPower(new PolarCoord(strafe.radius * scale, strafe.theta), turn * scale);
+        return mecanumPower(strafe.radius * scale, strafe.theta, turn * scale);
     }
 
     @Override

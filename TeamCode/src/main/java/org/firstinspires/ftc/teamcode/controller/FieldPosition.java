@@ -9,6 +9,7 @@ import java.util.Objects;
 
 import static java.lang.Math.PI;
 import static org.firstinspires.ftc.teamcode.polar.PolarCoord.polar;
+import static org.firstinspires.ftc.teamcode.polar.PolarUtil.fromCartesian;
 
 public class FieldPosition {
     public static final FieldPosition ORIGIN =
@@ -36,7 +37,7 @@ public class FieldPosition {
     }
 
     public FieldPosition(CartesianCoord cartesianCoord, double heading) {
-        this(PolarUtil.fromCartesian(cartesianCoord), heading);
+        this(fromCartesian(cartesianCoord), heading);
     }
 
     @Override

@@ -9,6 +9,8 @@ import java.util.Locale;
 import java.util.function.Supplier;
 
 import static java.lang.Math.abs;
+import static org.firstinspires.ftc.teamcode.polar.PolarCoord.polar;
+import static org.firstinspires.ftc.teamcode.polar.PolarUtil.add;
 
 public class MecanumLocalizer implements Localizer<FieldPosition> {
     private final Supplier<Long> nanoTime;
@@ -58,9 +60,9 @@ public class MecanumLocalizer implements Localizer<FieldPosition> {
         double directionOfTravel = PolarUtil.addRadians(currentPower.strafe.theta, heading.get());
         double velocityOfTravel = currentPower.strafe.radius * maxVelocityInchesPerSecond;
         double radiusOfTravel = velocityOfTravel * duration / 1_000_000_000.0d;
-        PolarCoord deltaPosition = new PolarCoord(radiusOfTravel, directionOfTravel);
+        PolarCoord deltaPosition = polar(radiusOfTravel, directionOfTravel);
 
-        PolarCoord netVector = PolarUtil.add(deltaPosition, getLast().polarCoord);
+        PolarCoord netVector = add(deltaPosition, getLast().polarCoord);
 
         lastUpdated = new FieldPosition(netVector, heading.get());
         timeOfLastUpdate = nanoTime;

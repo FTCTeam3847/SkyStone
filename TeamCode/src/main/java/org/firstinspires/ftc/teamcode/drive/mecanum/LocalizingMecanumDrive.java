@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.drive.mecanum;
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.signum;
+import static org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower.mecanumPower;
 
 public class LocalizingMecanumDrive implements MecanumDrive {
     private final MecanumDrive mecanumDrive;
@@ -29,7 +30,7 @@ public class LocalizingMecanumDrive implements MecanumDrive {
         radius = (radius < 0.05) ? 0.0d : max(0.1, radius);
         turn = (abs(turn) < 0.05) ? 0.0d : signum(turn) * max(0.1, abs(turn));
 
-        return new MecanumPower(radius, theta, turn);
+        return mecanumPower(radius, theta, turn);
     }
 
 

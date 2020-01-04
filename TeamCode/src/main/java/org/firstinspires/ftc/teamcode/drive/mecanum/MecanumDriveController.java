@@ -9,6 +9,8 @@ import java.util.function.Consumer;
 import static java.lang.Math.PI;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
+import static org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower.mecanumPower;
+import static org.firstinspires.ftc.teamcode.polar.PolarCoord.polar;
 import static org.firstinspires.ftc.teamcode.polar.PolarUtil.addRadians;
 import static org.firstinspires.ftc.teamcode.polar.PolarUtil.fromXY;
 import static org.firstinspires.ftc.teamcode.polar.PolarUtil.subtractRadians;
@@ -33,8 +35,8 @@ public class MecanumDriveController implements MecanumDrive {
 
     public void setPower(double strafe_x, double strafe_y, double turn) {
         PolarCoord xypolar = fromXY(strafe_x, strafe_y);
-        PolarCoord strafe = new PolarCoord(xypolar.radius, subtractRadians(xypolar.theta, 2 * QTR_PI));
-        setPower(new MecanumPower(strafe, turn));
+        PolarCoord strafe = polar(xypolar.radius, subtractRadians(xypolar.theta, 2 * QTR_PI));
+        setPower(mecanumPower(strafe, turn));
     }
 
     private static DrivePower turnPower(double turn) {

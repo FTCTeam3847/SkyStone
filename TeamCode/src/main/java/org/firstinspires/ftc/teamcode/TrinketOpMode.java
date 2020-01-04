@@ -198,7 +198,7 @@ public class TrinketOpMode extends BaseOp {
             towerLifter.setPower(0.0d);
         }
 
-        mecanum.setPower(MecanumPower.fromXYTurn(
+        mecanum.setPower(MecanumPower.fromGamepadXYTurn(
                 sensitivity(gamepad1.right_stick_x, SENSITIVITY),
                 sensitivity(-gamepad1.right_stick_y, SENSITIVITY),
                 sensitivity(gamepad1.left_stick_x, SENSITIVITY)

@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.polar.PolarCoord;
 import java.util.Locale;
 
 import static java.lang.String.format;
+import static org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower.mecanumPower;
 
 public class StrafeToAction implements RoboAction {
 
@@ -42,7 +43,7 @@ public class StrafeToAction implements RoboAction {
                 bot.getMecanumDrive().setPower(MecanumPower.ZERO);
             }
         } else {
-            bot.getMecanumDrive().setPower(new MecanumPower(PolarCoord.ORIGIN, 0));
+            bot.getMecanumDrive().setPower(mecanumPower(PolarCoord.ORIGIN, 0));
         }
     }
 

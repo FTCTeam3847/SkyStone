@@ -10,7 +10,7 @@ public class CartesianCoord {
     public static final CartesianCoord UNKNOWN = new CartesianCoord(-0.0d, -0.0d) {
         @Override
         public String toString() {
-            return "{UNKNOWN}";
+            return "UNKNOWN";
         }
     };
 
@@ -27,7 +27,7 @@ public class CartesianCoord {
     }
 
     public String toString() {
-        return format(Locale.US, "{%.2f, %.2f}", x, y);
+        return format(Locale.US, "x%.2f,y%.2f", x, y);
     }
 
     @Override

@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.polar.PolarCoord;
 import java.util.Locale;
 
 import static java.lang.String.format;
+import static org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower.mecanumPower;
 
 public class TurnToAction implements RoboAction {
 
@@ -36,14 +37,14 @@ public class TurnToAction implements RoboAction {
 
         if (started && !isDone) {
             if (headingController.getError() != 0) {
-                bot.getMecanumDrive().setPower(new MecanumPower(PolarCoord.ORIGIN, headingController.getControl()));
+                bot.getMecanumDrive().setPower(mecanumPower(0, 0, headingController.getControl()));
             } else {
                 stop();
                 started = false;
                 bot.getMecanumDrive().setPower(MecanumPower.ZERO);
             }
         } else {
-            bot.getMecanumDrive().setPower(new MecanumPower(PolarCoord.ORIGIN, 0));
+            bot.getMecanumDrive().setPower(MecanumPower.ZERO);
         }
     }
 

@@ -8,7 +8,6 @@ import org.firstinspires.ftc.teamcode.action.SequentialAction;
 import org.firstinspires.ftc.teamcode.controller.FieldPosition;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
 import org.firstinspires.ftc.teamcode.gamepad.PushButton;
-import org.firstinspires.ftc.teamcode.polar.PolarCoord;
 
 import static java.lang.Math.PI;
 import static java.lang.Math.abs;
@@ -25,6 +24,8 @@ import static org.firstinspires.ftc.teamcode.GameConstants.FACING_IMAGE_REAR_WAL
 import static org.firstinspires.ftc.teamcode.GameConstants.FACING_IMAGE_RED_WALL_FRONT;
 import static org.firstinspires.ftc.teamcode.GameConstants.FACING_REAR_WALL;
 import static org.firstinspires.ftc.teamcode.GameConstants.FACING_RED_WALL;
+import static org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower.mecanumPower;
+import static org.firstinspires.ftc.teamcode.polar.PolarCoord.polar;
 
 @TeleOp(name = "DerpyOp", group = "1")
 public class DerpyOp extends OpMode {
@@ -51,9 +52,9 @@ public class DerpyOp extends OpMode {
     public SequentialAction startBlueNearDepotBackward() {
         return new DriveTrainAction(System::currentTimeMillis, bot)
                 .run(() -> bot.headingLocalizer.lockCalibration(FACING_RED_WALL))
-                .strafeTo(new PolarCoord(68, .75 * PI))
+                .strafeTo(polar(68, .75 * PI))
                 .pause(500)
-                .strafeTo(new PolarCoord(68, .25 * PI));
+                .strafeTo(polar(68, .25 * PI));
     }
 
     public SequentialAction startBlueSideNearDepot() {
@@ -92,7 +93,7 @@ public class DerpyOp extends OpMode {
         bot = new DerpyBot(hardwareMap, telemetry);
         bot.init();
 
-        //MecanumPower mecanumPower = new MecanumPower(new PolarCoord(0.5, 0), 0);
+        //MecanumPower mecanumPower = mecanumPower(0.5, 0), 0);
         //moveAction = new MoveAction(1, mecanumPower, System::nanoTime, bot);
         //turnToAction = new TurnToAction(0, bot);
 
@@ -120,15 +121,15 @@ public class DerpyOp extends OpMode {
 
         if (!script.isRunning()) {
             if (gamepad1.dpad_up) {
-                bot.getMecanumDrive().setPower(new MecanumPower(new PolarCoord(.5, 0), 0));
+                bot.getMecanumDrive().setPower(mecanumPower(.5, 0, 0));
             } else if (gamepad1.dpad_down) {
-                bot.getMecanumDrive().setPower(new MecanumPower(new PolarCoord(.5, PI), 0));
+                bot.getMecanumDrive().setPower(mecanumPower(.5, PI, 0));
             } else if (gamepad1.dpad_left) {
-                bot.getMecanumDrive().setPower(new MecanumPower(new PolarCoord(.5, PI / 2), 0));
+                bot.getMecanumDrive().setPower(mecanumPower(.5, PI / 2, 0));
             } else if (gamepad1.dpad_right) {
-                bot.getMecanumDrive().setPower(new MecanumPower(new PolarCoord(.5, 3 * PI / 2), 0));
+                bot.getMecanumDrive().setPower(mecanumPower(.5, 3 * PI / 2, 0));
             } else {
-                MecanumPower mecanumPower = MecanumPower.fromXYTurn(
+                MecanumPower mecanumPower = MecanumPower.fromGamepadXYTurn(
                         sensitivity(gamepad1.right_stick_x, SENSITIVITY),
                         sensitivity(-gamepad1.right_stick_y, SENSITIVITY),
                         sensitivity(gamepad1.left_stick_x, SENSITIVITY)

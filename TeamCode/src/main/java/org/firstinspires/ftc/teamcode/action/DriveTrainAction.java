@@ -2,12 +2,14 @@ package org.firstinspires.ftc.teamcode.action;
 
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
 import org.firstinspires.ftc.teamcode.controller.FieldPosition;
-import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
 import org.firstinspires.ftc.teamcode.polar.CartesianCoord;
 import org.firstinspires.ftc.teamcode.polar.PolarCoord;
 import org.firstinspires.ftc.teamcode.polar.PolarUtil;
 
 import java.util.function.Supplier;
+
+import static org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower.mecanumPower;
+import static org.firstinspires.ftc.teamcode.polar.PolarUtil.fromCartesian;
 
 public class DriveTrainAction extends SequentialAction {
     private final Supplier<Long> msecTime;
@@ -19,7 +21,7 @@ public class DriveTrainAction extends SequentialAction {
     }
 
     public DriveTrainAction strafe(double direction, long time, double speed) {
-        addAction(new MoveAction(time, msecTime, new MecanumPower(new PolarCoord(speed, direction), 0), bot));
+        addAction(new MoveAction(time, msecTime, mecanumPower(speed, direction, 0), bot));
         pause();
         return this;
     }
@@ -40,13 +42,13 @@ public class DriveTrainAction extends SequentialAction {
     }
 
     public DriveTrainAction moveForward(long msec, double speed) {
-        addAction(new MoveAction(msec, msecTime, new MecanumPower(new PolarCoord(speed, 0), 0), bot));
+        addAction(new MoveAction(msec, msecTime, mecanumPower(speed, 0, 0), bot));
         pause();
         return this;
     }
 
     public DriveTrainAction moveBackwards(long msec, double speed) {
-        addAction(new MoveAction(msec, msecTime, new MecanumPower(new PolarCoord(speed, Math.PI), 0), bot));
+        addAction(new MoveAction(msec, msecTime, mecanumPower(speed, Math.PI, 0), bot));
         pause();
         return this;
     }
@@ -58,14 +60,12 @@ public class DriveTrainAction extends SequentialAction {
     }
 
     public DriveTrainAction strafeTo(CartesianCoord destination) {
-        addAction(new StrafeToAction(new FieldPosition(PolarUtil.fromCartesian(destination), 0), bot));
-        pause();
+        strafeTo(fromCartesian(destination));
         return this;
     }
 
     public DriveTrainAction strafeTo(PolarCoord destination) {
-        addAction(new StrafeToAction(new FieldPosition(destination, 0), bot));
-        pause();
+        strafeTo(new FieldPosition(destination, 0));
         return this;
     }
 

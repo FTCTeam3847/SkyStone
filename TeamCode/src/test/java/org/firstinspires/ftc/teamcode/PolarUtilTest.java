@@ -13,7 +13,8 @@ import org.junit.jupiter.api.Test;
 import static java.lang.Math.PI;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
-import static org.firstinspires.ftc.teamcode.polar.PolarUtil.ORIGIN;
+import static org.firstinspires.ftc.teamcode.polar.PolarCoord.ORIGIN;
+import static org.firstinspires.ftc.teamcode.polar.PolarCoord.polar;
 import static org.firstinspires.ftc.teamcode.polar.PolarUtil.add;
 import static org.firstinspires.ftc.teamcode.polar.PolarUtil.subtract;
 import static org.firstinspires.ftc.teamcode.polar.PolarUtil.subtractRadians;
@@ -30,8 +31,8 @@ class PolarUtilTest {
             @ForAll("radius") double r2,
             @ForAll("theta") double t2
     ) {
-        PolarCoord p1 = new PolarCoord(r1, t1);
-        PolarCoord p2 = new PolarCoord(r2, t2);
+        PolarCoord p1 = polar(r1, t1);
+        PolarCoord p2 = polar(r2, t2);
         PolarCoord fromP1ToP2 = PolarUtil.subtract(p1, p2);
         PolarCoord fromP2ToP1 = PolarUtil.subtract(p2, p1);
         if (p1.equals(p2)) {
@@ -39,7 +40,7 @@ class PolarUtilTest {
             assertThat(
                     "Relative coord between equal points should be (0,0)",
                     fromP1ToP2,
-                    is(equalTo(PolarUtil.ORIGIN)));
+                    is(equalTo(ORIGIN)));
         } else {
             assertThat(fromP1ToP2.radius, is(closeTo(fromP1ToP2.radius)));
             assertThat(
@@ -68,10 +69,10 @@ class PolarUtilTest {
     }
 
 
-    PolarCoord NE = new PolarCoord(1.0, 1*PI/4);
-    PolarCoord NW = new PolarCoord(1.0, 3*PI/4);
-    PolarCoord SW = new PolarCoord(1.0, 5*PI/4);
-    PolarCoord SE = new PolarCoord(1.0, 7*PI/4);
+    PolarCoord NE = polar(1.0, 1*PI/4);
+    PolarCoord NW = polar(1.0, 3*PI/4);
+    PolarCoord SW = polar(1.0, 5*PI/4);
+    PolarCoord SE = polar(1.0, 7*PI/4);
 
     @Test
     void testAdd() {

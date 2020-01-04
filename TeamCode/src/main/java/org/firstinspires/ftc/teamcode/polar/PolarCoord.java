@@ -11,7 +11,7 @@ public class PolarCoord {
     public static final PolarCoord UNKNOWN = new PolarCoord(-0.0d, -0.0d) {
         @Override
         public String toString() {
-            return "{UNKNOWN}";
+            return "UNKNOWN";
         }
     };
 
@@ -29,7 +29,7 @@ public class PolarCoord {
 
     @Override
     public String toString() {
-        return format(Locale.US, "{%.2f, %.2f·π}", radius, theta / PI);
+        return format(Locale.US, "r%.2f,θ%.2f·π", radius, theta / PI);
     }
 
     @Override

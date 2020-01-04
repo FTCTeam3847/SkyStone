@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static java.lang.Math.round;
+import static org.firstinspires.ftc.teamcode.polar.PolarCoord.polar;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -206,7 +207,7 @@ class MecanumDriveControllerTest {
 
     @Test
     void strafeBackwardPolar() {
-        DrivePower drivePower = MecanumDriveController.strafePower(new PolarCoord(1, Math.PI));
+        DrivePower drivePower = MecanumDriveController.strafePower(polar(1, Math.PI));
         assertThat(
                 "..",
                 round2(drivePower),
@@ -216,7 +217,7 @@ class MecanumDriveControllerTest {
 
     @Test
     void strafeForwardPolar() {
-        DrivePower drivePower = MecanumDriveController.strafePower(new PolarCoord(1, 0));
+        DrivePower drivePower = MecanumDriveController.strafePower(polar(1, 0));
         assertThat(
                 "..",
                 round2(drivePower),
@@ -226,7 +227,7 @@ class MecanumDriveControllerTest {
 
     @Test
     void strafeRightPolar() {
-        DrivePower drivePower = MecanumDriveController.strafePower(new PolarCoord(1, 3*Math.PI / 2));
+        DrivePower drivePower = MecanumDriveController.strafePower(polar(1, 3*Math.PI / 2));
         assertThat(
                 "..",
                 round2(drivePower),
@@ -236,7 +237,7 @@ class MecanumDriveControllerTest {
 
     @Test
     void strafeLeftPolar() {
-        DrivePower drivePower = MecanumDriveController.strafePower(new PolarCoord(1, Math.PI / 2));
+        DrivePower drivePower = MecanumDriveController.strafePower(polar(1, Math.PI / 2));
         assertThat(
                 "..",
                 round2(drivePower),

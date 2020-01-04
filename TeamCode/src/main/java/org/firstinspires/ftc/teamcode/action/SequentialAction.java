@@ -46,8 +46,7 @@ public class SequentialAction implements RoboAction {
 
     @Override
     public void stop() {
-        if(currentAction != null)
-        {
+        if (currentAction != null) {
             currentAction.stop();
         }
         isDone = true;

@@ -23,6 +23,10 @@ public class PolarCoord {
         this.theta = theta;
     }
 
+    public static PolarCoord polar(double radius, double theta) {
+        return new PolarCoord(radius, theta);
+    }
+
     @Override
     public String toString() {
         return format(Locale.US, "{%.2f, %.2f·π}", radius, theta / PI);

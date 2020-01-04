@@ -10,7 +10,7 @@ import java.util.Locale;
 
 import static java.lang.String.format;
 
-public class MoveToAction implements RoboAction {
+public class StrafeToAction implements RoboAction {
 
     private boolean started = false;
     private boolean isDone = false;
@@ -19,7 +19,7 @@ public class MoveToAction implements RoboAction {
 
     private SkystoneBot bot;
 
-    public MoveToAction(FieldPosition targetFieldPosition, SkystoneBot bot) {
+    public StrafeToAction(FieldPosition targetFieldPosition, SkystoneBot bot) {
         this.targetFieldPosition = targetFieldPosition;
         this.bot = bot;
     }
@@ -64,7 +64,7 @@ public class MoveToAction implements RoboAction {
     @Override
     public String toString() {
         return format(Locale.US,
-                "MoveToAction{%s}",
+                "StrafeToAction{%s}",
                 fieldPositionController
         );
     }

@@ -8,6 +8,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 import static java.lang.Math.PI;
+import static org.firstinspires.ftc.teamcode.polar.PolarCoord.polar;
 
 public class FieldPosition {
     public static final FieldPosition ORIGIN =
@@ -20,6 +21,11 @@ public class FieldPosition {
                     return "UNKNOWN";
                 }
             };
+
+
+    public static FieldPosition fieldPosition(double radius, double theta, double heading) {
+        return new FieldPosition(polar(radius, theta), heading);
+    }
 
     public final PolarCoord polarCoord;
     public final double heading;

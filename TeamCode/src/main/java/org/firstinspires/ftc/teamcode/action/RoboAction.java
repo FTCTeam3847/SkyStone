@@ -9,7 +9,7 @@ public interface RoboAction {
 
     void stop();
 
-    default boolean isDone(){return isDone();}
+    boolean isDone();
 
     default boolean isRunning() {
         return isStarted() && !isDone();

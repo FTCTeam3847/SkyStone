@@ -20,38 +20,59 @@ public class DriveTrainAction extends SequentialAction {
 
     public DriveTrainAction strafe(double direction, long time, double speed) {
         addAction(new MoveAction(time, msecTime, new MecanumPower(new PolarCoord(speed, direction), 0), bot));
+        pause();
         return this;
     }
 
-    public DriveTrainAction pause(long time) {
-        addAction(new PauseAction(time, msecTime, bot));
+    public DriveTrainAction pause(long msec) {
+        addAction(new PauseAction(msec, msecTime, bot));
         return this;
     }
 
-    public DriveTrainAction moveForward(long time, double speed) {
-        addAction(new MoveAction(time, msecTime, new MecanumPower(new PolarCoord(speed, 0), 0), bot));
+    public DriveTrainAction pause() {
+        pause(250);
         return this;
     }
 
-    public DriveTrainAction moveBackwards(long time, double speed) {
-        addAction(new MoveAction(time, msecTime, new MecanumPower(new PolarCoord(speed, Math.PI), 0), bot));
+    public DriveTrainAction run(Runnable runnable) {
+        addAction(new OnceAction(runnable));
+        return this;
+    }
+
+    public DriveTrainAction moveForward(long msec, double speed) {
+        addAction(new MoveAction(msec, msecTime, new MecanumPower(new PolarCoord(speed, 0), 0), bot));
+        pause();
+        return this;
+    }
+
+    public DriveTrainAction moveBackwards(long msec, double speed) {
+        addAction(new MoveAction(msec, msecTime, new MecanumPower(new PolarCoord(speed, Math.PI), 0), bot));
+        pause();
         return this;
     }
 
     public DriveTrainAction turnTo(double targetAngle) {
         addAction(new TurnToAction(targetAngle, bot));
+        pause();
         return this;
     }
 
-    public DriveTrainAction moveTo(CartesianCoord destination) {
-        addAction(new MoveToAction(new FieldPosition(PolarUtil.fromCartesian(destination), 0), bot));
+    public DriveTrainAction strafeTo(CartesianCoord destination) {
+        addAction(new StrafeToAction(new FieldPosition(PolarUtil.fromCartesian(destination), 0), bot));
+        pause();
         return this;
     }
 
-    public DriveTrainAction moveTo(PolarCoord destination) {
-        addAction(new MoveToAction(new FieldPosition(destination, 0), bot));
+    public DriveTrainAction strafeTo(PolarCoord destination) {
+        addAction(new StrafeToAction(new FieldPosition(destination, 0), bot));
+        pause();
         return this;
     }
 
+    public DriveTrainAction strafeTo(FieldPosition fieldPosition) {
+        addAction(new StrafeToAction(fieldPosition, bot));
+        pause();
+        return this;
+    }
 
 }

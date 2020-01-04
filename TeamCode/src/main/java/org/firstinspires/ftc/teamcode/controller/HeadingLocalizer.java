@@ -51,6 +51,22 @@ public class HeadingLocalizer implements Localizer<Double> {
      */
     @Override
     public void calibrate(Double reference) {
+        if (isCalibrationLocked) return;
+        internalCalibrate(reference);
+    }
+
+    private boolean isCalibrationLocked = false;
+
+    public void lockCalibration(double reference) {
+        isCalibrationLocked = false;
+        internalCalibrate(reference);
+    }
+
+    public void unlockCalibration() {
+        isCalibrationLocked = false;
+    }
+
+    private void internalCalibrate(Double reference) {
         checkAngleArgument(reference);
         this.zero = subtractRadians(readAbsolute(), reference);
         update();

@@ -8,17 +8,17 @@ import java.util.Locale;
 
 import static java.lang.String.format;
 
-public class DoubleLiftAction extends SequentialAction{
+public class DoubleLiftAction extends SequentialAction {
 
     private boolean started = false;
     private boolean isDone = false;
-    private double targetPosition;
 
     private TowerLifter towerLifter;
     private BlockLifter blockLifter;
     private double startPosition;
+    double targetPosition;
 
-    private int SCALE = 1;
+    private boolean up;
 
     public DoubleLiftAction(double targetPosition, SkystoneBot bot) {
         this.targetPosition = targetPosition;
@@ -30,30 +30,59 @@ public class DoubleLiftAction extends SequentialAction{
     public DoubleLiftAction start() {
         started = true;
         startPosition = towerLifter.getPosition();
-        if (startPosition > targetPosition){
-            SCALE = -1;
-        }
 
+        if (targetPosition > startPosition) {
+            up = true;
+        } else {
+            up = false;
+        }
         return this;
     }
 
     @Override
     public void loop() {
-        if (started && !isDone && isComplete()) stop();
-
-        if(towerLifter.getPosition() >= .9 && blockLifter.getPosition() >= .9)
-        {
+        if (started && !isDone && isComplete()) {
             stop();
             return;
         }
 
-        towerLifter.setPower(1.0 * SCALE);
+        if (up) { //up
+            if (towerLifter.getPosition() >= 1.0 && blockLifter.getPosition() >= 1.0) {
+                stop();
+                return;
+            }
+            if (towerLifter.getPosition() >= 1.0) {
+                towerLifter.setPower(0.0);
+            } else {
+                towerLifter.setPower(1.0);
+            }
 
-        if(towerLifter.getPosition() >= .5)
-        {
-            blockLifter.setPower(1.0 * SCALE);
+            if (blockLifter.getPosition() >= 1.0) {
+                blockLifter.setPower(0.0);
+            } else if (towerLifter.getPosition() >= .3) {
+                blockLifter.setPower(1.0);
+            } else {
+                blockLifter.setPower(0.0);
+            }
+        } else { //down
+            if (towerLifter.getPosition() <= .0 && blockLifter.getPosition() <= 0) {
+                stop();
+                return;
+            }
+            if (towerLifter.getPosition() <= 0) {
+                towerLifter.setPower(0.0);
+            } else if (blockLifter.getPosition() <= .7) {
+                towerLifter.setPower(-1.0);
+            } else {
+                towerLifter.setPower(-1.0);
+            }
+
+            if (blockLifter.getPosition() <= 0) {
+                blockLifter.setPower(0.0);
+            } else {
+                blockLifter.setPower(-1.0);
+            }
         }
-
     }
 
     @Override

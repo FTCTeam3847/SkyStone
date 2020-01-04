@@ -31,7 +31,11 @@ public class BlockLifter {
     }
 
     public void setPower(double power) {
-        power = clip(power, -1.0d, 1.0d);
+        if (power > 0 && position.getPosition() >= MAX_POSITION) {
+            power = 0;
+        } else {
+            power = clip(power, -1.0d, 1.0d);
+        }
         position.setVelocity(power);
         leftPower.accept(power);
         rightPower.accept(power);

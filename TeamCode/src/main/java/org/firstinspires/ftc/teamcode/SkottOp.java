@@ -67,13 +67,11 @@ public class SkottOp extends OpMode {
         TowerBuilderAction script = new TowerBuilderAction(System::currentTimeMillis, bot)
                 .releaseTower()
                 .grabTower()
-                .liftTower()
-                .liftBlock()
+                .doubleLift(1.0)
                 .extendBlock()
                 .releaseBlock()
                 .retractBlock()
-                .lowerBlock()
-                .lowerTower(0.5)
+                .doubleLift(0.0)
                 .releaseTower()
                 ;
         return script;

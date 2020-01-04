@@ -1,15 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.vuforia.PIXEL_FORMAT;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -131,20 +127,49 @@ public class TensorFlow extends BaseOp {
             blockWidth = (int) Math.round(recWidth/numBlocks);
         }
 
+        public ArrayList<Integer> getAverageColor(Bitmap map) {
+            int r = 0;
+            int g = 0;
+            int b = 0;
+
+            int total = 0;
+
+            for (int x = 0; x < map.getWidth(); x+=10)
+            {
+                for (int y = 0; y < map.getHeight(); y+=10)
+                {
+                    Color color = map.getPixel(x, y);
+
+                    r += color.R;
+                    g += color.G;
+                    b += color.B;
+
+                    total++;
+                }
+            }
+
+            //Calculate average
+            r /= total;
+            g /= total;
+            b /= total;
+
+            return Color.FromArgb(r, g, b);
+        }
 
         public ArrayList<Integer> getSkystoneXVals() {
             ArrayList<Integer> xVals = new ArrayList<Integer>();
             ArrayList<Integer> samples = new ArrayList<Integer>();
-            int sumPixel = 0;
+            int sumPixel = 0; //total color?
+
             for (int x = 0; x < map.getWidth(); x += 10) {
                 for (int y = 0; y < map.getHeight(); y += 10) {
-                        sumPixel += map.getPixel(x, y);
+                        sumPixel += map.getPixel(x, y); //color of pixel
                     if (x%blockWidth == 0) {
-                        samples.add(sumPixel/blockWidth);
+                        samples.add(sumPixel/blockWidth); //color/num pixels -> average color?
                     }
                 }
             }
-            int totalSum = 0;
+            int totalSum = 0; //sum of average colors?
             for (int i : samples) {
                 totalSum += i;
             }

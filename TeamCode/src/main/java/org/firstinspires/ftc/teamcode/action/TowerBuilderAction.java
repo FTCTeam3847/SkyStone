@@ -99,6 +99,12 @@ public class TowerBuilderAction extends SequentialAction {
         return this;
     }
 
+    public TowerBuilderAction doubleLift(double targetPosition)
+    {
+        addAction(new DoubleLiftAction(targetPosition, bot));
+        return this;
+    }
+
 //    public TowerBuilderAction parallel(RoboAction... actions) {
 //        ParallelAction parallelAction = new ParallelAction();
 //        for (RoboAction action : actions) {

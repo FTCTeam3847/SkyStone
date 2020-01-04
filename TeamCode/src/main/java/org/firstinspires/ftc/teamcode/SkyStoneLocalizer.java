@@ -153,12 +153,12 @@ public class SkyStoneLocalizer implements Localizer<FieldPosition> {
         //Set the position of the perimeter targets with relation to origin (center of field)
         //Edited values: dy from -halfField to -24 * mmPerInch
         red1.setLocation(OpenGLMatrix
-                .translation(quadField, -halfField * mmPerInch, mmTargetHeight)
+                .translation(quadField, -halfField, mmTargetHeight)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 180)));
 
         //Edited values: dy from -halfField to -24 * mmPerInch
         red2.setLocation(OpenGLMatrix
-                .translation(-quadField, -halfField * mmPerInch, mmTargetHeight)
+                .translation(-quadField, -halfField, mmTargetHeight)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 180)));
 
         //Edited values: dy from -quadField to 0

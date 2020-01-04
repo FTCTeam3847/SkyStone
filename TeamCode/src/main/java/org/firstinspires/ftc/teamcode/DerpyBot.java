@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
 import org.firstinspires.ftc.teamcode.controller.FieldPosition;
 import org.firstinspires.ftc.teamcode.controller.HeadingController;
@@ -174,6 +175,11 @@ public class DerpyBot implements SkystoneBot {
     @Override
     public MecanumDrive getMecanumDrive() {
         return mecanum;
+    }
+
+    @Override
+    public TFObjectDetector getTfod() {
+        return null;
     }
 
 

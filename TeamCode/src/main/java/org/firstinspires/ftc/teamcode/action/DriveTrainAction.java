@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.action;
 
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
 import org.firstinspires.ftc.teamcode.controller.FieldPosition;
 import org.firstinspires.ftc.teamcode.polar.CartesianCoord;
@@ -7,6 +8,7 @@ import org.firstinspires.ftc.teamcode.polar.PolarCoord;
 
 import java.util.function.Supplier;
 
+import static java.lang.Math.*;
 import static org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower.mecanumPower;
 import static org.firstinspires.ftc.teamcode.polar.PolarUtil.fromCartesian;
 
@@ -22,6 +24,15 @@ public class DriveTrainAction extends SequentialAction {
     @Override
     public DriveTrainAction start() {
         super.start();
+        return this;
+    }
+
+    public DriveTrainAction detectSkystone(TFObjectDetector tfod) {
+        addAction( new MoveAction(500, msecTime, mecanumPower(.5, 0, 0), bot));
+        addAction( new DetectSkystoneAction((long) 500, msecTime, tfod));
+        addAction( new MoveAction(500, msecTime, mecanumPower(.5, 3* PI/2, 0), bot));
+        addAction( new MoveAction(500, msecTime, mecanumPower(.5, 3*PI/2, 0), bot));
+
         return this;
     }
 
@@ -53,7 +64,7 @@ public class DriveTrainAction extends SequentialAction {
     }
 
     public DriveTrainAction moveBackwards(long msec, double speed) {
-        addAction(new MoveAction(msec, msecTime, mecanumPower(speed, Math.PI, 0), bot));
+        addAction(new MoveAction(msec, msecTime, mecanumPower(speed, PI, 0), bot));
         pause();
         return this;
     }
@@ -85,5 +96,12 @@ public class DriveTrainAction extends SequentialAction {
         pause();
         return this;
     }
+
+//    public DriveTrainAction strafeBy(PolarCoord vector) {
+//        FieldPosition fieldPosition = new FieldPosition(new PolarCoord(),0);
+//        addAction(new StrafeToAction(fieldPosition, bot));
+//        pause();
+//        return this;
+//    }
 
 }

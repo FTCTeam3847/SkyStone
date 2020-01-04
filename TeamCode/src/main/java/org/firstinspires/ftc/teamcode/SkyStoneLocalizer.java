@@ -161,9 +161,9 @@ public class SkyStoneLocalizer implements Localizer<FieldPosition> {
                 .translation(-quadField, -halfField * mmPerInch, mmTargetHeight)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 180)));
 
-        //Edited values: dy from - quadField to 0
+        //Edited values: dy from -quadField to 0
         front1.setLocation(OpenGLMatrix
-                .translation(-halfField, quadField, mmTargetHeight)
+                .translation(-halfField, -quadField, mmTargetHeight)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 90)));
 
         front2.setLocation(OpenGLMatrix

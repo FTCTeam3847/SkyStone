@@ -29,7 +29,11 @@ public class PolarCoord {
 
     @Override
     public String toString() {
-        return format(Locale.US, "r%.2f,θ%.2f·π", radius, theta / PI);
+        return format(Locale.US, "r%.1f,θ%.2f·π,%s", radius, theta / PI, toXY());
+    }
+
+    private CartesianCoord toXY() {
+        return PolarUtil.toXY(this);
     }
 
     @Override

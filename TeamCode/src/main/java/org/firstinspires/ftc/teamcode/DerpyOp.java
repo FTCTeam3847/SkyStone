@@ -24,8 +24,9 @@ import static org.firstinspires.ftc.teamcode.GameConstants.FACING_IMAGE_REAR_WAL
 import static org.firstinspires.ftc.teamcode.GameConstants.FACING_IMAGE_RED_WALL_FRONT;
 import static org.firstinspires.ftc.teamcode.GameConstants.FACING_REAR_WALL;
 import static org.firstinspires.ftc.teamcode.GameConstants.FACING_RED_WALL;
+import static org.firstinspires.ftc.teamcode.controller.FieldPosition.fieldPosition;
 import static org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower.mecanumPower;
-import static org.firstinspires.ftc.teamcode.polar.PolarCoord.polar;
+import static org.firstinspires.ftc.teamcode.polar.CartesianCoord.xy;
 
 @TeleOp(name = "DerpyOp", group = "1")
 public class DerpyOp extends OpMode {
@@ -51,10 +52,19 @@ public class DerpyOp extends OpMode {
 
     public SequentialAction startBlueNearDepotBackward() {
         return new DriveTrainAction(System::currentTimeMillis, bot)
-                .run(() -> bot.headingLocalizer.lockCalibration(FACING_RED_WALL))
-                .strafeTo(polar(68, .75 * PI))
-                .pause(500)
-                .strafeTo(polar(68, .25 * PI));
+                .run(() -> bot.combinedLocalizer.calibrate(fieldPosition(xy(-39, 72), FACING_BLUE_WALL)))
+                .run(() -> bot.headingLocalizer.lockCalibration(FACING_BLUE_WALL))
+                .moveBackwards(1_000, 0.5d)
+                .strafeTo(xy(-36, 48)).turnTo(FACING_BLUE_WALL)
+                .strafeTo(xy(36, 48)).turnTo(FACING_BLUE_WALL)
+                .strafeTo(xy(-36, 48)).turnTo(FACING_BLUE_WALL)
+                .strafeTo(xy(36, 48)).turnTo(FACING_BLUE_WALL)
+                .strafeTo(xy(-36, 48)).turnTo(FACING_BLUE_WALL)
+                .strafeTo(xy(36, 48)).turnTo(FACING_BLUE_WALL)
+                .strafeTo(xy(-36, 48)).turnTo(FACING_BLUE_WALL)
+                .strafeTo(xy(36, 48)).turnTo(FACING_BLUE_WALL)
+                .strafeTo(xy(-36, 48)).turnTo(FACING_BLUE_WALL)
+                ;
     }
 
     public SequentialAction startBlueSideNearDepot() {

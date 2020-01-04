@@ -88,21 +88,21 @@ public class SkyStoneLocalizer implements Localizer<FieldPosition> {
         VuforiaTrackable blueFrontBridge = targetsSkyStone.get(4);
         blueFrontBridge.setName("Blue Front Bridge");
         VuforiaTrackable red1 = targetsSkyStone.get(5);
-        red1.setName("Red Perimeter 1");
+        red1.setName("Red Perim 1");
         VuforiaTrackable red2 = targetsSkyStone.get(6);
-        red2.setName("Red Perimeter 2");
+        red2.setName("Red Perim 2");
         VuforiaTrackable front1 = targetsSkyStone.get(7);
-        front1.setName("Front Perimeter 1");
+        front1.setName("Front Perim 1");
         VuforiaTrackable front2 = targetsSkyStone.get(8);
-        front2.setName("Front Perimeter 2");
+        front2.setName("Front Perim 2");
         VuforiaTrackable blue1 = targetsSkyStone.get(9);
-        blue1.setName("Blue Perimeter 1");
+        blue1.setName("Blue Perim 1");
         VuforiaTrackable blue2 = targetsSkyStone.get(10);
-        blue2.setName("Blue Perimeter 2");
+        blue2.setName("Blue Perim 2");
         VuforiaTrackable rear1 = targetsSkyStone.get(11);
-        rear1.setName("Rear Perimeter 1");
+        rear1.setName("Rear Perim 1");
         VuforiaTrackable rear2 = targetsSkyStone.get(12);
-        rear2.setName("Rear Perimeter 2");
+        rear2.setName("Rear Perim 2");
 
         // For convenience, gather together all the trackable objects in one easily-iterable collection */
         allTrackables.addAll(targetsSkyStone);
@@ -307,7 +307,7 @@ public class SkyStoneLocalizer implements Localizer<FieldPosition> {
     public String toString() {
         return String.format(
                 Locale.US,
-                "c:%s\nt:%s %s @ %.2f\nm:%s %s @ %.2f",
+                "%s\nt:%s %s@%.1f\nm:%s %s@%.1f",
                 currentFieldPosition,
                 lastTrustedFieldPosition, null == lastTrustedVisibleTarget ? "None" : lastTrustedVisibleTarget.getName(), lastTrustedDistanceFromTarget,
                 lastMeasuredFieldPosition, null == lastMeasuredVisibleTarget ? "None" : lastMeasuredVisibleTarget.getName(), lastMeasuredDistanceFromTarget

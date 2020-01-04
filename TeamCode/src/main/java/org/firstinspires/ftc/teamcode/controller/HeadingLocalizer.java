@@ -58,7 +58,7 @@ public class HeadingLocalizer implements Localizer<Double> {
     private boolean isCalibrationLocked = false;
 
     public void lockCalibration(double reference) {
-        isCalibrationLocked = false;
+        isCalibrationLocked = true;
         internalCalibrate(reference);
     }
 

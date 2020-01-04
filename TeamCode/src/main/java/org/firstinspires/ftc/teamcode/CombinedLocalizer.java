@@ -3,11 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import org.firstinspires.ftc.teamcode.controller.FieldPosition;
 import org.firstinspires.ftc.teamcode.controller.HeadingLocalizer;
 import org.firstinspires.ftc.teamcode.controller.Localizer;
-import org.firstinspires.ftc.teamcode.drive.mecanum.LocalizingMecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumLocalizer;
-import org.firstinspires.ftc.teamcode.polar.PolarCoord;
 
-import java.lang.reflect.Field;
 import java.util.Locale;
 
 public class CombinedLocalizer implements Localizer<FieldPosition> {
@@ -28,23 +25,22 @@ public class CombinedLocalizer implements Localizer<FieldPosition> {
 
     @Override
     public FieldPosition getCurrent() {
-        double headingGuess = headingLocalizer.getCurrent();
+        // must ask the headingLocalizer to get a fresh reading
+        headingLocalizer.getCurrent();
+
         FieldPosition mecanumGuess = mecanumLocalizer.getCurrent();
-        FieldPosition skyStoneGuess = FieldPosition.UNKNOWN;
-        if(loopCount % 10 == 0)
-        {
-            skyStoneGuess = skyStoneLocalizer.getCurrent();
-        }
+
+        // don't read from vuforia every time since it's CPU intensive
+        FieldPosition skyStoneGuess = (loopCount % 10 == 0) ? FieldPosition.UNKNOWN : skyStoneLocalizer.getCurrent();
+
         FieldPosition bestGuess;
 
-        if(!skyStoneGuess.equals(FieldPosition.UNKNOWN))
-        {
+        if (!skyStoneGuess.equals(FieldPosition.UNKNOWN)) {
             calibrate(skyStoneGuess);
             bestGuess = skyStoneGuess;
-        } else{
+        } else {
             bestGuess = mecanumGuess;
         }
-
 
         currentPosition = bestGuess;
 
@@ -59,7 +55,7 @@ public class CombinedLocalizer implements Localizer<FieldPosition> {
 
     @Override
     public void calibrate(FieldPosition fieldPosition) {
-        //eadingLocalizer.calibrate(fieldPosition.heading);
+        headingLocalizer.calibrate(fieldPosition.heading);
         mecanumLocalizer.calibrate(fieldPosition);
     }
 

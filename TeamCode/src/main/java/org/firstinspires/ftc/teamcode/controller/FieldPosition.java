@@ -24,8 +24,16 @@ public class FieldPosition {
             };
 
 
+    public static FieldPosition fieldPosition(PolarCoord coord, double heading) {
+        return new FieldPosition(coord, heading);
+    }
+
+    public static FieldPosition fieldPosition(CartesianCoord coord, double heading) {
+        return fieldPosition(fromCartesian(coord), heading);
+    }
+
     public static FieldPosition fieldPosition(double radius, double theta, double heading) {
-        return new FieldPosition(polar(radius, theta), heading);
+        return fieldPosition(polar(radius, theta), heading);
     }
 
     public final PolarCoord polarCoord;
@@ -58,7 +66,7 @@ public class FieldPosition {
     public String toString() {
         return String.format(
                 Locale.US,
-                "{%s, h=%.2f·π}",
+                "%s, h%.2f·π",
                 polarCoord,
                 heading / PI
         );

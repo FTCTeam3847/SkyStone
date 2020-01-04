@@ -27,7 +27,7 @@ public class CartesianCoord {
     }
 
     public String toString() {
-        return format(Locale.US, "x%.2f,y%.2f", x, y);
+        return format(Locale.US, "x%.1f,y%.1f", x, y);
     }
 
     @Override

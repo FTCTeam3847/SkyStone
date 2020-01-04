@@ -31,10 +31,8 @@ public class PolarUtil {
     }
 
     public static CartesianCoord toXY(PolarCoord polarCoord){
-        double radiant = polarCoord.theta * (Math.PI/180);
-
-        double x = polarCoord.radius * Math.cos(radiant);
-        double y = polarCoord.radius * Math.sin(radiant);
+        double x = polarCoord.radius * Math.cos(polarCoord.theta);
+        double y = polarCoord.radius * Math.sin(polarCoord.theta);
         return xy(x, y);
     }
 

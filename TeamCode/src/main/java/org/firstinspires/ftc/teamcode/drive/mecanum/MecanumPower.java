@@ -15,6 +15,10 @@ public class MecanumPower {
     public final PolarCoord strafe;
     public final double turn;
 
+    public MecanumPower(double radius, double theta, double turn) {
+        this(new PolarCoord(radius, theta), turn);
+    }
+
     public MecanumPower(PolarCoord strafe, double turn) {
         this.strafe = strafe;
         this.turn = turn;

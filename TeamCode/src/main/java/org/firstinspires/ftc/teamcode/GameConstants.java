@@ -14,16 +14,18 @@ public class GameConstants {
     public static double FACING_FRONT_WALL = PI;
     public static double FACING_RED_WALL = 3 * PI / 2;
 
-    public static final FieldPosition FACING_IMAGE_REAR_WALL_BLUE = fieldPosition(60, 0.21 * PI, FACING_REAR_WALL);
-    public static final FieldPosition FACING_IMAGE_BLUE_WALL_REAR = fieldPosition(60, 0.30 * PI, FACING_BLUE_WALL);
-    public static final FieldPosition FACING_IMAGE_BLUE_WALL_FRONT = fieldPosition(60, 0.70 * PI, FACING_BLUE_WALL);
-    public static final FieldPosition FACING_IMAGE_FRONT_WALL_BLUE = fieldPosition(61, 0.80 * PI, FACING_FRONT_WALL);
-    public static final FieldPosition FACING_IMAGE_FRONT_WALL_RED = fieldPosition(xy(-54, -36), FACING_FRONT_WALL);
+    public static final FieldPosition FACING_IMAGE_REAR_WALL_BLUE = fieldPosition(xy(48, 36), FACING_REAR_WALL);
+    public static final FieldPosition FACING_IMAGE_REAR_WALL_RED = fieldPosition(xy(48, -36), FACING_REAR_WALL);
+
+    public static final FieldPosition FACING_IMAGE_RED_WALL_REAR = fieldPosition(xy(36, -48), FACING_RED_WALL);
     public static final FieldPosition FACING_IMAGE_RED_WALL_FRONT = fieldPosition(xy(-36, -48), FACING_RED_WALL);
 
+    public static final FieldPosition FACING_IMAGE_FRONT_WALL_RED = fieldPosition(xy(-48, -36), FACING_FRONT_WALL);
+    public static final FieldPosition FACING_IMAGE_FRONT_WALL_BLUE = fieldPosition(xy(-48, 36), FACING_FRONT_WALL);
+
+    public static final FieldPosition FACING_IMAGE_BLUE_WALL_FRONT = fieldPosition(xy(-36, 48), FACING_BLUE_WALL);
+    public static final FieldPosition FACING_IMAGE_BLUE_WALL_REAR = fieldPosition(xy(36, 48), FACING_BLUE_WALL);
+
     public static final FieldPosition STARTING_BLUE_NEAR_DEPOT = fieldPosition(67, 0.85*PI, FACING_RED_WALL);
-
-
-
     public static FieldPosition FACING_BLUE_SKYSTONE_2 = fieldPosition(80, 0.83 * PI, 3 * PI / 3);
 }

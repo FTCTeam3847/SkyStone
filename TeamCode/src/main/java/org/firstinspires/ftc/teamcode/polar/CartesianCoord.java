@@ -3,12 +3,16 @@ package org.firstinspires.ftc.teamcode.polar;
 import java.util.Locale;
 import java.util.Objects;
 
-import static java.lang.Math.atan2;
-import static java.lang.Math.sqrt;
 import static java.lang.String.format;
-import static org.firstinspires.ftc.teamcode.polar.PolarUtil.normalize;
 
 public class CartesianCoord {
+    public static final CartesianCoord ORIGIN = new CartesianCoord(0.0d, 0.0d);
+    public static final CartesianCoord UNKNOWN = new CartesianCoord(-0.0d, -0.0d) {
+        @Override
+        public String toString() {
+            return "{UNKNOWN}";
+        }
+    };
 
     public final double x;
     public final double y;
@@ -16,6 +20,10 @@ public class CartesianCoord {
     public CartesianCoord(double x, double y) {
         this.x = x;
         this.y = y;
+    }
+
+    public static CartesianCoord xy(double x, double y) {
+        return new CartesianCoord(x, y);
     }
 
     public String toString() {

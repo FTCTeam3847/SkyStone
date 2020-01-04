@@ -37,8 +37,8 @@ public class SkottOp extends OpMode {
     private ToggleButton toggleSlowMode = new ToggleButton(() -> gamepad1.right_stick_button);
 
     private PairedButtons<Double> towerGrabberButtons = new PairedButtons<>(
-            () -> gamepad1.left_bumper, () -> 0.0d,
-            () -> gamepad1.right_bumper, () -> 1.0d
+            () -> gamepad1.left_bumper, 0.0d,
+            () -> gamepad1.right_bumper, 1.0d
     );
 
     private PairedButtons<Double> towerLifterButtons = new PairedButtons<>(
@@ -118,6 +118,16 @@ public class SkottOp extends OpMode {
             towerLifterButtons.apply(towerLifter::setPower);
             blockLifterButtons.apply(blockLifter::setPower);
             blockExtenderButtons.apply(blockExtender::setPower);
+
+            double tehSpeeds = 0.05;
+
+            if (gamepad1.y) {
+                towerGrabber.setPosition(towerGrabber.getPosition() + tehSpeeds);
+            }
+
+            if (gamepad1.x) {
+                towerGrabber.setPosition(towerGrabber.getPosition() - tehSpeeds);
+            }
 
             MecanumPower mecanumPower = MecanumPower.fromGamepadXYTurn(
                     sensitivity(gamepad1.right_stick_x, SENSITIVITY),

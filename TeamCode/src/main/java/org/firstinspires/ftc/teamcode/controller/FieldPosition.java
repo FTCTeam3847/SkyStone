@@ -2,21 +2,30 @@ package org.firstinspires.ftc.teamcode.controller;
 
 import org.firstinspires.ftc.teamcode.polar.CartesianCoord;
 import org.firstinspires.ftc.teamcode.polar.PolarCoord;
-import org.firstinspires.ftc.teamcode.polar.PolarUtil;
 
 import java.util.Locale;
 import java.util.Objects;
 
 import static java.lang.Math.PI;
+import static org.firstinspires.ftc.teamcode.controller.FieldPosition.Fix.*;
 import static org.firstinspires.ftc.teamcode.polar.PolarCoord.polar;
 import static org.firstinspires.ftc.teamcode.polar.PolarUtil.fromCartesian;
 
 public class FieldPosition {
+    public enum Fix {
+        UNKNOWN, RELATIVE, ABSOLUTE;
+
+        @Override
+        public String toString() {
+            return name();
+        }
+    }
+
     public static final FieldPosition ORIGIN =
             new FieldPosition(PolarCoord.ORIGIN, 0.0d);
 
     public static final FieldPosition UNKNOWN =
-            new FieldPosition(PolarCoord.UNKNOWN, -0.0d) {
+            new FieldPosition(PolarCoord.UNKNOWN, -0.0d, Fix.UNKNOWN) {
                 @Override
                 public String toString() {
                     return "UNKNOWN";
@@ -38,10 +47,16 @@ public class FieldPosition {
 
     public final PolarCoord polarCoord;
     public final double heading;
+    public final Fix fix;
 
-    public FieldPosition(PolarCoord polarCoord, double heading) {
+    public FieldPosition(PolarCoord polarCoord, double heading, Fix fix) {
         this.polarCoord = polarCoord;
         this.heading = heading;
+        this.fix = fix;
+    }
+
+    public FieldPosition(PolarCoord polarCoord, double heading) {
+        this(polarCoord, heading, ABSOLUTE);
     }
 
     public FieldPosition(CartesianCoord cartesianCoord, double heading) {

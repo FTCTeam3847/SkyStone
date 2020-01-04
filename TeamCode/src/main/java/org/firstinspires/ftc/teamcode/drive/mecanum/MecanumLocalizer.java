@@ -40,7 +40,7 @@ public class MecanumLocalizer implements Localizer<FieldPosition> {
     @Override
     public void calibrate(FieldPosition fieldPosition) {
         timeOfLastUpdate = nanoTime.get();
-        positionOfLastUpdate = new FieldPosition(fieldPosition.polarCoord, heading.get());
+        positionOfLastUpdate = new FieldPosition(fieldPosition.polarCoord, heading.get(), FieldPosition.Fix.RELATIVE);
         lastUpdated = positionOfLastUpdate;
     }
 
@@ -64,7 +64,7 @@ public class MecanumLocalizer implements Localizer<FieldPosition> {
 
         PolarCoord netVector = add(deltaPosition, getLast().polarCoord);
 
-        lastUpdated = new FieldPosition(netVector, heading.get());
+        lastUpdated = new FieldPosition(netVector, heading.get(), FieldPosition.Fix.RELATIVE);
         timeOfLastUpdate = nanoTime;
         return lastUpdated;
     }

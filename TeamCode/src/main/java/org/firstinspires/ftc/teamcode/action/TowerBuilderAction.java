@@ -14,6 +14,12 @@ public class TowerBuilderAction extends SequentialAction {
         this.bot = bot;
     }
 
+    @Override
+    public TowerBuilderAction start() {
+        super.start();
+        return this;
+    }
+
     public TowerBuilderAction releaseTower() {
         addAction(new TowerGrabAction(msecTime, 0.0, bot));
         pause();

@@ -33,7 +33,7 @@ public class ParallelAction extends SequentialAction{
     }
 
     @Override
-    public void start() {
+    public ParallelAction start() {
         isStarted = true;
 
         for(int i = 0; i < numTerms; i++) {
@@ -41,6 +41,7 @@ public class ParallelAction extends SequentialAction{
             script.add(action);
             action.start();
         }
+        return this;
     }
 
     @Override

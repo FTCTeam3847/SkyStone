@@ -11,8 +11,9 @@ public class OnceAction implements RoboAction {
     }
 
     @Override
-    public void start() {
+    public OnceAction start() {
         isStarted = true;
+        return this;
     }
 
     @Override

@@ -26,10 +26,11 @@ public class StrafeToAction implements RoboAction {
     }
 
     @Override
-    public void start() {
+    public StrafeToAction start() {
         started = true;
         fieldPositionController = new FieldPositionController(bot.getLocalizer()::getCurrent);
         fieldPositionController.setTarget(targetFieldPosition);
+        return this;
     }
 
     @Override

@@ -4,7 +4,6 @@ import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
 import org.firstinspires.ftc.teamcode.controller.FieldPosition;
 import org.firstinspires.ftc.teamcode.polar.CartesianCoord;
 import org.firstinspires.ftc.teamcode.polar.PolarCoord;
-import org.firstinspires.ftc.teamcode.polar.PolarUtil;
 
 import java.util.function.Supplier;
 
@@ -18,6 +17,12 @@ public class DriveTrainAction extends SequentialAction {
     public DriveTrainAction(Supplier<Long> msecTime, SkystoneBot bot) {
         this.msecTime = msecTime;
         this.bot = bot;
+    }
+
+    @Override
+    public DriveTrainAction start() {
+        super.start();
+        return this;
     }
 
     public DriveTrainAction strafe(double direction, long time, double speed) {
@@ -55,6 +60,12 @@ public class DriveTrainAction extends SequentialAction {
 
     public DriveTrainAction turnTo(double targetAngle) {
         addAction(new TurnToAction(targetAngle, bot));
+        pause();
+        return this;
+    }
+
+    public DriveTrainAction turnToLocate() {
+        addAction(new TurnToLocateAction(bot));
         pause();
         return this;
     }

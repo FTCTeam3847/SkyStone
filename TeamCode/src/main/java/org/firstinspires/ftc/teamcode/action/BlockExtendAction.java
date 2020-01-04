@@ -23,13 +23,14 @@ public class BlockExtendAction implements RoboAction {
     }
 
     @Override
-    public void start() {
+    public BlockExtendAction start() {
         started = true;
         startPosition = extender.getPosition();
         if (startPosition <= targetPosition)
             extender.setPower(1.0);
         else
             extender.setPower(-1.0);
+        return this;
     }
 
     @Override

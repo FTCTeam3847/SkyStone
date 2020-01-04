@@ -24,8 +24,9 @@ public class SequentialAction implements RoboAction {
     }
 
     @Override
-    public void start() {
+    public SequentialAction start() {
         isStarted = true;
+        return this;
     }
 
     @Override

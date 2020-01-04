@@ -20,9 +20,10 @@ public class TowerGrabAction extends TimeAction {
     }
 
     @Override
-    public void start() {
+    public TowerGrabAction start() {
         super.start();
         grabber.setPosition(this.position);
+        return this;
     }
 
     @Override

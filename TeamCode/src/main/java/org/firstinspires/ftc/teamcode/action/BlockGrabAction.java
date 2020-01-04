@@ -21,9 +21,10 @@ public class BlockGrabAction extends TimeAction {
     }
 
     @Override
-    public void start() {
+    public BlockGrabAction start() {
         super.start();
         grabber.setPosition(this.position);
+        return this;
     }
 
     @Override

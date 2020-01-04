@@ -16,7 +16,8 @@ import org.firstinspires.ftc.teamcode.drive.mecanum.LocalizingMecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDriveController;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumLocalizer;
-import org.firstinspires.ftc.teamcode.polar.PolarUtil;
+
+import java.util.function.Supplier;
 
 import static org.firstinspires.ftc.teamcode.HardwareMapUtils.initImu;
 import static org.firstinspires.ftc.teamcode.HardwareMapUtils.initVuforia;
@@ -24,6 +25,7 @@ import static org.firstinspires.ftc.teamcode.polar.PolarUtil.normalize;
 
 public class DerpyBot implements SkystoneBot {
 
+    public static final int NANOS_PER_SEC = 1_000_000_000;
     public DcMotor leftFrontMotor;
     public DcMotor leftBackMotor;
     public DcMotor rightFrontMotor;
@@ -31,6 +33,10 @@ public class DerpyBot implements SkystoneBot {
 
     private final HardwareMap hardwareMap;
     private final Telemetry telemetry;
+    private final Supplier<Long> nanoTime;
+    private long loopEndTime;
+    private double loopDuration;
+
     private MecanumDrive mecanum;
     private BNO055IMU imu;
     HeadingLocalizer headingLocalizer;
@@ -44,14 +50,14 @@ public class DerpyBot implements SkystoneBot {
     VuforiaLocalizer vuforiaLocalizer;
 
 
-    long lapse;
-
     public DerpyBot(
             HardwareMap hardwareMap,
-            Telemetry telemetry
+            Telemetry telemetry,
+            Supplier<Long> nanoTime
     ) {
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
+        this.nanoTime = nanoTime;
     }
 
     @Override
@@ -66,7 +72,7 @@ public class DerpyBot implements SkystoneBot {
                 4.0d,
                 0.0d);
         MecanumDriveController drive = new MecanumDriveController(headingController, this::move);
-        mecanumLocalizer = new MecanumLocalizer(System::nanoTime, headingLocalizer::getLast, 28.6); //derpy-28.6, 25.6
+        mecanumLocalizer = new MecanumLocalizer(nanoTime, headingLocalizer::getLast, 28.6); //derpy-28.6, 25.6
         mecanum= new LocalizingMecanumDrive(drive, mecanumLocalizer);
 
         vuforiaLocalizer = initVuforia(hardwareMap);
@@ -99,12 +105,20 @@ public class DerpyBot implements SkystoneBot {
         rightBackMotor.setDirection(DcMotor.Direction.FORWARD);
         rightBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        loopEndTime = nanoTime.get();
+    }
+
+    private void updateLoopTimer() {
+        long endTime = nanoTime.get();
+        loopDuration = (double)(endTime - loopEndTime) / (double)NANOS_PER_SEC;
+        loopEndTime = endTime;
     }
 
     @Override
     public void init_loop() {
         combinedLocalizer.getCurrent();
         updateTelemetry();
+        updateLoopTimer();
     }
 
     @Override
@@ -113,11 +127,9 @@ public class DerpyBot implements SkystoneBot {
 
     @Override
     public void loop() {
-        long startTime = System.nanoTime();
         lastLoc = combinedLocalizer.getCurrent();
         updateTelemetry();
-        long endTime = System.nanoTime();
-        lapse = (endTime-startTime)/1_000_000_000;
+        updateLoopTimer();
     }
 
     @Override
@@ -130,10 +142,9 @@ public class DerpyBot implements SkystoneBot {
         telemetry.addData("heading", headingLocalizer);
         telemetry.addData("mecanum", mecanumLocalizer);
 
-        //telemetry.addData("xy", PolarUtil.toXY(lastLoc.polarCoord));
         telemetry.addData("combined", combinedLocalizer);
 
-        telemetry.addData("time", lapse);
+        telemetry.addData("loop", "%.2fsec", loopDuration);
     }
 
     private void move4(double leftFront, double leftBack, double rightFront, double rightBack) {

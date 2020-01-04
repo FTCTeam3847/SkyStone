@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.action.DriveTrainAction;
 import org.firstinspires.ftc.teamcode.action.SequentialAction;
-import org.firstinspires.ftc.teamcode.controller.FieldPosition;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
+import org.firstinspires.ftc.teamcode.gamepad.OptionsButton;
 import org.firstinspires.ftc.teamcode.gamepad.PushButton;
 
 import static java.lang.Math.PI;
@@ -39,6 +39,12 @@ public class DerpyOp extends OpMode {
     PushButton pushButtonA = new PushButton(() -> gamepad1.a);
     PushButton pushButtonB = new PushButton(() -> gamepad1.b);
 
+    OptionsButton<Double> headingResetBtn = new OptionsButton<>(
+            () -> gamepad1.right_stick_button,
+            FACING_REAR_WALL, FACING_BLUE_WALL, FACING_FRONT_WALL, FACING_RED_WALL
+    );
+    PushButton pushButtonLeftStick = new PushButton(() -> gamepad1.left_stick_button);
+
     PushButton pushButtonLeftBumper = new PushButton(() -> gamepad1.left_bumper);
 
     SequentialAction script;
@@ -46,15 +52,15 @@ public class DerpyOp extends OpMode {
 
     DerpyBot bot;
 
-    public SequentialAction makeScript() {
+    public DriveTrainAction newScript() {
+        if (null != script) script.stop();
         return new DriveTrainAction(System::currentTimeMillis, bot);
     }
 
     public SequentialAction startBlueNearDepotBackward() {
         return new DriveTrainAction(System::currentTimeMillis, bot)
                 .run(() -> bot.combinedLocalizer.calibrate(fieldPosition(xy(-39, 72), FACING_BLUE_WALL)))
-                .run(() -> bot.headingLocalizer.lockCalibration(FACING_BLUE_WALL))
-                .moveBackwards(1_000, 0.5d)
+                .turnToLocate().turnTo(FACING_BLUE_WALL)
                 .strafeTo(xy(-36, 48)).turnTo(FACING_BLUE_WALL)
                 .strafeTo(xy(36, 48)).turnTo(FACING_BLUE_WALL)
                 .strafeTo(xy(-36, 48)).turnTo(FACING_BLUE_WALL)
@@ -69,7 +75,8 @@ public class DerpyOp extends OpMode {
 
     public SequentialAction startBlueSideNearDepot() {
         return new DriveTrainAction(System::currentTimeMillis, bot)
-                .run(() -> bot.headingLocalizer.lockCalibration(FACING_RED_WALL))
+                .turnTo(FACING_RED_WALL)
+                .run(() -> bot.combinedLocalizer.calibrate(fieldPosition(xy(-39, 60), FACING_BLUE_WALL)))
                 .moveForward(500, 0.5d)
                 .turnTo(9 * PI / 8)
                 .strafeTo(FACING_IMAGE_FRONT_WALL_BLUE)
@@ -80,7 +87,7 @@ public class DerpyOp extends OpMode {
 
     public SequentialAction circumnavigateBlueSide() {
         return new DriveTrainAction(System::currentTimeMillis, bot)
-                .run(() -> bot.headingLocalizer.lockCalibration(0.0))
+//                .run(() -> bot.headingLocalizer.lockCalibration(0.0))
                 .strafeTo(FACING_IMAGE_REAR_WALL_BLUE)
                 .turnTo(FACING_REAR_WALL)
                 .turnTo(FACING_BLUE_WALL)
@@ -100,14 +107,14 @@ public class DerpyOp extends OpMode {
 
     @Override
     public void init() {
-        bot = new DerpyBot(hardwareMap, telemetry);
+        bot = new DerpyBot(hardwareMap, telemetry, System::nanoTime);
         bot.init();
 
         //MecanumPower mecanumPower = mecanumPower(0.5, 0), 0);
         //moveAction = new MoveAction(1, mecanumPower, System::nanoTime, bot);
         //turnToAction = new TurnToAction(0, bot);
 
-        script = makeScript();
+        script = newScript();
 
     }
 
@@ -121,6 +128,7 @@ public class DerpyOp extends OpMode {
     public void init_loop() {
         super.init_loop();
         bot.init_loop();
+        headingResetBtn.apply(bot.headingLocalizer::lockCalibration);
     }
 
     @Override
@@ -128,6 +136,7 @@ public class DerpyOp extends OpMode {
         bot.loop();
         script.loop();
 
+        headingResetBtn.apply(bot.headingLocalizer::lockCalibration);
 
         if (!script.isRunning()) {
             if (gamepad1.dpad_up) {
@@ -154,27 +163,25 @@ public class DerpyOp extends OpMode {
             bot.getMecanumDrive().setPower(MecanumPower.ZERO);
         }
 
+        if (pushButtonLeftStick.getCurrent() && !script.isRunning()) {
+            script = newScript().turnTo(0).start();
+        }
+
         if (pushButtonY.getCurrent() && !script.isRunning()) {
-            script.stop();
-            script = startBlueNearDepotBackward();
-            script.start();
+            script = startBlueNearDepotBackward().start();
         }
 
         if (pushButtonA.getCurrent() && !script.isRunning()) {
-            script.stop();
-            script = startBlueSideNearDepot();
-            script.start();
+            script = startBlueSideNearDepot().start();
         }
 
         if (pushButtonB.getCurrent() && !script.isRunning()) {
-            script = circumnavigateBlueSide();
-            script.start();
+            script = circumnavigateBlueSide().start();
         }
 
         if (pushButtonLeftBumper.getCurrent()) {
-            bot.combinedLocalizer.calibrate(FieldPosition.ORIGIN);
+            script = newScript().turnToLocate().start();
         }
-
 
         telemetry.addData("script", script);
         telemetry.update();

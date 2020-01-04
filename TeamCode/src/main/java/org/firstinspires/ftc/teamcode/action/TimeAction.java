@@ -16,9 +16,10 @@ public abstract class TimeAction implements RoboAction {
     }
 
     @Override
-    public void start() {
+    public TimeAction start() {
         startTime = msecTime.get();
         isStarted = true;
+        return this;
     }
 
     @Override

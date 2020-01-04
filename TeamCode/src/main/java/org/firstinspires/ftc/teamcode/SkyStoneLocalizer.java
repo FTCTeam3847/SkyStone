@@ -22,6 +22,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
+import static org.firstinspires.ftc.teamcode.controller.FieldPosition.Fix.ABSOLUTE;
 import static org.firstinspires.ftc.teamcode.polar.PolarUtil.fromXY;
 import static org.firstinspires.ftc.teamcode.polar.PolarUtil.subtract;
 
@@ -263,7 +264,8 @@ public class SkyStoneLocalizer implements Localizer<FieldPosition> {
                     fromXY(
                             translation.get(0) / mmPerInch,
                             translation.get(1) / mmPerInch),
-                    heading
+                    heading,
+                    ABSOLUTE
             );
 
             OpenGLMatrix image = lastMeasuredVisibleTarget.getLocation();

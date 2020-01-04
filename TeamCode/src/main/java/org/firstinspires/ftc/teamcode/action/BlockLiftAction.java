@@ -23,13 +23,14 @@ public class BlockLiftAction implements RoboAction {
     }
 
     @Override
-    public void start() {
+    public BlockLiftAction start() {
         started = true;
         startPosition = lifter.getPosition();
         if (startPosition <= targetPosition)
             lifter.setPower(1.0);
         else
             lifter.setPower(-1.0);
+        return this;
     }
 
     @Override

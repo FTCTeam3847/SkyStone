@@ -99,31 +99,31 @@ public class TowerBuilderAction extends SequentialAction {
         return this;
     }
 
-    public TowerBuilderAction parallel(RoboAction... actions) {
-        ParallelAction parallelAction = new ParallelAction();
-        for (RoboAction action : actions) {
-            parallelAction.addAction(action);
-        }
-        addAction(parallelAction);
-        return this;
-    }
-
-    public TowerBuilderAction all() {
-        ParallelAction script = new ParallelAction();
-        script.addAction(releaseTower());
-        script.addAction(grabTower());
-        script.addAction(liftTower());
-        script.addAction(liftBlock());
-        script.addAction(extendBlock());
-        script.addAction(releaseBlock());
-        script.addAction(retractBlock());
-        script.addAction(lowerBlock());
-        script.addAction(lowerTower(0.5));
-        script.addAction(releaseTower());
-
-        addAction(script);
-        return this;
-    }
+//    public TowerBuilderAction parallel(RoboAction... actions) {
+//        ParallelAction parallelAction = new ParallelAction();
+//        for (RoboAction action : actions) {
+//            parallelAction.addAction(action);
+//        }
+//        addAction(parallelAction);
+//        return this;
+//    }
+//
+//    public TowerBuilderAction all() {
+//        ParallelAction script = new ParallelAction();
+//        script.addAction(releaseTower());
+//        script.addAction(grabTower());
+//        script.addAction(liftTower());
+//        script.addAction(liftBlock());
+//        script.addAction(extendBlock());
+//        script.addAction(releaseBlock());
+//        script.addAction(retractBlock());
+//        script.addAction(lowerBlock());
+//        script.addAction(lowerTower(0.5));
+//        script.addAction(releaseTower());
+//
+//        addAction(script);
+//        return this;
+//    }
 
 
 }

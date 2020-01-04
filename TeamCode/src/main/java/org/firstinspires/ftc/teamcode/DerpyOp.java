@@ -57,19 +57,12 @@ public class DerpyOp extends OpMode {
         return new DriveTrainAction(System::currentTimeMillis, bot);
     }
 
-    public SequentialAction startBlueNearDepotBackward() {
+    public SequentialAction startBlueDepotParkOnly() {
         return new DriveTrainAction(System::currentTimeMillis, bot)
-                .run(() -> bot.combinedLocalizer.calibrate(fieldPosition(xy(-39, 72), FACING_BLUE_WALL)))
-                .turnToLocate().turnTo(FACING_BLUE_WALL)
-                .strafeTo(xy(-36, 48)).turnTo(FACING_BLUE_WALL)
-                .strafeTo(xy(36, 48)).turnTo(FACING_BLUE_WALL)
-                .strafeTo(xy(-36, 48)).turnTo(FACING_BLUE_WALL)
-                .strafeTo(xy(36, 48)).turnTo(FACING_BLUE_WALL)
-                .strafeTo(xy(-36, 48)).turnTo(FACING_BLUE_WALL)
-                .strafeTo(xy(36, 48)).turnTo(FACING_BLUE_WALL)
-                .strafeTo(xy(-36, 48)).turnTo(FACING_BLUE_WALL)
-                .strafeTo(xy(36, 48)).turnTo(FACING_BLUE_WALL)
-                .strafeTo(xy(-36, 48)).turnTo(FACING_BLUE_WALL)
+                .run(() -> bot.combinedLocalizer.calibrate(fieldPosition(xy(-39, 60), FACING_RED_WALL)))
+                .moveForward(250, 0.3d)
+                .strafeTo(xy(4, 60))
+                .strafeTo(xy(4, 62))
                 ;
     }
 
@@ -168,7 +161,7 @@ public class DerpyOp extends OpMode {
         }
 
         if (pushButtonY.getCurrent() && !script.isRunning()) {
-            script = startBlueNearDepotBackward().start();
+            script = startBlueDepotParkOnly().start();
         }
 
         if (pushButtonA.getCurrent() && !script.isRunning()) {

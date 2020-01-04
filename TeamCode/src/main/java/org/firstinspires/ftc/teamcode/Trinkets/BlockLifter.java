@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 import static com.qualcomm.robotcore.util.Range.clip;
 import static com.qualcomm.robotcore.util.Range.scale;
 import static java.lang.Math.max;
+import static java.lang.Math.min;
 import static java.lang.String.format;
 
 public class BlockLifter {
@@ -41,9 +42,15 @@ public class BlockLifter {
         return this.power;
     }
 
+    //Percentage
     public double getPosition() {
-        return position.getPosition();
+        return limit(0.0d, position.getPosition() / MAX_POSITION, 1.0d);
     }
+
+    private static double limit(double min, double n, double max) {
+        return min(max(min, n), max);
+    }
+
 
     @Override
     public String toString() {

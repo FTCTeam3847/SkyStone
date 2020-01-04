@@ -70,10 +70,11 @@ public class BufferingLocalizer implements Localizer<FieldPosition> {
 
     public String toString() {
         return format(Locale.US,
-                "%s ∆%.2f ∆∆%.2f",
+                "%s ∆%.2f ∆∆%.2f\n%s",
                 lastFieldPosition,
                 lastDeltaRadius,
-                lastAverageRadius
+                lastAverageRadius,
+                delegate
         );
     }
 

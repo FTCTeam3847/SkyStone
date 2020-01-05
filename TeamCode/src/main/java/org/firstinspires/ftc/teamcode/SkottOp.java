@@ -9,9 +9,8 @@ import org.firstinspires.ftc.teamcode.Trinkets.BlockLifter;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerBuilder;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerGrabber;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerLifter;
-import org.firstinspires.ftc.teamcode.action.DriveTrainAction;
+import org.firstinspires.ftc.teamcode.action.SkystoneActions;
 import org.firstinspires.ftc.teamcode.action.SequentialAction;
-import org.firstinspires.ftc.teamcode.action.TowerBuilderAction;
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
 import org.firstinspires.ftc.teamcode.gamepad.PairedButtons;
@@ -78,7 +77,7 @@ public class SkottOp extends OpMode {
     SequentialAction script;
 
     public SequentialAction makeScript() {
-        TowerBuilderAction script = new TowerBuilderAction(System::currentTimeMillis, bot)
+        SkystoneActions script = new SkystoneActions(System::currentTimeMillis, bot)
                 .releaseTower()
                 .grabTower()
                 .doubleLift(1.0)
@@ -92,7 +91,7 @@ public class SkottOp extends OpMode {
     }
 
     public SequentialAction circumnavigateBlueSide() {
-        return new DriveTrainAction(System::currentTimeMillis, bot)
+        return new SkystoneActions(System::currentTimeMillis, bot)
 //                .run(() -> bot.headingLocalizer.lockCalibration(0.0))
                 .strafeTo(FACING_IMAGE_REAR_WALL_BLUE)
                 .turnTo(FACING_REAR_WALL)

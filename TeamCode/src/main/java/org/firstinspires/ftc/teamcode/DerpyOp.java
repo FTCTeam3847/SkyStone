@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.action.DriveTrainAction;
+import org.firstinspires.ftc.teamcode.action.SkystoneActions;
 import org.firstinspires.ftc.teamcode.action.SequentialAction;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
 import org.firstinspires.ftc.teamcode.gamepad.OptionsButton;
@@ -51,13 +51,13 @@ public class DerpyOp extends OpMode {
 
     DerpyBot bot;
 
-    public DriveTrainAction newScript() {
+    public SkystoneActions newScript() {
         if (null != script) script.stop();
-        return new DriveTrainAction(System::currentTimeMillis, bot);
+        return new SkystoneActions(System::currentTimeMillis, bot);
     }
 
     public SequentialAction startBlueDepotParkOnly() {
-        return new DriveTrainAction(System::currentTimeMillis, bot)
+        return new SkystoneActions(System::currentTimeMillis, bot)
                 .run(() -> bot.combinedLocalizer.calibrate(fieldPosition(xy(-39, 60), FACING_RED_WALL)))
                 .moveForward(250, 0.3d)
                 .strafeTo(xy(4, 60))
@@ -66,7 +66,7 @@ public class DerpyOp extends OpMode {
     }
 
     public SequentialAction strafeFrontWallToRed() {
-        return new DriveTrainAction(System::currentTimeMillis, bot)
+        return new SkystoneActions(System::currentTimeMillis, bot)
                 .turnTo(FACING_FRONT_WALL)
                 .strafeTo(FACING_IMAGE_FRONT_WALL_BLUE)
                 .turnTo(FACING_FRONT_WALL)
@@ -79,7 +79,7 @@ public class DerpyOp extends OpMode {
     }
 
     public SequentialAction circumnavigateBlueSide() {
-        return new DriveTrainAction(System::currentTimeMillis, bot)
+        return new SkystoneActions(System::currentTimeMillis, bot)
 //                .run(() -> bot.headingLocalizer.lockCalibration(0.0))
                 .strafeTo(FACING_IMAGE_REAR_WALL_BLUE)
                 .turnTo(FACING_REAR_WALL)

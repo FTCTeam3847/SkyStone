@@ -46,7 +46,6 @@ public class DerpyBot implements SkystoneBot {
     MecanumLocalizer mecanumLocalizer;
 
     CombinedLocalizer combinedLocalizer;
-    FieldPosition lastLoc = FieldPosition.ORIGIN;
 
     VuforiaLocalizer vuforiaLocalizer;
     private BufferingLocalizer bufferingLocalizer;
@@ -130,7 +129,7 @@ public class DerpyBot implements SkystoneBot {
 
     @Override
     public void loop() {
-        lastLoc = combinedLocalizer.getCurrent();
+        combinedLocalizer.getCurrent();
         updateTelemetry();
         updateLoopTimer();
     }

@@ -65,6 +65,7 @@ public class SkottBot implements SkystoneBot {
     private MecanumLocalizer mecanumLocalizer;
     private VuforiaLocalizer vuforiaLocalizer;
     private SkyStoneLocalizer skyStoneLocalizer;
+    private BufferingLocalizer bufferingLocalizer;
 
     private CombinedLocalizer combinedLocalizer;
 
@@ -94,7 +95,7 @@ public class SkottBot implements SkystoneBot {
         MecanumLocalizer mecanumLocalizer = new MecanumLocalizer(
                 System::nanoTime,
                 headingLocalizer::getLast,
-                35.0
+                28.0
         );
         this.mecanumLocalizer = mecanumLocalizer;
         MecanumDrive mDrive = new MecanumDriveController(headingController, this::setDrivePower);
@@ -102,8 +103,10 @@ public class SkottBot implements SkystoneBot {
         vuforiaLocalizer = initVuforia(hardwareMap);
         skyStoneLocalizer = new SkyStoneLocalizer(vuforiaLocalizer);
 
-        combinedLocalizer = new CombinedLocalizer(headingLocalizer, mecanumLocalizer, skyStoneLocalizer);
+        bufferingLocalizer = new BufferingLocalizer(skyStoneLocalizer);
 
+
+        combinedLocalizer = new CombinedLocalizer(headingLocalizer, mecanumLocalizer, bufferingLocalizer);
 
         //Primary Port 3
         leftFrontMotor = hardwareMap.get(DcMotor.class, "motor-left-front");
@@ -212,7 +215,7 @@ public class SkottBot implements SkystoneBot {
 
     @Override
     public void init_loop() {
-        skyStoneLocalizer.getCurrent();
+        combinedLocalizer.getCurrent();
         updateTelemetry();
     }
 
@@ -222,9 +225,7 @@ public class SkottBot implements SkystoneBot {
 
     @Override
     public void loop() {
-        headingLocalizer.getCurrent();
-        mecanumLocalizer.getCurrent();
-        skyStoneLocalizer.getCurrent();
+        combinedLocalizer.getCurrent();
         updateTelemetry();
     }
 
@@ -236,6 +237,7 @@ public class SkottBot implements SkystoneBot {
     private void updateTelemetry() {
         telemetry.addData("heading", headingLocalizer);
         telemetry.addData("skyStoneLocalizer", skyStoneLocalizer);
+        telemetry.addData("buffering", bufferingLocalizer);
         telemetry.addData("mecanumLocalizer", mecanumLocalizer);
     }
 

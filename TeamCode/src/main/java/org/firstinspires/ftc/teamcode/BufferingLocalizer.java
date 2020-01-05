@@ -31,6 +31,7 @@ public class BufferingLocalizer implements Localizer<FieldPosition> {
         FieldPosition previous = recents.get(0);
         FieldPosition ret = FieldPosition.UNKNOWN;
 
+        unknownsInBuffer = recents.stream().mapToInt(p -> p.equals(FieldPosition.UNKNOWN) ? 1 : 0).sum();
         lastAverageRadius = 0;
         if (!current.equals(FieldPosition.UNKNOWN)
                 && !previous.equals(FieldPosition.UNKNOWN)
@@ -72,10 +73,11 @@ public class BufferingLocalizer implements Localizer<FieldPosition> {
 
     public String toString() {
         return format(Locale.US,
-                "%s ∆%.2f ∆∆%.2f\n%s",
+                "%s ∆%.2f ∆∆%.2f U%d\n%s",
                 lastFieldPosition,
                 lastDeltaRadius,
                 lastAverageRadius,
+                unknownsInBuffer,
                 delegate
         );
     }

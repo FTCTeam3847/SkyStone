@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.Trinkets.BlockLifter;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerBuilder;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerGrabber;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerLifter;
+import org.firstinspires.ftc.teamcode.action.DriveTrainAction;
 import org.firstinspires.ftc.teamcode.action.SequentialAction;
 import org.firstinspires.ftc.teamcode.action.TowerBuilderAction;
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
@@ -20,6 +21,16 @@ import org.firstinspires.ftc.teamcode.gamepad.ToggleButton;
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
 import static java.lang.Math.signum;
+import static org.firstinspires.ftc.teamcode.GameConstants.FACING_BLUE_WALL;
+import static org.firstinspires.ftc.teamcode.GameConstants.FACING_FRONT_WALL;
+import static org.firstinspires.ftc.teamcode.GameConstants.FACING_IMAGE_BLUE_WALL_FRONT;
+import static org.firstinspires.ftc.teamcode.GameConstants.FACING_IMAGE_BLUE_WALL_REAR;
+import static org.firstinspires.ftc.teamcode.GameConstants.FACING_IMAGE_FRONT_WALL_BLUE;
+import static org.firstinspires.ftc.teamcode.GameConstants.FACING_IMAGE_FRONT_WALL_RED;
+import static org.firstinspires.ftc.teamcode.GameConstants.FACING_IMAGE_REAR_WALL_BLUE;
+import static org.firstinspires.ftc.teamcode.GameConstants.FACING_IMAGE_RED_WALL_FRONT;
+import static org.firstinspires.ftc.teamcode.GameConstants.FACING_REAR_WALL;
+import static org.firstinspires.ftc.teamcode.GameConstants.FACING_RED_WALL;
 
 @TeleOp(name = "SkottOp", group = "1")
 public class SkottOp extends OpMode {
@@ -35,7 +46,10 @@ public class SkottOp extends OpMode {
         msStuckDetectInit = 10_000;
     }
 
-    private PushButton buttonRunScript = new PushButton(() -> gamepad2.x);
+    private PushButton buttonRunScript = new PushButton(() -> gamepad2.y);
+    PushButton buttonStopScript = new PushButton(() -> gamepad2.x);
+
+
     private ToggleButton toggleSlowMode = new ToggleButton(() -> gamepad1.right_stick_button);
 
     private PairedButtons<Double> towerGrabberButtons = new PairedButtons<>(
@@ -77,6 +91,27 @@ public class SkottOp extends OpMode {
         return script;
     }
 
+    public SequentialAction circumnavigateBlueSide() {
+        return new DriveTrainAction(System::currentTimeMillis, bot)
+//                .run(() -> bot.headingLocalizer.lockCalibration(0.0))
+                .strafeTo(FACING_IMAGE_REAR_WALL_BLUE)
+                .turnTo(FACING_REAR_WALL)
+                .turnTo(FACING_BLUE_WALL)
+                .strafeTo(FACING_IMAGE_BLUE_WALL_REAR)
+                .turnTo(FACING_BLUE_WALL)
+                .strafeTo(FACING_IMAGE_BLUE_WALL_FRONT)
+                .turnTo(FACING_BLUE_WALL)
+                .turnTo(FACING_FRONT_WALL)
+                .strafeTo(FACING_IMAGE_FRONT_WALL_BLUE)
+                .turnTo(FACING_FRONT_WALL)
+                .strafeTo(FACING_IMAGE_FRONT_WALL_RED)
+                .turnTo(FACING_FRONT_WALL)
+                .turnTo(FACING_RED_WALL)
+                .strafeTo(FACING_IMAGE_RED_WALL_FRONT)
+                .turnTo(FACING_RED_WALL);
+    }
+
+
     @Override
     public void init() {
         bot = new SkottBot(hardwareMap, telemetry);
@@ -109,8 +144,15 @@ public class SkottOp extends OpMode {
         script.loop();
         boolean slowMode = toggleSlowMode.getCurrent();
 
+
+        if(buttonStopScript.getCurrent())
+        {
+            script.stop();
+            bot.getMecanumDrive().setPower(MecanumPower.ZERO);
+        }
+
         if (buttonRunScript.getCurrent()) {
-            script = makeScript();
+            script = circumnavigateBlueSide();
             script.start();
         }
 

@@ -4,6 +4,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
@@ -176,5 +177,8 @@ public class DerpyBot implements SkystoneBot {
         return mecanum;
     }
 
-
+    @Override
+    public double getAutonomousSpeed() {
+        return 0.5;
+    }
 }

@@ -19,4 +19,6 @@ public interface SkystoneBot extends Bot {
     default TowerBuilder getTowerBuilder() {
         return TowerBuilder.NIL;
     }
+
+    double getAutonomousSpeed();
 }

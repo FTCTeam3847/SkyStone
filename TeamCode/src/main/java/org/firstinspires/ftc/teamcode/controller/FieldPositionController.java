@@ -14,12 +14,14 @@ import static org.firstinspires.ftc.teamcode.polar.PolarUtil.subtractRadians;
 
 public class FieldPositionController implements Controller<FieldPosition, MecanumPower> {
     private final Supplier<FieldPosition> fieldPositionSupplier;
+    private final double autonomousSpeed;
     private FieldPosition targetFieldPosition;
     private PolarCoord lastError = PolarCoord.ORIGIN;
     private MecanumPower lastControl = MecanumPower.ZERO;
 
-    public FieldPositionController(Supplier<FieldPosition> fieldPositionSupplier) {
+    public FieldPositionController(Supplier<FieldPosition> fieldPositionSupplier, double autonomousSpeed) {
         this.fieldPositionSupplier = fieldPositionSupplier;
+        this.autonomousSpeed = autonomousSpeed;
     }
 
     public void setTarget(FieldPosition targetFieldPosition) {
@@ -35,7 +37,7 @@ public class FieldPositionController implements Controller<FieldPosition, Mecanu
 
         PolarCoord error = getError();
         double mecanumTheta = subtractRadians(error.theta, currentFieldPosition.heading);
-        double power = min(error.radius / 6, 1) / 2;
+        double power = min(error.radius / 12, 1) * autonomousSpeed;
 
         lastControl = mecanumPower(power, mecanumTheta, 0);
 

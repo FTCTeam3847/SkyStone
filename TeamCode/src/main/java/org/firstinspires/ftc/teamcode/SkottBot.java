@@ -270,5 +270,8 @@ public class SkottBot implements SkystoneBot {
         return towerBuilder;
     }
 
-
+    @Override
+    public double getAutonomousSpeed() {
+        return 0.6;
+    }
 }

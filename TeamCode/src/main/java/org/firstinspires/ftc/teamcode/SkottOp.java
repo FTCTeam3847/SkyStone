@@ -44,8 +44,8 @@ public class SkottOp extends OpMode {
     );
 
     private PairedButtons<Double> towerLifterButtons = new PairedButtons<>(
-            () -> gamepad1.b, 1.0d,
-            () -> gamepad1.a, -1.0d,
+            () -> gamepad1.b && !gamepad1.start, 1.0d,
+            () -> gamepad1.a && !gamepad1.start, -1.0d,
             0.0d
     );
 

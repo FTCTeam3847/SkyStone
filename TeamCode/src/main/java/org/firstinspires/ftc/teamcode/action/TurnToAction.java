@@ -28,7 +28,7 @@ public class TurnToAction implements RoboAction {
     @Override
     public TurnToAction start() {
         started = true;
-        headingController = new HeadingController(bot::getFieldRelativeHeading, Math.PI / 64, 1.0, 0.1);
+        headingController = new HeadingController(bot::getFieldRelativeHeading, 0.010 * Math.PI, 1.0, 0.1);
         headingController.setTarget(targetAngle);
         return this;
     }

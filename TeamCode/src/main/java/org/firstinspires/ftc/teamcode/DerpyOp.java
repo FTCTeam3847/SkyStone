@@ -13,7 +13,6 @@ import static java.lang.Math.PI;
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
 import static java.lang.Math.signum;
-import static org.firstinspires.ftc.teamcode.GameConstants.FACING_BLUE_SKYSTONE_2;
 import static org.firstinspires.ftc.teamcode.GameConstants.FACING_BLUE_WALL;
 import static org.firstinspires.ftc.teamcode.GameConstants.FACING_FRONT_WALL;
 import static org.firstinspires.ftc.teamcode.GameConstants.FACING_IMAGE_BLUE_WALL_FRONT;
@@ -34,10 +33,10 @@ public class DerpyOp extends OpMode {
         msStuckDetectInit = 10_000;
     }
 
-    PushButton pushButtonX = new PushButton(() -> gamepad1.x);
-    PushButton pushButtonY = new PushButton(() -> gamepad1.y);
-    PushButton pushButtonA = new PushButton(() -> gamepad1.a);
-    PushButton pushButtonB = new PushButton(() -> gamepad1.b);
+    PushButton pushButtonX = new PushButton(() -> gamepad1.x && !gamepad1.start);
+    PushButton pushButtonY = new PushButton(() -> gamepad1.y && !gamepad1.start);
+    PushButton pushButtonA = new PushButton(() -> gamepad1.a && !gamepad1.start);
+    PushButton pushButtonB = new PushButton(() -> gamepad1.b && !gamepad1.start);
 
     OptionsButton<Double> headingResetBtn = new OptionsButton<>(
             () -> gamepad1.right_stick_button,
@@ -66,16 +65,17 @@ public class DerpyOp extends OpMode {
                 ;
     }
 
-    public SequentialAction startBlueSideNearDepot() {
+    public SequentialAction strafeFrontWallToRed() {
         return new DriveTrainAction(System::currentTimeMillis, bot)
-                .turnTo(FACING_RED_WALL)
-                .run(() -> bot.combinedLocalizer.calibrate(fieldPosition(xy(-39, 60), FACING_BLUE_WALL)))
-                .moveForward(500, 0.5d)
-                .turnTo(9 * PI / 8)
+                .turnTo(FACING_FRONT_WALL)
                 .strafeTo(FACING_IMAGE_FRONT_WALL_BLUE)
-                .turnTo(FACING_IMAGE_FRONT_WALL_BLUE.heading)
+                .turnTo(FACING_FRONT_WALL)
+                .strafeTo(FACING_IMAGE_FRONT_WALL_RED)
+                .turnTo(FACING_FRONT_WALL)
                 .turnTo(FACING_RED_WALL)
-                .strafeTo(FACING_BLUE_SKYSTONE_2);
+                .strafeTo(FACING_IMAGE_RED_WALL_FRONT)
+                .turnTo(FACING_RED_WALL)
+                ;
     }
 
     public SequentialAction circumnavigateBlueSide() {
@@ -121,7 +121,7 @@ public class DerpyOp extends OpMode {
     public void init_loop() {
         super.init_loop();
         bot.init_loop();
-        headingResetBtn.apply(bot.headingLocalizer::lockCalibration);
+//        headingResetBtn.apply(bot.headingLocalizer::lockCalibration);
     }
 
     @Override
@@ -129,7 +129,7 @@ public class DerpyOp extends OpMode {
         bot.loop();
         script.loop();
 
-        headingResetBtn.apply(bot.headingLocalizer::lockCalibration);
+//        headingResetBtn.apply(bot.headingLocalizer::lockCalibration);
 
         if (!script.isRunning()) {
             if (gamepad1.dpad_up) {
@@ -161,15 +161,15 @@ public class DerpyOp extends OpMode {
         }
 
         if (pushButtonY.getCurrent() && !script.isRunning()) {
-            script = startBlueDepotParkOnly().start();
+            script = circumnavigateBlueSide().start();
         }
 
         if (pushButtonA.getCurrent() && !script.isRunning()) {
-            script = startBlueSideNearDepot().start();
+            script = strafeFrontWallToRed().start();
         }
 
         if (pushButtonB.getCurrent() && !script.isRunning()) {
-            script = circumnavigateBlueSide().start();
+            script = startBlueDepotParkOnly().start();
         }
 
         if (pushButtonLeftBumper.getCurrent()) {

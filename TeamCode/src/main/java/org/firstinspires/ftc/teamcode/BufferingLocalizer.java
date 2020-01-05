@@ -17,6 +17,7 @@ public class BufferingLocalizer implements Localizer<FieldPosition> {
     private FieldPosition lastFieldPosition = FieldPosition.UNKNOWN;
     private double lastDeltaRadius = 0;
     private double lastAverageRadius = 0;
+    private int unknownsInBuffer;
 
     public BufferingLocalizer(Localizer<FieldPosition> delegate) {
         this.delegate = delegate;
@@ -55,6 +56,7 @@ public class BufferingLocalizer implements Localizer<FieldPosition> {
         if (recents.size() > RECENTS_MAX_SIZE) recents.remove(0);
         recents.add(current);
 
+        lastFieldPosition = ret;
         return ret;
     }
 

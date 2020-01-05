@@ -28,7 +28,7 @@ import static org.firstinspires.ftc.teamcode.polar.PolarUtil.subtract;
 
 public class SkyStoneLocalizer implements Localizer<FieldPosition> {
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
-    private static final boolean PHONE_IS_PORTRAIT = true;
+    private static final boolean PHONE_IS_PORTRAIT = false;
     private VuforiaLocalizer vuforiaLocalizer;
 
     // Since ImageTarget trackables use mm to specifiy their dimensions, we must use mm for all the physical dimension.
@@ -211,6 +211,8 @@ public class SkyStoneLocalizer implements Localizer<FieldPosition> {
         // Rotate the phone vertical about the X axis if it's in portrait mode
         if (PHONE_IS_PORTRAIT) {
             phoneXRotate = 90;
+        } else {
+            phoneXRotate = 180;
         }
 
         // Next, translate the camera lens to where it is on the robot.

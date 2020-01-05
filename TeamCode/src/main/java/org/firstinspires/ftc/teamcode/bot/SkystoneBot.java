@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.bot;
 
-import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerBuilder;
 import org.firstinspires.ftc.teamcode.controller.FieldPosition;
 import org.firstinspires.ftc.teamcode.controller.Localizer;
@@ -20,6 +19,4 @@ public interface SkystoneBot extends Bot {
     default TowerBuilder getTowerBuilder() {
         return TowerBuilder.NIL;
     }
-
-    TFObjectDetector getTfod();
 }

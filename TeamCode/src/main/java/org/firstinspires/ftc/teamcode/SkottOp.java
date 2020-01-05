@@ -9,7 +9,6 @@ import org.firstinspires.ftc.teamcode.Trinkets.BlockLifter;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerBuilder;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerGrabber;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerLifter;
-import org.firstinspires.ftc.teamcode.action.DriveTrainAction;
 import org.firstinspires.ftc.teamcode.action.SequentialAction;
 import org.firstinspires.ftc.teamcode.action.TowerBuilderAction;
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
@@ -37,8 +36,6 @@ public class SkottOp extends OpMode {
     }
 
     private PushButton buttonRunScript = new PushButton(() -> gamepad2.x);
-    private PushButton buttonRunScript2 = new PushButton(() -> gamepad2.y);
-
     private ToggleButton toggleSlowMode = new ToggleButton(() -> gamepad1.right_stick_button);
 
     private PairedButtons<Double> towerGrabberButtons = new PairedButtons<>(
@@ -80,13 +77,6 @@ public class SkottOp extends OpMode {
         return script;
     }
 
-    public SequentialAction detectionScript() {
-        DriveTrainAction script = new DriveTrainAction(System::currentTimeMillis, bot)
-                .detectSkystone(bot.getTfod())
-                ;
-        return script;
-    }
-
     @Override
     public void init() {
         bot = new SkottBot(hardwareMap, telemetry);
@@ -123,11 +113,6 @@ public class SkottOp extends OpMode {
             script = makeScript();
             script.start();
         }
-        if (buttonRunScript2.getCurrent()) {
-            script = detectionScript();
-            script.start();
-        }
-
 
         if (!script.isRunning()) {
             towerGrabberButtons.apply(blockGrabber::setPosition);

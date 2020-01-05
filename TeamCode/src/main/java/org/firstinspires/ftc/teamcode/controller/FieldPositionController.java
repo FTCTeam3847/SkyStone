@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.polar.PolarUtil;
 import java.util.Locale;
 import java.util.function.Supplier;
 
+import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower.mecanumPower;
 import static org.firstinspires.ftc.teamcode.polar.PolarUtil.addRadians;
@@ -39,7 +40,7 @@ public class FieldPositionController implements Controller<FieldPosition, Mecanu
         double mecanumTheta = subtractRadians(error.theta, currentFieldPosition.heading);
         double power = min(error.radius / 12, 1) * autonomousSpeed;
 
-        lastControl = mecanumPower(power, mecanumTheta, 0);
+        lastControl = mecanumPower(max(power, 0.1), mecanumTheta, 0);
 
         return lastControl;
     }
@@ -48,7 +49,7 @@ public class FieldPositionController implements Controller<FieldPosition, Mecanu
         this.lastError = PolarUtil.subtract(getCurrent().polarCoord, targetFieldPosition.polarCoord);
 
         //tolerance
-        if (lastError.radius <= 1) {
+        if (lastError.radius <= 0.1) {
             return PolarCoord.ORIGIN;
         }
 

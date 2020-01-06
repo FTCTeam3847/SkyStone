@@ -47,8 +47,11 @@ public class SkottOp extends OpMode {
         msStuckDetectInit = 10_000;
     }
 
-    private PushButton buttonRunScript = new PushButton(() -> gamepad2.y);
-    PushButton buttonStopScript = new PushButton(() -> gamepad2.x);
+    private PushButton buttonAddBlockToTower2y = new PushButton(() -> gamepad2.y);
+    private PushButton buttonBlueSideSkystone2b = new PushButton(() -> gamepad2.b && !gamepad1.start && !gamepad2.start);
+    private PushButton buttonRedSideSkystone2a = new PushButton(() -> gamepad2.a && !gamepad1.start && !gamepad2.start);
+
+    private PushButton buttonStopScript = new PushButton(() -> gamepad2.x);
 
 
     private ToggleButton toggleSlowMode = new ToggleButton(() -> gamepad1.right_stick_button);
@@ -59,8 +62,8 @@ public class SkottOp extends OpMode {
     );
 
     private PairedButtons<Double> towerLifterButtons = new PairedButtons<>(
-            () -> gamepad1.b && !gamepad1.start, 1.0d,
-            () -> gamepad1.a && !gamepad1.start, -1.0d,
+            () -> gamepad1.b && !gamepad1.start && !gamepad2.start, 1.0d,
+            () -> gamepad1.a && !gamepad1.start && !gamepad2.start, -1.0d,
             0.0d
     );
 
@@ -140,8 +143,14 @@ public class SkottOp extends OpMode {
             bot.getMecanumDrive().setPower(MecanumPower.ZERO);
         }
 
-        if (buttonRunScript.getCurrent()) {
+        if (buttonAddBlockToTower2y.getCurrent()) {
+            script.stop();
             script = scripts.addBlockToTower().start();
+        }
+
+        if (buttonBlueSideSkystone2b.getCurrent()) {
+            script.stop();
+            script = scripts.blueSideSkystoneOuter().start();
         }
 
         if (!script.isRunning()) {

@@ -34,19 +34,19 @@ public class SkystoneActions extends SequentialAction {
 
     public SkystoneActions releaseTower() {
         addAction(new TowerGrabAction(msecTime, 0.25, bot));
-        pause();
+        pause(1);
         return this;
     }
 
     public SkystoneActions grabTower() {
         addAction(new TowerGrabAction(msecTime, 1.0, bot));
-        pause();
+        pause(1);
         return this;
     }
 
     public SkystoneActions grabTower(double openness) {
         addAction(new TowerGrabAction(msecTime, openness, bot));
-        pause(500);
+        pause(1);
         return this;
     }
 
@@ -64,7 +64,7 @@ public class SkystoneActions extends SequentialAction {
 
     public SkystoneActions liftTower(double position) {
         addAction(new TowerLiftAction(position, bot));
-        pause();
+        pause(1);
         return this;
     }
 
@@ -107,9 +107,19 @@ public class SkystoneActions extends SequentialAction {
         return this;
     }
 
-    public SkystoneActions strafe(double direction, long time, double speed) {
-        addAction(new MoveAction(time, msecTime, mecanumPower(speed, direction, 0), bot));
-        pause();
+    public SkystoneActions strafe(double direction, long time) {
+        addAction(new MoveAction(time, msecTime, mecanumPower(bot.getAutonomousSpeed(), direction, 0), bot));
+        pause(1);
+        return this;
+    }
+
+    public SkystoneActions strafeNoStop(double direction, long time) {
+        addAction(new MoveNoStopAction(time, msecTime, mecanumPower(bot.getAutonomousSpeed(), direction, 0), bot));
+        return this;
+    }
+
+    public SkystoneActions strafeNoStop(double direction, long time, double speed) {
+        addAction(new MoveNoStopAction(time, msecTime, mecanumPower(speed, direction, 0), bot));
         return this;
     }
 
@@ -142,7 +152,7 @@ public class SkystoneActions extends SequentialAction {
 
     public SkystoneActions turnTo(double targetAngle) {
         addAction(new TurnToAction(targetAngle, bot));
-        pause();
+        pause(1);
         return this;
     }
 
@@ -164,7 +174,12 @@ public class SkystoneActions extends SequentialAction {
 
     public SkystoneActions strafeTo(FieldPosition fieldPosition) {
         addAction(new StrafeToAction(fieldPosition, bot));
-        pause();
+        //pause();
+        return this;
+    }
+
+    public SkystoneActions strafeToNoStop(FieldPosition fieldPosition) {
+        addAction(new StrafeToNoStopAction(fieldPosition, bot));
         return this;
     }
 

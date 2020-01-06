@@ -178,6 +178,6 @@ public class DerpyBot implements SkystoneBot {
 
     @Override
     public double getAutonomousSpeed() {
-        return 0.5;
+        return 0.6;
     }
 }

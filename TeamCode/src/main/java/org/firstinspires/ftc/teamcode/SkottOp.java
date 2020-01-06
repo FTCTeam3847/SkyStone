@@ -159,16 +159,15 @@ public class SkottOp extends OpMode {
 
         if (!script.isRunning()) {
             towerGrabberButtons.apply(blockGrabber::setPosition);
-            towerLifterButtons.apply(towerLifter::setPower);
             blockLifterButtons.apply(blockLifter::setPower);
             blockExtenderButtons.apply(blockExtender::setPower);
 
             if (buttonTowerUp.getCurrent()) {
                 towerLifter.setPosition(1.0d);
-            }
-
-            if (buttonTowerDown.getCurrent()) {
+            } else if (buttonTowerDown.getCurrent()) {
                 towerLifter.setPosition(0.0d);
+            } else {
+//                towerLifterButtons.apply(towerLifter::setPower);
             }
 
             double tehSpeeds = 0.05;

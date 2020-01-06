@@ -24,9 +24,9 @@ public class TowerLifter {
     private static final double MAX_RIGHT_UP = 0.30;
     private static final double MAX_LEFT_DOWN = 0.14;
     private static final double MAX_RIGHT_DOWN = 0.11;
-    private static final double MAX_POSITION = 3000.0d;
+    private static final double MAX_POSITION = 2950.0d;
     private double power = 0.0d;
-    private RunToPositionController runToPositionController = new RunToPositionController(this::getPower, this::getPosition, 0.1d, 1.0d, 4.0d);
+    private RunToPositionController runToPositionController = new RunToPositionController(this::getPower, this::getPosition, 1.0d, 1.0d, 4.0d);
 
     public TowerLifter(Consumer<Double> leftPower,
                        Consumer<Double> rightPower,

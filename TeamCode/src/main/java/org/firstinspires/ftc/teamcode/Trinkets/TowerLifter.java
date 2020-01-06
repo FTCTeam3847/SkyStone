@@ -6,10 +6,8 @@ import java.util.Locale;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
-import static java.lang.Math.signum;
 import static java.lang.String.format;
 
 public class TowerLifter {
@@ -26,7 +24,7 @@ public class TowerLifter {
     private static final double MAX_RIGHT_DOWN = 0.11;
     private static final double MAX_POSITION = 2950.0d;
     private double power = 0.0d;
-    private RunToPositionController runToPositionController = new RunToPositionController(this::getPower, this::getPosition, 1.0d, 1.0d, 4.0d);
+    private RunToPositionController runToPositionController = new RunToPositionController(this::getPower, this::getPosition);
 
     public TowerLifter(Consumer<Double> leftPower,
                        Consumer<Double> rightPower,

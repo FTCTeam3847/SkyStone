@@ -39,6 +39,15 @@ public class BlockLifter {
         }
     }
 
+    public void stop() {
+        runToPositionController.stop();
+        runAtPower(0.0d);
+    }
+
+    public boolean isBusy() {
+        return runToPositionController.isBusy();
+    }
+
     // Position: [0.0..1.0] 0.0 is down, 1.0 is up
     public void setPosition(double targetPosition) {
         runToPositionController.setTarget(targetPosition);
@@ -57,11 +66,6 @@ public class BlockLifter {
 
     public double getPower() {
         return this.power;
-    }
-
-    public void stop() {
-        runToPositionController.stop();
-        runAtPower(0.0d);
     }
 
     private boolean isRunningPastLimits() {

@@ -43,6 +43,10 @@ public class BlockExtender {
         runAtPower(0.0d);
     }
 
+    public boolean isBusy() {
+        return runToPositionController.isBusy();
+    }
+
     // Position [0.0..1.0] 0.0 is in, 1.0 is out
     public void setPosition(double targetPosition) {
         runToPositionController.setTarget(targetPosition);

@@ -50,6 +50,13 @@ public class TowerBuilder {
         blockExtender.stop();
     }
 
+    public boolean isBusy() {
+        return towerLifter.isBusy()
+                || blockLifter.isBusy()
+                || blockExtender.isBusy()
+                ;
+    }
+
     @Override
     public String toString() {
         return format(Locale.US,

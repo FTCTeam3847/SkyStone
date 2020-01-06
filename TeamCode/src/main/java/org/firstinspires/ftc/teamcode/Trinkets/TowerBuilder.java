@@ -40,6 +40,7 @@ public class TowerBuilder {
 
     public void loop() {
         towerLifter.loop();
+        blockLifter.loop();
     }
 
     public void stop() {

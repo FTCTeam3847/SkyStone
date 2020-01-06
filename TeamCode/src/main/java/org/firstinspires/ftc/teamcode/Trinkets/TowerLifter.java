@@ -1,10 +1,13 @@
 package org.firstinspires.ftc.teamcode.Trinkets;
 
+import org.firstinspires.ftc.teamcode.controller.RunToPositionController;
+
 import java.util.Locale;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import static java.lang.Math.*;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 import static java.lang.String.format;
 
 public class TowerLifter {
@@ -19,8 +22,9 @@ public class TowerLifter {
     private static final double MAX_RIGHT_UP = 0.30;
     private static final double MAX_LEFT_DOWN = 0.14;
     private static final double MAX_RIGHT_DOWN = 0.11;
-    private static final double MAX_POSITION = 3000.0d;
+    private static final double MAX_POSITION = 2950.0d;
     private double power = 0.0d;
+    private RunToPositionController runToPositionController = new RunToPositionController(this::getPower, this::getPosition);
 
     public TowerLifter(Consumer<Double> leftPower,
                        Consumer<Double> rightPower,
@@ -33,20 +37,47 @@ public class TowerLifter {
         this.rightPosition = rightPosition;
     }
 
+    public void loop() {
+        if (isRunningPastLimits()) {
+            stop();
+        } else if (runToPositionController.isBusy()) {
+            runAtPower(runToPositionController.getControl());
+        }
+    }
+
+    public void stop() {
+        runToPositionController.stop();
+        runAtPower(0.0d);
+    }
+
     public double getPower() {
         return power;
     }
 
     // [-1.0..1.0] negative is down, positive is up
     public void setPower(double pwr) {
-        power = limit(-1.0d, pwr, 1.0d);
-        leftPower.accept(leftPwr(power));
-        rightPower.accept(rightPwr(power));
+        // if the user starts controlling the power, then cancel the rtp controller
+        runToPositionController.stop();
+        runAtPower(pwr);
     }
 
     // [0.0..1.0] 0.0 is down, 1.0 is up
     public double getPosition() {
         return limit(0.0d, leftPosition.get() / MAX_POSITION, 1.0d);
+    }
+
+    public void setPosition(double targetPosition) {
+        runToPositionController.setTarget(targetPosition);
+    }
+
+    private void runAtPower(double pwr) {
+        power = limit(-1.0d, pwr, 1.0d);
+        leftPower.accept(leftPwr(power));
+        rightPower.accept(rightPwr(power));
+    }
+
+    private boolean isRunningPastLimits() {
+        return (this.power < 0.0d && getPosition() <= 0.0) || (this.power > 0.0d && getPosition() >= MAX_POSITION);
     }
 
     private static double limit(double min, double n, double max) {

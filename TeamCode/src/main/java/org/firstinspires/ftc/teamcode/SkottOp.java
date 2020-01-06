@@ -48,6 +48,8 @@ public class SkottOp extends OpMode {
     private PushButton buttonRunScript = new PushButton(() -> gamepad2.y);
     PushButton buttonStopScript = new PushButton(() -> gamepad2.x);
 
+    private PushButton buttonTowerUp = new PushButton(() -> gamepad2.b && !gamepad2.start);
+    private PushButton buttonTowerDown = new PushButton(() -> gamepad2.a && !gamepad2.start);
 
     private ToggleButton toggleSlowMode = new ToggleButton(() -> gamepad1.right_stick_button);
 
@@ -157,9 +159,16 @@ public class SkottOp extends OpMode {
 
         if (!script.isRunning()) {
             towerGrabberButtons.apply(blockGrabber::setPosition);
-            towerLifterButtons.apply(towerLifter::setPower);
             blockLifterButtons.apply(blockLifter::setPower);
             blockExtenderButtons.apply(blockExtender::setPower);
+
+            if (buttonTowerUp.getCurrent()) {
+                towerLifter.setPosition(1.0d);
+            } else if (buttonTowerDown.getCurrent()) {
+                towerLifter.setPosition(0.0d);
+            } else {
+//                towerLifterButtons.apply(towerLifter::setPower);
+            }
 
             double tehSpeeds = 0.05;
 

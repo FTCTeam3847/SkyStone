@@ -64,7 +64,7 @@ public class SkystoneActions extends SequentialAction {
 
     public SkystoneActions liftTower(double position) {
         addAction(new TowerLiftAction(position, bot));
-        pause(1);
+        pause();
         return this;
     }
 
@@ -174,7 +174,7 @@ public class SkystoneActions extends SequentialAction {
 
     public SkystoneActions strafeTo(FieldPosition fieldPosition) {
         addAction(new StrafeToAction(fieldPosition, bot));
-        //pause();
+        pause(1);
         return this;
     }
 

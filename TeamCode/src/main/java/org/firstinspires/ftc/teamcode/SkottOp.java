@@ -153,6 +153,11 @@ public class SkottOp extends OpMode {
             script = scripts.blueSideSkystoneOuter().start();
         }
 
+        if (buttonRedSideSkystone2a.getCurrent()) {
+            script.stop();
+            script = scripts.blueSideSkystoneInner().start();
+        }
+
         if (!script.isRunning()) {
             towerGrabberButtons.apply(blockGrabber::setPosition);
             towerLifterButtons.apply(towerLifter::setPower);

@@ -82,40 +82,50 @@ public class SkystoneScripts {
     public SkystoneActions blueSideSkystoneOuter() {
         return emptyScript()
                 .run(() -> bot.getLocalizer().calibrate(START_NEAR_BLUE_SKYSTONES))
-                .grabTower(.65)
+                .grabTower(0.65)
                 .strafeTo(xy(-62, 54))
                 .strafeTo(xy(-62, 18))
-                //.strafeTo(NEAR_BLUE_SKYSTONES)
-//                .strafe(0, 2400)
                 .grabTower()
-//                .strafeTo(MIDDLE_BLUE_SKYSTONES)
                 .strafeTo(xy(-61, 50))
                 .turnTo(0)
-                //.strafeTo(UNDER_BLUE_BRIDGE_CENTER)
-
-                //.strafeNoStop(Math.PI / 2, 2500)
                 .strafeNoStop(0, 3100, 0.9) //Time based
-                .liftTower(.3)
+                .liftTower(0.3)
                 .turnTo(3 * Math.PI / 2)
-
                 .strafeTo(xy(50, 16))
-                .grabTower(.15)
+                .grabTower(0.15)
+                //MOVES FOUNDATION -----------------------------------------------------------------
                 .lowerTower()
                 .strafeTo(xy(50, 54))
-
-                .liftTower(.2)
-
+                .liftTower(0.2)
+                //----------------------------------------------------------------------------------
                 .strafeNoStop(3 * Math.PI /2, 1500) //Time based
                 .lowerTower()
                 .strafeNoStop(3 * Math.PI /2, 750) //Time based
                 ;
     }
 
-    public SkystoneActions bluesideSkystoneInner() {
+    public SkystoneActions blueSideSkystoneInner() {
         return emptyScript()
                 .run(() -> bot.getLocalizer().calibrate(fieldPosition(xy(-15, 54), FACING_RED_WALL)))
+                .grabTower(0.65)
                 .strafeTo(xy(-15, 28))
-                .strafeTo(xy(-33, 28))
+                .strafeTo(xy(-36, 28))
+                .strafeTo(xy(-36, 18))
+                .grabTower()
+                .strafeTo(xy(-36, 28))
+                .turnTo(0)
+                .strafeNoStop(0,2200,0.9)
+                .liftTower(0.3)
+                .turnTo(3 * Math.PI / 2)
+                .strafeTo(xy(50, 16))
+                .grabTower(0.15)
+                .lowerTower()
+                .strafeTo(xy(50, 54))
+                .liftTower(0.2)
+                .strafeTo(xy(14, 54))
+                .strafeTo(xy(14, 30))
+                .lowerTower()
+                .strafeTo(xy(0,30))
                 ;
     }
 

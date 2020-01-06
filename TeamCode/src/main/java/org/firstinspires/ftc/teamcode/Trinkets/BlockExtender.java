@@ -55,6 +55,8 @@ public class BlockExtender {
 
     // Power [-1.0..1.0] -1.0 is in, 1.0 is out
     public void setPower(double power) {
+        // if the user starts controlling the power, then cancel the rtp controller
+        runToPositionController.stop();
         runAtPower(power);
     }
 

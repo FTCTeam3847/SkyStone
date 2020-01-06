@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Trinkets;
 
+import org.firstinspires.ftc.teamcode.controller.RunToPositionController;
+
 import java.util.Locale;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -18,12 +20,46 @@ public class BlockExtender {
     Consumer<Double> servoPower;
     Supplier<Double> servoPowerSupplier;
     double position = 0.0d;
+    double power;
     long lastTime = 0L;
     double MAX_POSITION = 1720.0d;
+    private RunToPositionController runToPositionController = new RunToPositionController(this::getPower, this::getPosition);
 
     public BlockExtender(Consumer<Double> servoPower, Supplier<Double> servoPowerSupplier) {
         this.servoPower = servoPower;
         this.servoPowerSupplier = servoPowerSupplier;
+    }
+
+    public boolean isRunningPastLimits() {
+        return (this.power < 0.0d && getPosition() <= 0.0) || (this.power > 0.0d && getPosition() >= MAX_POSITION);
+    }
+
+    public void loop() {
+        if (isRunningPastLimits()) {
+            stop();
+        } else if (runToPositionController.isBusy()) {
+            runAtPower(runToPositionController.getControl());
+        }
+    }
+
+    public void setPosition(double targetPosition) {
+        runToPositionController.setTarget(targetPosition);
+    }
+
+    public void stop() {
+        runToPositionController.stop();
+        runAtPower(0.0d);
+    }
+
+    private void runAtPower(double power) {
+        if (isRunningPastLimits()) {
+            power = 0;
+        } else {
+            power = clip(power, -1.0d, 1.0d);
+        }
+        integratePosition();
+        this.power = power;
+        servoPower.accept(power);
     }
 
     private void integratePosition() {
@@ -34,9 +70,7 @@ public class BlockExtender {
     }
 
     public void setPower(double power) {
-        power = clip(power, -1.0d, 1.0d);
-        integratePosition();
-        servoPower.accept(power);
+        runAtPower(power);
     }
 
     public double getPower() {

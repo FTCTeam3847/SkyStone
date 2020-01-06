@@ -25,11 +25,7 @@ public class BlockLiftAction implements RoboAction {
     @Override
     public BlockLiftAction start() {
         started = true;
-        startPosition = lifter.getPosition();
-        if (startPosition <= targetPosition)
-            lifter.setPower(1.0);
-        else
-            lifter.setPower(-1.0);
+        lifter.setPosition(targetPosition);
         return this;
     }
 
@@ -41,7 +37,7 @@ public class BlockLiftAction implements RoboAction {
     @Override
     public void stop() {
         isDone = true;
-        lifter.setPower(0.0);
+        lifter.stop();
     }
 
     @Override
@@ -55,12 +51,7 @@ public class BlockLiftAction implements RoboAction {
     }
 
     private boolean isComplete() {
-        double currentPosition = lifter.getPosition();
-
-        if (startPosition <= targetPosition)
-            return currentPosition >= targetPosition;
-        else
-            return currentPosition <= targetPosition;
+        return !lifter.isBusy();
     }
 
     @Override

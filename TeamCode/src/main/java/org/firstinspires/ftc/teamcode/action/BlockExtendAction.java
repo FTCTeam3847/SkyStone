@@ -15,7 +15,6 @@ public class BlockExtendAction implements RoboAction {
     private double targetPosition;
 
     private BlockExtender extender;
-    private double startPosition;
 
     public BlockExtendAction(double targetPosition, SkystoneBot bot) {
         this.targetPosition = targetPosition;
@@ -25,11 +24,7 @@ public class BlockExtendAction implements RoboAction {
     @Override
     public BlockExtendAction start() {
         started = true;
-        startPosition = extender.getPosition();
-        if (startPosition <= targetPosition)
-            extender.setPower(1.0);
-        else
-            extender.setPower(-1.0);
+        extender.setPosition(targetPosition);
         return this;
     }
 
@@ -41,7 +36,7 @@ public class BlockExtendAction implements RoboAction {
     @Override
     public void stop() {
         isDone = true;
-        extender.setPower(0.0);
+        extender.stop();
     }
 
     @Override
@@ -55,12 +50,7 @@ public class BlockExtendAction implements RoboAction {
     }
 
     private boolean isComplete() {
-        double currentPosition = extender.getPosition();
-
-        if (startPosition <= targetPosition)
-            return currentPosition >= targetPosition;
-        else
-            return currentPosition <= targetPosition;
+        return !extender.isBusy();
     }
 
     @Override

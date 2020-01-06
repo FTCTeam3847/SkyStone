@@ -84,8 +84,9 @@ public class SkottOp extends OpMode {
                 .extendBlock()
                 .releaseBlock()
                 .retractBlock()
-                .doubleLift(0.0)
+                .doubleLift(0.35)
                 .releaseTower()
+                .doubleLift(0.1)
                 ;
         return script;
     }
@@ -109,7 +110,6 @@ public class SkottOp extends OpMode {
                 .strafeTo(FACING_IMAGE_RED_WALL_FRONT)
                 .turnTo(FACING_RED_WALL);
     }
-
 
     @Override
     public void init() {
@@ -151,7 +151,7 @@ public class SkottOp extends OpMode {
         }
 
         if (buttonRunScript.getCurrent()) {
-            script = circumnavigateBlueSide();
+            script = makeScript();
             script.start();
         }
 

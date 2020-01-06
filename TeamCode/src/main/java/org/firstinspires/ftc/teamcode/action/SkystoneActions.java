@@ -27,7 +27,7 @@ public class SkystoneActions extends SequentialAction {
     }
 
     public SkystoneActions releaseTower() {
-        addAction(new TowerGrabAction(msecTime, 0.0, bot));
+        addAction(new TowerGrabAction(msecTime, 0.25, bot));
         pause();
         return this;
     }

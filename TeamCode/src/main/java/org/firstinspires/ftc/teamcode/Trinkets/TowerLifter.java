@@ -19,7 +19,7 @@ public class TowerLifter {
     private final Supplier<Integer> rightPosition;
 
     private static final double MAX_LEFT_UP = 0.35;
-    private static final double MAX_RIGHT_UP = 0.30;
+    private static final double MAX_RIGHT_UP = 0.35;
     private static final double MAX_LEFT_DOWN = 0.14;
     private static final double MAX_RIGHT_DOWN = 0.11;
     private static final double MAX_POSITION = 2950.0d;

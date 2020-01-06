@@ -9,8 +9,8 @@ import org.firstinspires.ftc.teamcode.Trinkets.BlockLifter;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerBuilder;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerGrabber;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerLifter;
-import org.firstinspires.ftc.teamcode.action.SequentialAction;
 import org.firstinspires.ftc.teamcode.action.SkystoneActions;
+import org.firstinspires.ftc.teamcode.action.SequentialAction;
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
 import org.firstinspires.ftc.teamcode.gamepad.PairedButtons;
@@ -48,14 +48,6 @@ public class SkottOp extends OpMode {
     private PushButton buttonRunScript = new PushButton(() -> gamepad2.y);
     PushButton buttonStopScript = new PushButton(() -> gamepad2.x);
 
-    private PushButton buttonTowerUp = new PushButton(() -> gamepad2.b && !gamepad2.start);
-    private PushButton buttonTowerDown = new PushButton(() -> gamepad2.a && !gamepad2.start);
-
-    private PushButton buttonExtendIn = new PushButton(() -> gamepad2.dpad_down);
-    private PushButton buttonExtendOut = new PushButton(() -> gamepad2.dpad_up);
-
-    private PushButton buttonBlockUp = new PushButton(() -> gamepad2.left_trigger != 0.0d);
-    private PushButton buttonBlockDown = new PushButton(() -> gamepad2.right_trigger != 0.0d);
 
     private ToggleButton toggleSlowMode = new ToggleButton(() -> gamepad1.right_stick_button);
 
@@ -93,7 +85,8 @@ public class SkottOp extends OpMode {
                 .releaseBlock()
                 .retractBlock()
                 .doubleLift(0.0)
-                .releaseTower();
+                .releaseTower()
+                ;
         return script;
     }
 
@@ -151,7 +144,8 @@ public class SkottOp extends OpMode {
         boolean slowMode = toggleSlowMode.getCurrent();
 
 
-        if (buttonStopScript.getCurrent()) {
+        if(buttonStopScript.getCurrent())
+        {
             script.stop();
             bot.getMecanumDrive().setPower(MecanumPower.ZERO);
         }
@@ -163,28 +157,9 @@ public class SkottOp extends OpMode {
 
         if (!script.isRunning()) {
             towerGrabberButtons.apply(blockGrabber::setPosition);
-//            blockLifterButtons.apply(blockLifter::setPower);
-//            blockExtenderButtons.apply(blockExtender::setPower);
-//            towerLifterButtons.apply(towerLifter::setPower);
-
-
-            if (buttonTowerUp.getCurrent()) {
-                towerLifter.setPosition(1.0d);
-            } else if (buttonTowerDown.getCurrent()) {
-                towerLifter.setPosition(0.0d);
-            }
-
-            if (buttonBlockUp.getCurrent() && towerLifter.getPosition() > 0.7d) {
-                blockLifter.setPosition(1.0d);
-            } else if (buttonBlockDown.getCurrent()) {
-                blockLifter.setPosition(0.0d);
-            }
-
-            if (buttonExtendIn.getCurrent()) {
-                blockExtender.setPosition(0.0d);
-            } else if (buttonExtendOut.getCurrent() && towerLifter.getPosition() >= 0.99) {
-                blockExtender.setPosition(1.0d);
-            }
+            towerLifterButtons.apply(towerLifter::setPower);
+            blockLifterButtons.apply(blockLifter::setPower);
+            blockExtenderButtons.apply(blockExtender::setPower);
 
             double tehSpeeds = 0.05;
 

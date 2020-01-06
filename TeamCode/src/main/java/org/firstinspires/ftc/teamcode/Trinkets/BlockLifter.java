@@ -24,13 +24,11 @@ public class BlockLifter {
     private final PositionIntegrator position = new PositionIntegrator(System::nanoTime, 0.0d, MAX_POSITION);
     private RunToPositionController runToPositionController = new RunToPositionController(this::getPower, this::getPosition);
 
-
     public BlockLifter(Consumer<Double> leftPower,
                        Consumer<Double> rightPower
     ) {
         this.leftPower = leftPower;
         this.rightPower = rightPower;
-
     }
 
     public void loop() {
@@ -39,6 +37,26 @@ public class BlockLifter {
         } else if (runToPositionController.isBusy()) {
             runAtPower(runToPositionController.getControl());
         }
+    }
+
+    // Position: [0.0..1.0] 0.0 is down, 1.0 is up
+    public void setPosition(double targetPosition) {
+        runToPositionController.setTarget(targetPosition);
+    }
+
+    public double getPosition() {
+        return limit(0.0d, position.getPosition() / MAX_POSITION, 1.0d);
+    }
+
+    // Power: [-1.0..1.0] negative is down, positive is up
+    public void setPower(double pwr) {
+        // if the user starts controlling the power, then cancel the rtp controller
+        runToPositionController.stop();
+        runAtPower(pwr);
+    }
+
+    public double getPower() {
+        return this.power;
     }
 
     public void stop() {
@@ -61,26 +79,6 @@ public class BlockLifter {
         leftPower.accept(power);
         rightPower.accept(power);
         this.power = power;
-    }
-
-    // [-1.0..1.0] negative is down, positive is up
-    public void setPower(double pwr) {
-        // if the user starts controlling the power, then cancel the rtp controller
-        runToPositionController.stop();
-        runAtPower(pwr);
-    }
-
-    public double getPower() {
-        return this.power;
-    }
-
-    // [0.0..1.0] 0.0 is down, 1.0 is up
-    public double getPosition() {
-        return limit(0.0d, position.getPosition() / MAX_POSITION, 1.0d);
-    }
-
-    public void setPosition(double targetPosition) {
-        runToPositionController.setTarget(targetPosition);
     }
 
     private static double limit(double min, double n, double max) {

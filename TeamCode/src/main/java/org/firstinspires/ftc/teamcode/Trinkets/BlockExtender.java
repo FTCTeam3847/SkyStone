@@ -30,10 +30,6 @@ public class BlockExtender {
         this.servoPowerSupplier = servoPowerSupplier;
     }
 
-    public boolean isRunningPastLimits() {
-        return (this.power < 0.0d && getPosition() <= 0.0) || (this.power > 0.0d && getPosition() >= MAX_POSITION);
-    }
-
     public void loop() {
         if (isRunningPastLimits()) {
             stop();
@@ -42,13 +38,32 @@ public class BlockExtender {
         }
     }
 
+    public void stop() {
+        runToPositionController.stop();
+        runAtPower(0.0d);
+    }
+
+    // Position [0.0..1.0] 0.0 is in, 1.0 is out
     public void setPosition(double targetPosition) {
         runToPositionController.setTarget(targetPosition);
     }
 
-    public void stop() {
-        runToPositionController.stop();
-        runAtPower(0.0d);
+    public double getPosition() {
+        integratePosition();
+        return scale(position, 0.0d, MAX_POSITION, 0.0d, 1.0d);
+    }
+
+    // Power [-1.0..1.0] -1.0 is in, 1.0 is out
+    public void setPower(double power) {
+        runAtPower(power);
+    }
+
+    public double getPower() {
+        return servoPowerSupplier.get();
+    }
+
+    private boolean isRunningPastLimits() {
+        return (this.power < 0.0d && getPosition() <= 0.0) || (this.power > 0.0d && getPosition() >= MAX_POSITION);
     }
 
     private void runAtPower(double power) {
@@ -67,19 +82,6 @@ public class BlockExtender {
         long duration = now - lastTime;
         position = clip(position + (duration * getPower()) / 1_000_000.0d, 0.0d, MAX_POSITION);
         lastTime = now;
-    }
-
-    public void setPower(double power) {
-        runAtPower(power);
-    }
-
-    public double getPower() {
-        return servoPowerSupplier.get();
-    }
-
-    public double getPosition() {
-        integratePosition();
-        return scale(position, 0.0d, MAX_POSITION, 0.0d, 1.0d);
     }
 
     @Override

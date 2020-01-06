@@ -50,34 +50,35 @@ public class TowerLifter {
         runAtPower(0.0d);
     }
 
-    public double getPower() {
-        return power;
+    // Position [0.0..1.0] 0.0 is down, 1.0 is up
+    public void setPosition(double targetPosition) {
+        runToPositionController.setTarget(targetPosition);
     }
 
-    // [-1.0..1.0] negative is down, positive is up
+    public double getPosition() {
+        return limit(0.0d, leftPosition.get() / MAX_POSITION, 1.0d);
+    }
+
+    // Power: [-1.0..1.0] negative is down, positive is up
     public void setPower(double pwr) {
         // if the user starts controlling the power, then cancel the rtp controller
         runToPositionController.stop();
         runAtPower(pwr);
     }
 
-    // [0.0..1.0] 0.0 is down, 1.0 is up
-    public double getPosition() {
-        return limit(0.0d, leftPosition.get() / MAX_POSITION, 1.0d);
+    public double getPower() {
+        return power;
     }
 
-    public void setPosition(double targetPosition) {
-        runToPositionController.setTarget(targetPosition);
+
+    private boolean isRunningPastLimits() {
+        return (this.power < 0.0d && getPosition() <= 0.0) || (this.power > 0.0d && getPosition() >= MAX_POSITION);
     }
 
     private void runAtPower(double pwr) {
         power = limit(-1.0d, pwr, 1.0d);
         leftPower.accept(leftPwr(power));
         rightPower.accept(rightPwr(power));
-    }
-
-    private boolean isRunningPastLimits() {
-        return (this.power < 0.0d && getPosition() <= 0.0) || (this.power > 0.0d && getPosition() >= MAX_POSITION);
     }
 
     private static double limit(double min, double n, double max) {

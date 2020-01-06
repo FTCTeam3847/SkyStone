@@ -41,10 +41,13 @@ public class TowerBuilder {
     public void loop() {
         towerLifter.loop();
         blockLifter.loop();
+        blockExtender.loop();
     }
 
     public void stop() {
         towerLifter.stop();
+        blockLifter.stop();
+        blockExtender.stop();
     }
 
     @Override

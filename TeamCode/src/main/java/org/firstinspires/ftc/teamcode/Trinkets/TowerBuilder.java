@@ -38,6 +38,14 @@ public class TowerBuilder {
         this.capstoneLifter = capstoneLifter;
     }
 
+    public void loop() {
+        towerLifter.loop();
+    }
+
+    public void stop() {
+        towerLifter.stop();
+    }
+
     @Override
     public String toString() {
         return format(Locale.US,

@@ -234,11 +234,13 @@ public class SkottBot implements SkystoneBot {
     @Override
     public void loop() {
         combinedLocalizer.getCurrent();
+        towerBuilder.loop();
         updateTelemetry();
     }
 
     @Override
     public void stop() {
+        towerBuilder.stop();
         skyStoneLocalizer.stop();
     }
 

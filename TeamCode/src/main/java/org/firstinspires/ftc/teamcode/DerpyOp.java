@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.action.SkystoneActions;
 import org.firstinspires.ftc.teamcode.action.SequentialAction;
+import org.firstinspires.ftc.teamcode.action.SkystoneScripts;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
 import org.firstinspires.ftc.teamcode.gamepad.OptionsButton;
 import org.firstinspires.ftc.teamcode.gamepad.PushButton;
@@ -47,6 +48,7 @@ public class DerpyOp extends OpMode {
     PushButton pushButtonLeftBumper = new PushButton(() -> gamepad1.left_bumper);
 
     SequentialAction script;
+    SkystoneScripts scripts;
 
 
     DerpyBot bot;
@@ -56,14 +58,7 @@ public class DerpyOp extends OpMode {
         return new SkystoneActions(System::currentTimeMillis, bot);
     }
 
-    public SequentialAction startBlueDepotParkOnly() {
-        return new SkystoneActions(System::currentTimeMillis, bot)
-                .run(() -> bot.combinedLocalizer.calibrate(fieldPosition(xy(-39, 60), FACING_RED_WALL)))
-                .moveForward(250, 0.3d)
-                .strafeTo(xy(4, 60))
-                .strafeTo(xy(4, 62))
-                ;
-    }
+
 
     public SequentialAction strafeFrontWallToRed() {
         return new SkystoneActions(System::currentTimeMillis, bot)
@@ -108,6 +103,7 @@ public class DerpyOp extends OpMode {
         //turnToAction = new TurnToAction(0, bot);
 
         script = newScript();
+        scripts = new SkystoneScripts(bot);
 
     }
 
@@ -169,7 +165,7 @@ public class DerpyOp extends OpMode {
         }
 
         if (pushButtonB.getCurrent() && !script.isRunning()) {
-            script = startBlueDepotParkOnly().start();
+            script = scripts.startBlueDepotParkOnly().start();
         }
 
         if (pushButtonLeftBumper.getCurrent()) {

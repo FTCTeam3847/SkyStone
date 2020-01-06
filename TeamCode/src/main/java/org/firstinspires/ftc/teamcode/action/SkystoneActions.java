@@ -26,6 +26,12 @@ public class SkystoneActions extends SequentialAction {
         return this;
     }
 
+    public SkystoneActions towerDrive(long dur, double direction, double speed, double position)
+    {
+        addAction(new TowerDrive(dur, msecTime, mecanumPower(speed, direction, 0), position, bot));
+        return this;
+    }
+
     public SkystoneActions releaseTower() {
         addAction(new TowerGrabAction(msecTime, 0.25, bot));
         pause();
@@ -35,6 +41,12 @@ public class SkystoneActions extends SequentialAction {
     public SkystoneActions grabTower() {
         addAction(new TowerGrabAction(msecTime, 1.0, bot));
         pause();
+        return this;
+    }
+
+    public SkystoneActions grabTower(double openness) {
+        addAction(new TowerGrabAction(msecTime, openness, bot));
+        pause(500);
         return this;
     }
 

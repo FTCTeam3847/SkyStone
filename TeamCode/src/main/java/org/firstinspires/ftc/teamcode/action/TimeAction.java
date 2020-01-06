@@ -7,7 +7,7 @@ public abstract class TimeAction implements RoboAction {
     private long startTime;
     private boolean isDone = false;
     private boolean isStarted = false;
-    private final long dur;
+    final long dur;
     private final Supplier<Long> msecTime;
 
     public TimeAction(long dur, Supplier<Long> msecTime) {

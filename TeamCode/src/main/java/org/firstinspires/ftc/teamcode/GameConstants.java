@@ -28,4 +28,18 @@ public class GameConstants {
 
     public static final FieldPosition STARTING_BLUE_NEAR_DEPOT = fieldPosition(67, 0.85*PI, FACING_RED_WALL);
     public static FieldPosition FACING_BLUE_SKYSTONE_2 = fieldPosition(80, 0.83 * PI, 3 * PI / 3);
+
+    public static final FieldPosition UNDER_BLUE_BRIDGE = fieldPosition(xy(-4, 56), FACING_RED_WALL);
+    public static final FieldPosition UNDER_BLUE_BRIDGE_CENTER = fieldPosition(xy(0, 48), FACING_RED_WALL);
+
+
+    public static final FieldPosition FACING_FOUNDATION_BLUE_CENTER = fieldPosition(xy(50, 18), FACING_RED_WALL);
+    public static final FieldPosition START_NEAR_BLUE_FOUNDATION = fieldPosition(xy(50, 54), FACING_RED_WALL);
+
+
+    public static final FieldPosition START_NEAR_BLUE_SKYSTONES = fieldPosition(xy(-39, 54), FACING_RED_WALL);
+    public static final FieldPosition NEAR_BLUE_SKYSTONES = fieldPosition(xy(-39, 20), FACING_RED_WALL);
+    public static final FieldPosition MIDDLE_BLUE_SKYSTONES = fieldPosition(xy(-39, 30), FACING_RED_WALL);
+
+
 }

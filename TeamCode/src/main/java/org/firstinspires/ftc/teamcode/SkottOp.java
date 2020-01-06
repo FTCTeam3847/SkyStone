@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.Trinkets.TowerGrabber;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerLifter;
 import org.firstinspires.ftc.teamcode.action.SkystoneActions;
 import org.firstinspires.ftc.teamcode.action.SequentialAction;
+import org.firstinspires.ftc.teamcode.action.SkystoneScripts;
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
 import org.firstinspires.ftc.teamcode.gamepad.PairedButtons;
@@ -30,6 +31,7 @@ import static org.firstinspires.ftc.teamcode.GameConstants.FACING_IMAGE_REAR_WAL
 import static org.firstinspires.ftc.teamcode.GameConstants.FACING_IMAGE_RED_WALL_FRONT;
 import static org.firstinspires.ftc.teamcode.GameConstants.FACING_REAR_WALL;
 import static org.firstinspires.ftc.teamcode.GameConstants.FACING_RED_WALL;
+import static org.firstinspires.ftc.teamcode.controller.FieldPosition.fieldPosition;
 
 @TeleOp(name = "SkottOp", group = "1")
 public class SkottOp extends OpMode {
@@ -75,21 +77,8 @@ public class SkottOp extends OpMode {
     );
 
     SequentialAction script;
+    private SkystoneScripts scripts;
 
-    public SequentialAction makeScript() {
-        SkystoneActions script = new SkystoneActions(System::currentTimeMillis, bot)
-                .releaseTower()
-                .grabTower()
-                .doubleLift(1.0)
-                .extendBlock()
-                .releaseBlock()
-                .retractBlock()
-                .doubleLift(0.35)
-                .releaseTower()
-                .doubleLift(0.1)
-                ;
-        return script;
-    }
 
     public SequentialAction circumnavigateBlueSide() {
         return new SkystoneActions(System::currentTimeMillis, bot)
@@ -122,7 +111,8 @@ public class SkottOp extends OpMode {
         blockExtender = towerBuilder.blockExtender;
         blockGrabber = towerBuilder.blockGrabber;
 
-        script = makeScript();
+        scripts = new SkystoneScripts(bot);
+        script = scripts.emptyScript();
     }
 
     private static double sensitivity(double base, double exp) {
@@ -151,8 +141,7 @@ public class SkottOp extends OpMode {
         }
 
         if (buttonRunScript.getCurrent()) {
-            script = makeScript();
-            script.start();
+            script = scripts.addBlockToTower().start();
         }
 
         if (!script.isRunning()) {

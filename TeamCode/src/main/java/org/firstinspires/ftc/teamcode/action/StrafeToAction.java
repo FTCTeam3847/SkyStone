@@ -36,7 +36,7 @@ public class StrafeToAction implements RoboAction {
     @Override
     public void loop() {
         if (started && !isDone) {
-            if (fieldPositionController.getError() != PolarCoord.ORIGIN) {
+            if (!fieldPositionController.getError().equals(PolarCoord.ORIGIN)) {
                 bot.getMecanumDrive().setPower(fieldPositionController.getControl());
             } else {
                 stop();

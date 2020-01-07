@@ -36,7 +36,7 @@ public class StrafeToNoStopAction implements RoboAction {
     @Override
     public void loop() {
         if (started && !isDone) {
-            if (fieldPositionController.getError() != PolarCoord.ORIGIN) {
+            if (!fieldPositionController.getError().equals(PolarCoord.ORIGIN)) {
                 MecanumPower control = fieldPositionController.getControl();
                 MecanumPower power = mecanumPower(bot.getAutonomousSpeed(), control.strafe.theta, control.turn);
                 bot.getMecanumDrive().setPower(power);

@@ -38,7 +38,7 @@ public class FieldPositionController implements Controller<FieldPosition, Mecanu
 
         PolarCoord error = getError();
         double mecanumTheta = subtractRadians(error.theta, currentFieldPosition.heading);
-        double power = min(error.radius / 12, 1) * autonomousSpeed;
+        double power = min(error.radius / 4, 1) * autonomousSpeed;
 
         lastControl = mecanumPower(max(power, 0.1), mecanumTheta, 0);
 
@@ -49,7 +49,7 @@ public class FieldPositionController implements Controller<FieldPosition, Mecanu
         this.lastError = PolarUtil.subtract(getCurrent().polarCoord, targetFieldPosition.polarCoord);
 
         //tolerance
-        if (lastError.radius <= 0.1) {
+        if (lastError.radius <= 0.25) {
             return PolarCoord.ORIGIN;
         }
 

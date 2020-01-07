@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.drive.mecanum.LocalizingMecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDriveController;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumLocalizer;
+import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
 
 import java.util.function.Supplier;
 
@@ -137,6 +138,7 @@ public class DerpyBot implements SkystoneBot {
     @Override
     public void stop() {
         skyStoneLocalizer.stop();
+        mecanum.setPower(MecanumPower.ZERO);
     }
 
     private void updateTelemetry() {

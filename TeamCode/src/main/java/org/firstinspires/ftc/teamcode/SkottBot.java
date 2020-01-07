@@ -25,6 +25,7 @@ import org.firstinspires.ftc.teamcode.drive.mecanum.LocalizingMecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDriveController;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumLocalizer;
+import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
 
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_USING_ENCODER;
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_WITHOUT_ENCODER;
@@ -234,6 +235,7 @@ public class SkottBot implements SkystoneBot {
     public void stop() {
         towerBuilder.stop();
         skyStoneLocalizer.stop();
+        mecanum.setPower(MecanumPower.ZERO);
     }
 
     private void updateTelemetry() {

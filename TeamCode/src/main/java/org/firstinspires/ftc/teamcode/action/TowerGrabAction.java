@@ -14,7 +14,7 @@ public class TowerGrabAction extends TimeAction {
     private TowerGrabber grabber;
 
     public TowerGrabAction(Supplier<Long> msecTime, double position, SkystoneBot bot) {
-        super(1000, msecTime);
+        super(100, msecTime);
         this.position = position;
         grabber = bot.getTowerBuilder().towerGrabber;
     }

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.action;
 
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
 import org.firstinspires.ftc.teamcode.controller.FieldPosition;
+import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
 import org.firstinspires.ftc.teamcode.polar.CartesianCoord;
 
 import static org.firstinspires.ftc.teamcode.GameConstants.FACING_FOUNDATION_BLUE_CENTER;
@@ -39,6 +40,7 @@ public class SkystoneScripts {
     public SkystoneActions blueFoundation() {
         return emptyScript()
                 .run(() -> bot.getLocalizer().calibrate(START_NEAR_BLUE_FOUNDATION))
+                .run(() -> bot.stop())
                 .liftTower(.15)
                 .pause(14_000)
                 .strafeTo(FACING_FOUNDATION_BLUE_CENTER)
@@ -55,6 +57,7 @@ public class SkystoneScripts {
     public SkystoneActions blueSideSkystoneParallelAttempt() {
         return emptyScript()
                 .run(() -> bot.getLocalizer().calibrate(START_NEAR_BLUE_SKYSTONES))
+                .run(() -> bot.stop())
                 .grabTower(.65)
                 //.strafeTo(NEAR_BLUE_SKYSTONES)
                 .strafe(0, 2400)
@@ -82,6 +85,7 @@ public class SkystoneScripts {
     public SkystoneActions blueSideSkystoneOuter() {
         return emptyScript()
                 .run(() -> bot.getLocalizer().calibrate(START_NEAR_BLUE_SKYSTONES))
+                .run(() -> bot.stop())
                 .grabTower(0.65)
                 .strafeTo(xy(-62, 54))
                 .strafeTo(xy(-62, 18))
@@ -107,6 +111,7 @@ public class SkystoneScripts {
     public SkystoneActions blueSideSkystoneInner() {
         return emptyScript()
                 .run(() -> bot.getLocalizer().calibrate(fieldPosition(xy(-15, 54), FACING_RED_WALL)))
+                .run(() -> bot.stop())
                 .grabTower(0.65)
                 .strafeTo(xy(-15, 28))
                 .strafeTo(xy(-36, 28))

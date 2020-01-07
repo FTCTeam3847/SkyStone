@@ -34,19 +34,16 @@ public class SkystoneActions extends SequentialAction {
 
     public SkystoneActions releaseTower() {
         addAction(new TowerGrabAction(msecTime, 0.25, bot));
-        pause(1);
         return this;
     }
 
     public SkystoneActions grabTower() {
         addAction(new TowerGrabAction(msecTime, 1.0, bot));
-        pause(1);
         return this;
     }
 
     public SkystoneActions grabTower(double openness) {
         addAction(new TowerGrabAction(msecTime, openness, bot));
-        pause(1);
         return this;
     }
 
@@ -55,7 +52,7 @@ public class SkystoneActions extends SequentialAction {
     }
 
     public SkystoneActions lowerTower() {
-        return liftTower(0.0d);
+        return liftTower(0.05d);
     }
 
     public SkystoneActions lowerTower(double position) {
@@ -109,7 +106,7 @@ public class SkystoneActions extends SequentialAction {
 
     public SkystoneActions strafe(double direction, long time) {
         addAction(new MoveAction(time, msecTime, mecanumPower(bot.getAutonomousSpeed(), direction, 0), bot));
-        pause(1);
+
         return this;
     }
 
@@ -152,7 +149,7 @@ public class SkystoneActions extends SequentialAction {
 
     public SkystoneActions turnTo(double targetAngle) {
         addAction(new TurnToAction(targetAngle, bot));
-        pause(1);
+
         return this;
     }
 
@@ -174,7 +171,7 @@ public class SkystoneActions extends SequentialAction {
 
     public SkystoneActions strafeTo(FieldPosition fieldPosition) {
         addAction(new StrafeToAction(fieldPosition, bot));
-        pause(1);
+
         return this;
     }
 

@@ -50,11 +50,12 @@ public class SkottOp extends OpMode {
     private PushButton buttonAddBlockToTower2y = new PushButton(() -> gamepad2.y);
     private PushButton buttonBlueSideSkystone2b = new PushButton(() -> gamepad2.b && !gamepad1.start && !gamepad2.start);
     private PushButton buttonRedSideSkystone2a = new PushButton(() -> gamepad2.a && !gamepad1.start && !gamepad2.start);
+    private PushButton addBlockToTowerBack = new PushButton(() -> gamepad1.back);
 
     private PushButton buttonStopScript = new PushButton(() -> gamepad2.x);
 
 
-    private ToggleButton toggleSlowMode = new ToggleButton(() -> gamepad1.right_stick_button);
+    private ToggleButton toggleSlowMode = new ToggleButton(() -> gamepad2.right_stick_button);
 
     private PairedButtons<Double> towerGrabberButtons = new PairedButtons<>(
             () -> gamepad1.left_bumper, 0.0d,
@@ -174,10 +175,16 @@ public class SkottOp extends OpMode {
                 towerGrabber.setPosition(towerGrabber.getPosition() - tehSpeeds);
             }
 
+            if (addBlockToTowerBack.getCurrent()) {
+                script.stop();
+                script = scripts.addBlockToTower().start();
+            }
+
+            //Changed to gamepad 2 temporarily
             MecanumPower mecanumPower = MecanumPower.fromGamepadXYTurn(
-                    sensitivity(gamepad1.right_stick_x, SENSITIVITY),
-                    sensitivity(-gamepad1.right_stick_y, SENSITIVITY),
-                    sensitivity(gamepad1.left_stick_x, SENSITIVITY)
+                    sensitivity(gamepad2.left_stick_x, SENSITIVITY),
+                    sensitivity(-gamepad2.left_stick_y, SENSITIVITY),
+                    sensitivity(gamepad2.right_stick_x, SENSITIVITY)
             );
 
             mecanumPower = slowMode ? mecanumPower.scale(0.5) : mecanumPower;

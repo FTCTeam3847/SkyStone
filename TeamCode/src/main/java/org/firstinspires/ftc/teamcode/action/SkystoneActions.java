@@ -110,6 +110,7 @@ public class SkystoneActions extends SequentialAction {
         return this;
     }
 
+    //relative to bot
     public SkystoneActions strafeNoStop(double direction, long time) {
         addAction(new MoveNoStopAction(time, msecTime, mecanumPower(bot.getAutonomousSpeed(), direction, 0), bot));
         return this;

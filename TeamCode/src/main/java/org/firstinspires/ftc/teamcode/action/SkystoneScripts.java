@@ -1,17 +1,8 @@
 package org.firstinspires.ftc.teamcode.action;
 
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
-import org.firstinspires.ftc.teamcode.controller.FieldPosition;
-import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
-import org.firstinspires.ftc.teamcode.polar.CartesianCoord;
 
-import static org.firstinspires.ftc.teamcode.GameConstants.FACING_FOUNDATION_BLUE_CENTER;
-import static org.firstinspires.ftc.teamcode.GameConstants.FACING_RED_WALL;
-import static org.firstinspires.ftc.teamcode.GameConstants.MIDDLE_BLUE_SKYSTONES;
-import static org.firstinspires.ftc.teamcode.GameConstants.START_NEAR_BLUE_FOUNDATION;
-import static org.firstinspires.ftc.teamcode.GameConstants.START_NEAR_BLUE_SKYSTONES;
-import static org.firstinspires.ftc.teamcode.GameConstants.UNDER_BLUE_BRIDGE;
-import static org.firstinspires.ftc.teamcode.GameConstants.UNDER_BLUE_BRIDGE_CENTER;
+import static org.firstinspires.ftc.teamcode.GameConstants.*;
 import static org.firstinspires.ftc.teamcode.controller.FieldPosition.fieldPosition;
 import static org.firstinspires.ftc.teamcode.polar.CartesianCoord.xy;
 
@@ -27,6 +18,8 @@ public class SkystoneScripts {
         return new SkystoneActions(System::currentTimeMillis, bot);
     }
 
+
+//BLUE
     public SkystoneActions startBlueDepotParkOnly() {
         return emptyScript()
                 .run(() -> bot.getLocalizer().calibrate(fieldPosition(xy(-39, 60), FACING_RED_WALL)))
@@ -54,9 +47,11 @@ public class SkystoneScripts {
     }
 
 
+
+//doesn't work
     public SkystoneActions blueSideSkystoneParallelAttempt() {
         return emptyScript()
-                .run(() -> bot.getLocalizer().calibrate(START_NEAR_BLUE_SKYSTONES))
+                .run(() -> bot.getLocalizer().calibrate(START_NEAR_BLUE_SKYSTONES_WALL))
                 .run(() -> bot.stop())
                 .grabTower(.65)
                 //.strafeTo(NEAR_BLUE_SKYSTONES)
@@ -84,7 +79,7 @@ public class SkystoneScripts {
 
     public SkystoneActions blueSideSkystoneOuter() {
         return emptyScript()
-                .run(() -> bot.getLocalizer().calibrate(START_NEAR_BLUE_SKYSTONES))
+                .run(() -> bot.getLocalizer().calibrate(START_NEAR_BLUE_SKYSTONES_WALL))
                 .run(() -> bot.stop())
                 .grabTower(0.65)
                 .strafeTo(xy(-62, 54))
@@ -110,7 +105,7 @@ public class SkystoneScripts {
 
     public SkystoneActions blueSideSkystoneInner() {
         return emptyScript()
-                .run(() -> bot.getLocalizer().calibrate(fieldPosition(xy(-15, 54), FACING_RED_WALL)))
+                .run(() -> bot.getLocalizer().calibrate(START_NEAR_RED_SKYSTONES_BRIDGE))
                 .run(() -> bot.stop())
                 .grabTower(0.65)
                 .strafeTo(xy(-15, 28))
@@ -134,6 +129,7 @@ public class SkystoneScripts {
                 ;
     }
 
+//BLOCK
     public SkystoneActions addBlockToTower() {
         return emptyScript()
                 .releaseTower()
@@ -145,6 +141,103 @@ public class SkystoneScripts {
                 .doubleLift(0.30)
                 .releaseTower()
                 .doubleLift(0.1);
+    }
+
+//RED
+    public SkystoneActions redFoundation() {
+        return emptyScript()
+                .run(() -> bot.getLocalizer().calibrate(START_NEAR_RED_FOUNDATION))
+                .run(() -> bot.stop())
+                .liftTower(.15)
+                .pause(14_000)
+                .strafeTo(FACING_FOUNDATION_RED_CENTER)
+                .lowerTower()
+                .strafeTo(START_NEAR_RED_FOUNDATION)
+                .strafe(Math.PI, 250)
+                .liftTower(.15)
+                .strafeTo(fieldPosition(xy(15, -54), FACING_BLUE_WALL))
+                .lowerTower()
+                .strafeTo(UNDER_RED_BRIDGE);
+    }
+
+
+public SkystoneActions redSideSkystoneOuter() {
+    return emptyScript()
+            .run(() -> bot.getLocalizer().calibrate(START_NEAR_RED_SKYSTONES_WALL))
+            .run(() -> bot.stop())
+            .grabTower(0.65)
+            .strafeTo(xy(-62, -54))
+            .strafeTo(xy(-62, -18))
+            .grabTower()
+            .strafeTo(xy(-61, -50))
+            .turnTo(0)
+            .strafeNoStop(0, 3100, 0.9) //Time based
+            .liftTower(0.3)
+            .turnTo(Math.PI / 2)
+            .strafeTo(xy(50, -16))
+            .grabTower(0.15)
+            //MOVES FOUNDATION -----------------------------------------------------------------
+            .lowerTower()
+            .strafeTo(xy(50, -54))
+            .liftTower(0.2)
+            //----------------------------------------------------------------------------------
+            .strafeNoStop(Math.PI /2, 1500) //Time based
+            .lowerTower()
+            .strafeNoStop( Math.PI /2, 750) //Time based
+            ;
+}
+
+
+    public SkystoneActions redSideSkystoneInner() {
+        return emptyScript()
+                .run(() -> bot.getLocalizer().calibrate(START_NEAR_RED_SKYSTONES_BRIDGE))
+                .run(() -> bot.stop())
+                .grabTower(0.65)
+                .strafeTo(xy(-15, -28))
+                .strafeTo(xy(-36, -28))
+                .strafeTo(xy(-36, -18))
+                .grabTower()
+                .strafeTo(xy(-36, -28))
+                .turnTo(0)
+                .strafeNoStop(0,2200,0.9)
+                .liftTower(0.3)
+                .turnTo(Math.PI / 2)
+                .strafeTo(xy(50, -16))
+                .grabTower(0.15)
+                .lowerTower()
+                .strafeTo(xy(50, -54))
+                .liftTower(0.2)
+                .strafeTo(xy(14, -54))
+                .strafeTo(xy(14, -30))
+                .lowerTower()
+                .strafeTo(xy(0,-30))
+                ;
+    }
+
+    public SkystoneActions redSideSkystoneOuter2() {
+        return emptyScript()
+                .run(() -> bot.getLocalizer().calibrate(fieldPosition(xy(-39, -54), FACING_BLUE_WALL)))
+                .run(() -> bot.stop())
+                .grabTower(0.65)
+                .strafeTo(xy(-62, -54))
+                .strafeTo(xy(-62, -18))
+                .grabTower()
+                .strafeTo(xy(-61, -50))
+                .turnTo(0)
+                .strafeNoStop(0, 3100, 0.9) //Time based
+                .liftTower(0.3)
+                .turnTo(Math.PI / 2)
+                .strafeTo(xy(50, -16))
+                .grabTower(0.15)
+                //MOVES FOUNDATION -----------------------------------------------------------------
+                .lowerTower()
+                .strafeTo(xy(50, -54))
+                .liftTower(0.2)
+                //----------------------------------------------------------------------------------
+                .strafeNoStop(Math.PI /2, 1500) //Time based
+                .lowerTower()
+                .strafeNoStop( Math.PI /2, 750) //Time based
+                ;
     }
 
 }

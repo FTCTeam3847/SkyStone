@@ -22,8 +22,8 @@ public class TowerGrabber {
 
     double position;
 
-    double leftStartPos = 0.60;
-    double leftEndPos = 0.10;
+    double leftStartPos = 0.65;
+    double leftEndPos = 0.15;
     double rightStartPos = 0.25;
     double rightEndPos = 0.75;
 

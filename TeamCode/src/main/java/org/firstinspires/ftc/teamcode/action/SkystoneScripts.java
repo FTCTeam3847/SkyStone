@@ -250,11 +250,11 @@ public class SkystoneScripts {
                 .run(() -> bot.getLocalizer().calibrate(START_NEAR_RED_SKYSTONES_BRIDGE))
                 .run(() -> bot.stop())
                 .strafeTo(xy(-15, -30))
-                .strafeTo(xy(-36, -30))
+                .strafeTo(xy(-37, -30))
                 .grabTower(0.65)
-                .strafeTo(xy(-36, -17.5))
+                .strafeTo(xy(-37, -16))
                 .grabTower()
-                .strafeTo(xy(-36, -28))
+                .strafeTo(xy(-37, -28))
                 .turnTo(0)
                 .strafeNoStop(0,2400,0.9)//long drive across field
                 .liftTower(0.3)
@@ -267,8 +267,8 @@ public class SkystoneScripts {
                 .strafeTo(xy(50, -54))
                 .liftTower(0.2)
 
-                .strafeTo(xy(16, -54))
-                .strafeTo(xy(16, -30))
+                .strafeTo(xy(15, -54))
+                .strafeTo(xy(15, -30))
                 .lowerTower()
                 .strafeTo(xy(-5,-30))
                 ;

@@ -49,7 +49,17 @@ public class SkottOp extends OpMode {
 
     private PushButton buttonAddBlockToTower2y = new PushButton(() -> gamepad2.y);
     private PushButton buttonBlueSideSkystone2b = new PushButton(() -> gamepad2.b && !gamepad1.start && !gamepad2.start);
-    private PushButton buttonRedSideSkystone2a = new PushButton(() -> gamepad2.a && !gamepad1.start && !gamepad2.start);
+    private PushButton buttonBlueSideSkystone2a = new PushButton(() -> gamepad2.a && !gamepad1.start && !gamepad2.start);
+
+    private PushButton buttonRedSideSkystone2L = new PushButton(() -> gamepad2.left_bumper && !gamepad1.start && !gamepad2.start);
+    private PushButton buttonRedSideSkystone2R = new PushButton(() -> gamepad2.right_bumper && !gamepad1.start && !gamepad2.start);
+
+    private PushButton buttonRedSideOuterNoFoundation2DpadL = new PushButton(() -> gamepad2.dpad_left && !gamepad1.start && !gamepad2.start);
+    private PushButton buttonRedSideInnerNoFoundation2DpadR = new PushButton(() -> gamepad2.dpad_right && !gamepad1.start && !gamepad2.start);
+    private PushButton buttonBlueSideOuterNoFoundation2DpadUp = new PushButton(() -> gamepad2.dpad_up && !gamepad1.start && !gamepad2.start);
+    private PushButton buttonBlueSideInnerNoFoundation2DpadDown = new PushButton(() -> gamepad2.dpad_down && !gamepad1.start && !gamepad2.start);
+
+
     private PushButton addBlockToTowerBack = new PushButton(() -> gamepad1.back);
 
     private PushButton buttonStopScript = new PushButton(() -> gamepad2.x);
@@ -58,8 +68,8 @@ public class SkottOp extends OpMode {
     private ToggleButton toggleSlowMode = new ToggleButton(() -> gamepad2.right_stick_button);
 
     private PairedButtons<Double> towerGrabberButtons = new PairedButtons<>(
-            () -> gamepad1.left_bumper, 0.0d,
-            () -> gamepad1.right_bumper, 1.0d
+            () -> gamepad1.left_bumper, 1.0d,
+            () -> gamepad1.right_bumper, 0.0d
     );
 
     private PairedButtons<Double> towerLifterButtons = new PairedButtons<>(
@@ -69,8 +79,8 @@ public class SkottOp extends OpMode {
     );
 
     private PairedButtons<Double> blockLifterButtons = new PairedButtons<>(
-            () -> gamepad1.left_trigger != 0.0d, () -> (double) gamepad1.left_trigger,
-            () -> gamepad1.right_trigger != 0.0d, () -> (double) -gamepad1.right_trigger,
+            () -> gamepad1.left_trigger != 0.0d, () -> (double) -gamepad1.left_trigger,
+            () -> gamepad1.right_trigger != 0.0d, () -> (double) gamepad1.right_trigger,
             () -> 0.0d
     );
 
@@ -123,7 +133,7 @@ public class SkottOp extends OpMode {
         return signum(base) * pow(abs(base), exp);
     }
 
-    private static final int SENSITIVITY = 3;
+    private static final int SENSITIVITY = 1;
 
     @Override
     public void init_loop() {
@@ -154,10 +164,42 @@ public class SkottOp extends OpMode {
             script = scripts.blueSideSkystoneOuter().start();
         }
 
-        if (buttonRedSideSkystone2a.getCurrent()) {
+        if (buttonBlueSideSkystone2a.getCurrent()) {
             script.stop();
             script = scripts.blueSideSkystoneInner().start();
         }
+
+
+        if (buttonRedSideSkystone2L.getCurrent()) {
+            script.stop();
+            script = scripts.redSideSkystoneOuter().start();
+        }
+
+        if (buttonRedSideSkystone2R.getCurrent()) {
+            script.stop();
+            script = scripts.redSideSkystoneInner().start();
+        }
+
+        if (buttonRedSideOuterNoFoundation2DpadL.getCurrent()) {
+            script.stop();
+            script = scripts.redSideSkystoneOuterNoFoundation().start();
+        }
+
+        if (buttonRedSideInnerNoFoundation2DpadR.getCurrent()) {
+            script.stop();
+            script = scripts.redSideSkystoneInnerNoFoundation().start();
+        }
+
+        if (buttonBlueSideInnerNoFoundation2DpadDown.getCurrent()) {
+            script.stop();
+            script = scripts.blueSideSkystoneInnerNoFoundation().start();
+        }
+
+        if (buttonBlueSideOuterNoFoundation2DpadUp.getCurrent()) {
+            script.stop();
+            script = scripts.blueSideSkystoneInnerNoFoundation().start();
+        }
+
 
         if (!script.isRunning()) {
             towerGrabberButtons.apply(blockGrabber::setPosition);

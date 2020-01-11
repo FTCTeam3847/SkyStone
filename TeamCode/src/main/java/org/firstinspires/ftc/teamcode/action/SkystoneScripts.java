@@ -213,7 +213,7 @@ public class SkystoneScripts {
                 //----------------------------------------------------------------------------------
                 .strafeNoStop(3 * Math.PI /2, 1500) //Time based
                 .lowerTower()
-                .strafeNoStop(3 * Math.PI /2, 1000) //Time based
+                .strafe(3 * Math.PI /2, 1350) //Time based
                 ;
     }//BLUE OUTER
 
@@ -238,8 +238,8 @@ public class SkystoneScripts {
                 .lowerTower()
                 .strafeTo(xy(50, 55))
                 .liftTower(0.2)
-                .strafeTo(xy(18, 55))
-                .strafeTo(xy(18, 30))
+                .strafeTo(xy(16.5, 55))
+                .strafeTo(xy(16.5, 30))
                 .lowerTower()
                 .strafeTo(xy(-5,30))
                 ;

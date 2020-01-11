@@ -26,7 +26,6 @@ import static org.firstinspires.ftc.teamcode.GameConstants.FACING_REAR_WALL;
 import static org.firstinspires.ftc.teamcode.GameConstants.FACING_RED_WALL;
 import static org.firstinspires.ftc.teamcode.controller.FieldPosition.fieldPosition;
 import static org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower.mecanumPower;
-import static org.firstinspires.ftc.teamcode.polar.CartesianCoord.xy;
 
 @TeleOp(name = "DerpyOp", group = "1")
 public class DerpyOp extends OpMode {
@@ -165,7 +164,7 @@ public class DerpyOp extends OpMode {
         }
 
         if (pushButtonB.getCurrent() && !script.isRunning()) {
-            script = scripts.startBlueDepotParkOnly().start();
+            script = scripts.blueDepotParkOnly().start();
         }
 
         if (pushButtonLeftBumper.getCurrent()) {

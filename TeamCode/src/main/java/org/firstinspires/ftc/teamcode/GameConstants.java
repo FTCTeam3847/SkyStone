@@ -46,7 +46,13 @@ public class GameConstants {
     public static final FieldPosition MIDDLE_BLUE_SKYSTONES = fieldPosition(xy(-39, 30), FACING_RED_WALL);
 
 
+
+    public static final FieldPosition START_NEAR_BLUE_BUILD_WALL = fieldPosition(xy(39, 54), FACING_RED_WALL);
+
     //RED
+
+    public static final FieldPosition START_NEAR_RED_BUILD_WALL = fieldPosition(xy(39, -54), FACING_BLUE_WALL);
+
 
     public static final FieldPosition START_NEAR_RED_SKYSTONES_WALL = fieldPosition(xy(-39, -54), FACING_BLUE_WALL);
     public static final FieldPosition START_NEAR_RED_SKYSTONES_BRIDGE = fieldPosition(xy(-15, -54), FACING_BLUE_WALL);

@@ -24,8 +24,8 @@ public class TowerGrabber {
 
     double leftStartPos = 0.65;
     double leftEndPos = 0.15;
-    double rightStartPos = 0.25;
-    double rightEndPos = 0.75;
+    double rightStartPos = 0.20;
+    double rightEndPos = 0.70;
 
     public TowerGrabber(Consumer<Double> setLeftPos,
                         Consumer<Double> setRightPos,

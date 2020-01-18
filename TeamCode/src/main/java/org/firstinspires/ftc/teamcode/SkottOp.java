@@ -236,6 +236,14 @@ public class SkottOp extends OpMode {
                     sensitivity(gamepad2.right_stick_x, SENSITIVITY)
             );
 
+            if (gamepad2.left_trigger > 0) {
+                mecanumPower = MecanumPower.fromGamepadXYTurn(-gamepad2.left_trigger, 0, 0);
+                mecanumPower.scale(0.2);
+            } else if (gamepad2.right_trigger > 0) {
+                mecanumPower = MecanumPower.fromGamepadXYTurn(gamepad2.right_trigger, 0, 0);
+                mecanumPower.scale(0.2);
+            }
+
             mecanumPower = slowMode ? mecanumPower.scale(0.5) : mecanumPower;
 
             bot.getMecanumDrive().setPower(mecanumPower);

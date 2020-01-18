@@ -18,11 +18,11 @@ public class TowerLifter {
     private final Supplier<Integer> leftPosition;
     private final Supplier<Integer> rightPosition;
 
-    private static final double MAX_LEFT_UP = 0.35;
-    private static final double MAX_RIGHT_UP = 0.35;
-    private static final double MAX_LEFT_DOWN = 0.14;
-    private static final double MAX_RIGHT_DOWN = 0.11;
-    private static final double MAX_POSITION = 2950.0d;
+    private static final double MAX_LEFT_UP = 0.75d;
+    private static final double MAX_RIGHT_UP = 0.75d;
+    private static final double MAX_LEFT_DOWN = 0.75d;
+    private static final double MAX_RIGHT_DOWN = 0.75d;
+    private static final double MAX_ENCODER_POSITION = 5850.0d;
     private double power = 0.0d;
     private RunToPositionController runToPositionController = new RunToPositionController(this::getPower, this::getPosition);
 
@@ -38,10 +38,13 @@ public class TowerLifter {
     }
 
     public void loop() {
-        if (isRunningPastLimits()) {
-            stop();
-        } else if (runToPositionController.isBusy()) {
-            runAtPower(runToPositionController.getControl());
+        if (runToPositionController.isBusy()) {
+            double power = runToPositionController.getControl();
+            if (isRunningPastLimits(power)) {
+                stop();
+            } else {
+                runAtPower(power);
+            }
         }
     }
 
@@ -59,8 +62,12 @@ public class TowerLifter {
         runToPositionController.setTarget(targetPosition);
     }
 
+    private int encoderPosition() {
+        return leftPosition.get();
+    }
+
     public double getPosition() {
-        return limit(0.0d, leftPosition.get() / MAX_POSITION, 1.0d);
+        return limit(0.0d, encoderPosition() / MAX_ENCODER_POSITION, 1.0d);
     }
 
     // Power: [-1.0..1.0] negative is down, positive is up
@@ -75,12 +82,20 @@ public class TowerLifter {
     }
 
 
-    private boolean isRunningPastLimits() {
-        return (this.power < 0.0d && getPosition() <= 0.0) || (this.power > 0.0d && getPosition() >= MAX_POSITION);
+    private boolean isRunningPastLowerLimit(double power) {
+        return (power < 0.0d && encoderPosition() <= 0);
+    }
+
+    private boolean isRunningPastUpperLimit(double power) {
+        return (power > 0.0d && encoderPosition() >= MAX_ENCODER_POSITION);
+    }
+
+    private boolean isRunningPastLimits(double power) {
+        return isRunningPastLowerLimit(power) || isRunningPastUpperLimit(power);
     }
 
     private void runAtPower(double pwr) {
-        power = limit(-1.0d, pwr, 1.0d);
+        power = isRunningPastUpperLimit(pwr) ? 0.0d : limit(-1.0d, pwr, 1.0d);
         leftPower.accept(leftPwr(power));
         rightPower.accept(rightPwr(power));
     }

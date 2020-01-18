@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -56,6 +57,9 @@ public class SkottBot implements SkystoneBot {
     public CRServo rightBlockLifter;
 
     public  Servo capstoneLifterServo;
+
+    public ColorSensor color1;
+    public ColorSensor color2;
 
     private final HardwareMap hardwareMap;
     private final Telemetry telemetry;
@@ -161,6 +165,12 @@ public class SkottBot implements SkystoneBot {
         rightTowerLifter.setDirection(REVERSE);
         rightTowerLifter.setZeroPowerBehavior(BRAKE);
         rightTowerLifter.setMode(RUN_WITHOUT_ENCODER);
+
+        //Color Sensor 1 I2C Port 0
+        color1 = hardwareMap.colorSensor.get("color1");
+
+        //Color Sensor 2 I2C Port 1
+        color2 = hardwareMap.colorSensor.get("color2");
 
         TowerLifter towerLifter =
                 new TowerLifter(

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -38,6 +39,9 @@ public class DerpyBot implements SkystoneBot {
     private final Supplier<Long> nanoTime;
     private long loopEndTime;
     private double loopDuration;
+
+    public ColorSensor color1;
+    public ColorSensor color2;
 
     private MecanumDrive mecanum;
     private BNO055IMU imu;
@@ -109,6 +113,12 @@ public class DerpyBot implements SkystoneBot {
         rightBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         loopEndTime = nanoTime.get();
+
+        //Color Sensor 1 I2C Port 0
+        color1 = hardwareMap.colorSensor.get("color1");
+
+        //Color Sensor 2 I2C Port 1
+        color2 = hardwareMap.colorSensor.get("color2");
     }
 
     private void updateLoopTimer() {

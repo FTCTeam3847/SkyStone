@@ -67,10 +67,10 @@ public class SkottBot implements SkystoneBot {
     public I2cDevice range1;
 
     byte[] range1Cache; //The read will return an array of bytes. They are stored in this variable
-    I2cAddr RANGE1ADDRESS = new I2cAddr(0x14); //Default I2C address for MR Range (7-bit)
+    I2cAddr range1Address = new I2cAddr(0x14); //Default I2C address for MR Range (7-bit)
     public static final int RANGE1_REG_START = 0x04; //Register to start reading
     public static final int RANGE1_READ_LENGTH = 2; //Number of byte to read
-    public I2cDeviceSynch RANGE1Reader;
+    public I2cDeviceSynch range1Reader;
 
 
     private final HardwareMap hardwareMap;
@@ -179,9 +179,9 @@ public class SkottBot implements SkystoneBot {
         rightTowerLifter.setMode(RUN_WITHOUT_ENCODER);
 
 
-        range1 = hardwareMap.i2cDevice.get("range");
-        RANGE1Reader = new I2cDeviceSynchImpl(range1, RANGE1ADDRESS, false);
-        RANGE1Reader.engage();
+        range1 = hardwareMap.i2cDevice.get("range1");
+        range1Reader = new I2cDeviceSynchImpl(range1, range1Address, false);
+        range1Reader.engage();
 
         //Color Sensor 1 I2C Port 1
         //color1 = hardwareMap.colorSensor.get("color1");
@@ -256,7 +256,7 @@ public class SkottBot implements SkystoneBot {
         combinedLocalizer.getCurrent();
         towerBuilder.loop();
 
-        range1Cache = RANGE1Reader.read(RANGE1_REG_START, RANGE1_READ_LENGTH);
+        range1Cache = range1Reader.read(RANGE1_REG_START, RANGE1_READ_LENGTH);
 
         updateTelemetry();
     }

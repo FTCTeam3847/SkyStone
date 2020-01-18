@@ -5,6 +5,10 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.I2cAddr;
+import com.qualcomm.robotcore.hardware.I2cDevice;
+import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
+import com.qualcomm.robotcore.hardware.I2cDeviceSynchImpl;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -60,6 +64,14 @@ public class SkottBot implements SkystoneBot {
 
     public ColorSensor color1;
     public ColorSensor color2;
+    public I2cDevice range1;
+
+    byte[] range1Cache; //The read will return an array of bytes. They are stored in this variable
+    I2cAddr RANGE1ADDRESS = new I2cAddr(0x14); //Default I2C address for MR Range (7-bit)
+    public static final int RANGE1_REG_START = 0x04; //Register to start reading
+    public static final int RANGE1_READ_LENGTH = 2; //Number of byte to read
+    public I2cDeviceSynch RANGE1Reader;
+
 
     private final HardwareMap hardwareMap;
     private final Telemetry telemetry;
@@ -166,11 +178,16 @@ public class SkottBot implements SkystoneBot {
         rightTowerLifter.setZeroPowerBehavior(BRAKE);
         rightTowerLifter.setMode(RUN_WITHOUT_ENCODER);
 
-        //Color Sensor 1 I2C Port 0
-        color1 = hardwareMap.colorSensor.get("color1");
 
-        //Color Sensor 2 I2C Port 1
-        color2 = hardwareMap.colorSensor.get("color2");
+        range1 = hardwareMap.i2cDevice.get("range");
+        RANGE1Reader = new I2cDeviceSynchImpl(range1, RANGE1ADDRESS, false);
+        RANGE1Reader.engage();
+
+        //Color Sensor 1 I2C Port 1
+        //color1 = hardwareMap.colorSensor.get("color1");
+
+        //Color Sensor 2 I2C Port 2
+        //color2 = hardwareMap.colorSensor.get("color2");
 
         TowerLifter towerLifter =
                 new TowerLifter(
@@ -238,6 +255,9 @@ public class SkottBot implements SkystoneBot {
     public void loop() {
         combinedLocalizer.getCurrent();
         towerBuilder.loop();
+
+        range1Cache = RANGE1Reader.read(RANGE1_REG_START, RANGE1_READ_LENGTH);
+
         updateTelemetry();
     }
 
@@ -249,6 +269,9 @@ public class SkottBot implements SkystoneBot {
     }
 
     private void updateTelemetry() {
+        telemetry.addData("Ultra Sonic", range1Cache[0] & 0xFF);
+        telemetry.addData("ODS", range1Cache[1] & 0xFF);
+
         telemetry.addData("heading", headingLocalizer);
         telemetry.addData("skyStoneLocalizer", skyStoneLocalizer);
         telemetry.addData("buffering", bufferingLocalizer);

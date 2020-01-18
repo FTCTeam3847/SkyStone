@@ -171,8 +171,7 @@ public class DerpyOp extends OpMode {
             script = newScript().turnToLocate().start();
         }
 
-        telemetry.addData("Color Sensor 1: ", bot.color1.argb());
-        telemetry.addData("Color Sensor 2: ", bot.color2.argb());
+        telemetry.addData("Color 1:", "r: %d g: %d b: %d a: %d", bot.color1.red(), bot.color1.green(), bot.color1.blue(), bot.color1.alpha());
         telemetry.addData("script", script);
         telemetry.update();
     }

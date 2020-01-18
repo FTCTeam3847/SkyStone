@@ -41,7 +41,6 @@ public class DerpyBot implements SkystoneBot {
     private double loopDuration;
 
     public ColorSensor color1;
-    public ColorSensor color2;
 
     private MecanumDrive mecanum;
     private BNO055IMU imu;
@@ -116,9 +115,6 @@ public class DerpyBot implements SkystoneBot {
 
         //Color Sensor 1 I2C Port 0
         color1 = hardwareMap.colorSensor.get("color1");
-
-        //Color Sensor 2 I2C Port 1
-        color2 = hardwareMap.colorSensor.get("color2");
     }
 
     private void updateLoopTimer() {

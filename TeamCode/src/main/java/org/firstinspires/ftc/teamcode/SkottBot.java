@@ -79,7 +79,6 @@ public class SkottBot implements SkystoneBot {
     private HeadingController headingController;
     private HeadingLocalizer headingLocalizer;
     private MecanumDrive mecanum;
-    private MecanumLocalizer mecanumLocalizer;
     private VuforiaLocalizer vuforiaLocalizer;
     private SkyStoneLocalizer skyStoneLocalizer;
     private BufferingLocalizer bufferingLocalizer;
@@ -114,9 +113,7 @@ public class SkottBot implements SkystoneBot {
                 headingLocalizer::getLast,
                 28.0
         );
-        this.mecanumLocalizer = mecanumLocalizer;
-        MecanumDrive mDrive = new MecanumDriveController(headingController, this::setDrivePower);
-        mecanum = new LocalizingMecanumDrive(mDrive, mecanumLocalizer);
+        mecanum = new MecanumDriveController(headingController, this::setDrivePower);
         vuforiaLocalizer = initVuforia(hardwareMap);
         skyStoneLocalizer = new SkyStoneLocalizer(vuforiaLocalizer);
 
@@ -127,25 +124,25 @@ public class SkottBot implements SkystoneBot {
 
         //Primary Port 3
         leftFrontMotor = hardwareMap.get(DcMotor.class, "motor-left-front");
-        leftFrontMotor.setDirection(FORWARD);
+        leftFrontMotor.setDirection(REVERSE);
         leftFrontMotor.setZeroPowerBehavior(BRAKE);
         leftFrontMotor.setMode(RUN_USING_ENCODER);
 
         //Primary Port 1
         leftBackMotor = hardwareMap.get(DcMotor.class, "motor-left-back");
-        leftBackMotor.setDirection(REVERSE);
+        leftBackMotor.setDirection(FORWARD);
         leftBackMotor.setZeroPowerBehavior(BRAKE);
         leftBackMotor.setMode(RUN_USING_ENCODER);
 
         //Primary Port 2
         rightFrontMotor = hardwareMap.get(DcMotor.class, "motor-right-front");
-        rightFrontMotor.setDirection(REVERSE);
+        rightFrontMotor.setDirection(FORWARD);
         rightFrontMotor.setZeroPowerBehavior(BRAKE);
         rightFrontMotor.setMode(RUN_USING_ENCODER);
 
         //Primary Port 0
         rightBackMotor = hardwareMap.get(DcMotor.class, "motor-right-back");
-        rightBackMotor.setDirection(FORWARD);
+        rightBackMotor.setDirection(REVERSE);
         rightBackMotor.setZeroPowerBehavior(BRAKE);
         rightBackMotor.setMode(RUN_USING_ENCODER);
 
@@ -275,7 +272,6 @@ public class SkottBot implements SkystoneBot {
         telemetry.addData("heading", headingLocalizer);
         telemetry.addData("skyStoneLocalizer", skyStoneLocalizer);
         telemetry.addData("buffering", bufferingLocalizer);
-        telemetry.addData("mecanumLocalizer", mecanumLocalizer);
     }
 
     private void setPower4(double leftFront, double leftBack, double rightFront, double rightBack) {

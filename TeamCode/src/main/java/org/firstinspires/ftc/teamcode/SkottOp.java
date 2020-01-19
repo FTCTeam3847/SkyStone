@@ -31,7 +31,7 @@ import static org.firstinspires.ftc.teamcode.GameConstants.FACING_IMAGE_REAR_WAL
 import static org.firstinspires.ftc.teamcode.GameConstants.FACING_IMAGE_RED_WALL_FRONT;
 import static org.firstinspires.ftc.teamcode.GameConstants.FACING_REAR_WALL;
 import static org.firstinspires.ftc.teamcode.GameConstants.FACING_RED_WALL;
-import static org.firstinspires.ftc.teamcode.controller.FieldPosition.fieldPosition;
+import static org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower.fromGamepadXYTurn;
 
 @TeleOp(name = "SkottOp", group = "1")
 public class SkottOp extends OpMode {
@@ -65,7 +65,9 @@ public class SkottOp extends OpMode {
 
     private PushButton addBlockToTowerBack = new PushButton(() -> gamepad1.back);
 
-    private PushButton buttonStopScript = new PushButton(() -> gamepad2.x);
+    private PushButton buttonStopScript = new PushButton(
+            () -> gamepad1.dpad_left || gamepad1.dpad_right || gamepad1.dpad_up || gamepad1.dpad_down
+    );
 
 
     private ToggleButton toggleSlowMode = new ToggleButton(() -> gamepad2.right_stick_button);
@@ -136,7 +138,7 @@ public class SkottOp extends OpMode {
         return signum(base) * pow(abs(base), exp);
     }
 
-    private static final int SENSITIVITY = 1;
+    private static final int SENSITIVITY = 2;
 
     @Override
     public void init_loop() {
@@ -151,8 +153,7 @@ public class SkottOp extends OpMode {
         boolean slowMode = toggleSlowMode.getCurrent();
 
 
-        if(buttonStopScript.getCurrent())
-        {
+        if (buttonStopScript.getCurrent()) {
             script.stop();
             bot.getMecanumDrive().setPower(MecanumPower.ZERO);
         }
@@ -214,7 +215,7 @@ public class SkottOp extends OpMode {
             blockLifterButtons.apply(blockLifter::setPower);
             blockExtenderButtons.apply(blockExtender::setPower);
 
-            double tehSpeeds = 0.05;
+            double tehSpeeds = 0.1;
 
             if (gamepad1.y) {
                 towerGrabber.setPosition(towerGrabber.getPosition() + tehSpeeds);
@@ -229,19 +230,28 @@ public class SkottOp extends OpMode {
                 script = scripts.addBlockToTower().start();
             }
 
-            //Changed to gamepad 2 temporarily
-            MecanumPower mecanumPower = MecanumPower.fromGamepadXYTurn(
-                    sensitivity(gamepad2.left_stick_x, SENSITIVITY),
-                    sensitivity(-gamepad2.left_stick_y, SENSITIVITY),
-                    sensitivity(gamepad2.right_stick_x, SENSITIVITY)
-            );
+            MecanumPower mecanumPower;
 
             if (gamepad2.left_trigger > 0) {
-                mecanumPower = MecanumPower.fromGamepadXYTurn(-gamepad2.left_trigger, 0, 0);
-                mecanumPower.scale(0.2);
+                mecanumPower = fromGamepadXYTurn(-gamepad2.left_trigger, 0, 0).scale(0.2);
             } else if (gamepad2.right_trigger > 0) {
-                mecanumPower = MecanumPower.fromGamepadXYTurn(gamepad2.right_trigger, 0, 0);
-                mecanumPower.scale(0.2);
+                mecanumPower = fromGamepadXYTurn(gamepad2.right_trigger, 0, 0).scale(0.2);
+            } else {
+                // Prash Drive
+                mecanumPower = fromGamepadXYTurn(
+                        sensitivity(gamepad2.left_stick_x, SENSITIVITY),
+                        sensitivity(-gamepad2.left_stick_y, SENSITIVITY),
+                        sensitivity(gamepad2.right_stick_x, SENSITIVITY)
+                );
+            }
+
+            if (mecanumPower.strafe.radius < 0.0001 && abs(mecanumPower.turn) < 0.0001) {
+                // Charlie Drive
+                mecanumPower = fromGamepadXYTurn(
+                        sensitivity(gamepad1.right_stick_x, SENSITIVITY),
+                        sensitivity(-gamepad1.right_stick_y, SENSITIVITY),
+                        sensitivity(gamepad1.left_stick_x * 0.85, SENSITIVITY)
+                );
             }
 
             mecanumPower = slowMode ? mecanumPower.scale(0.5) : mecanumPower;

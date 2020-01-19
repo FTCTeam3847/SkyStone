@@ -2,14 +2,17 @@ package org.firstinspires.ftc.teamcode.controller;
 
 import org.firstinspires.ftc.teamcode.polar.CartesianCoord;
 import org.firstinspires.ftc.teamcode.polar.PolarCoord;
+import org.firstinspires.ftc.teamcode.polar.PolarUtil;
 
 import java.util.Locale;
 import java.util.Objects;
 
 import static java.lang.Math.PI;
-import static org.firstinspires.ftc.teamcode.controller.FieldPosition.Fix.*;
+import static java.lang.Math.signum;
+import static org.firstinspires.ftc.teamcode.controller.FieldPosition.Fix.ABSOLUTE;
 import static org.firstinspires.ftc.teamcode.polar.PolarCoord.polar;
 import static org.firstinspires.ftc.teamcode.polar.PolarUtil.fromCartesian;
+import static org.firstinspires.ftc.teamcode.polar.PolarUtil.subtractRadians;
 
 public class FieldPosition {
     public enum Fix {
@@ -32,7 +35,6 @@ public class FieldPosition {
                 }
             };
 
-
     public static FieldPosition fieldPosition(PolarCoord coord, double heading) {
         return new FieldPosition(coord, heading);
     }
@@ -45,8 +47,8 @@ public class FieldPosition {
         return fieldPosition(polar(radius, theta), heading);
     }
 
-    public final PolarCoord polarCoord;
-    public final double heading;
+    public final PolarCoord polarCoord; //location relative to center of field, expressed as a polar coordinate
+    public final double heading; //direction bot is facing
     public final Fix fix;
 
     public FieldPosition(PolarCoord polarCoord, double heading, Fix fix) {
@@ -61,6 +63,20 @@ public class FieldPosition {
 
     public FieldPosition(CartesianCoord cartesianCoord, double heading) {
         this(fromCartesian(cartesianCoord), heading);
+    }
+
+
+    public FieldPosition subtract(FieldPosition targetFieldPosition)
+    {
+        double err = subtractRadians(targetFieldPosition.heading, this.heading);
+        double heading = (1.0-Math.abs((err-PI)/PI))*signum(err-PI);
+
+        return fieldPosition(PolarUtil.subtract(this.polarCoord, targetFieldPosition.polarCoord), heading);
+    }
+
+    public double distance(FieldPosition targetFieldPosition)
+    {
+        return PolarUtil.subtract(this.polarCoord, targetFieldPosition.polarCoord).radius;
     }
 
     @Override

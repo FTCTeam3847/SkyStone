@@ -1,14 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.lynx.LynxI2cColorRangeSensor;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.SensorREVColorDistance;
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
@@ -16,6 +13,7 @@ import org.firstinspires.ftc.teamcode.controller.FieldPosition;
 import org.firstinspires.ftc.teamcode.controller.HeadingController;
 import org.firstinspires.ftc.teamcode.controller.HeadingLocalizer;
 import org.firstinspires.ftc.teamcode.controller.Localizer;
+import org.firstinspires.ftc.teamcode.controller.RangeSensor;
 import org.firstinspires.ftc.teamcode.drive.DrivePower;
 import org.firstinspires.ftc.teamcode.drive.mecanum.LocalizingMecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDrive;
@@ -59,6 +57,11 @@ public class DerpyBot implements SkystoneBot {
     VuforiaLocalizer vuforiaLocalizer;
     private BufferingLocalizer bufferingLocalizer;
 
+    DistanceSensor distanceSensor;
+    public RangeSensor range1;
+
+    public int innerSkystone = 6;//[3-6] close to bridge, assume 6th block
+    public int outerSkystone = 3;//[1-3] close to wall, assume 3rd block
 
     public DerpyBot(
             HardwareMap hardwareMap,
@@ -123,6 +126,10 @@ public class DerpyBot implements SkystoneBot {
 
         // get a reference to the distance sensor that shares the same name.
         sensorDistance = hardwareMap.get(DistanceSensor.class, "sensor_color_distance");
+
+        //modern robotics range sensor
+        range1 = new RangeSensor(hardwareMap);
+        range1.init();
     }
 
     private void updateLoopTimer() {
@@ -175,6 +182,32 @@ public class DerpyBot implements SkystoneBot {
 
     private void move(DrivePower drivePower) {
         move4(drivePower.leftFront, drivePower.leftBack, drivePower.rightFront, drivePower.rightBack);
+    }
+
+    @Override
+    public void setInnerSkystone(int innerSkystone)
+    {
+        this.innerSkystone = innerSkystone;
+        this.outerSkystone = innerSkystone-2;
+    }
+
+    @Override
+    public void setOuterSkystone(int outerSkystone)
+    {
+        this.outerSkystone = outerSkystone;
+        this.innerSkystone = outerSkystone+2;
+    }
+
+    @Override
+    public ColorSensor getColorSensor()
+    {
+        return sensorColor;
+    }
+
+    @Override
+    public RangeSensor getRangeSensor()
+    {
+        return range1;
     }
 
     @Override

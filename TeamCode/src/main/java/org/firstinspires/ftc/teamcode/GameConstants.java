@@ -40,8 +40,8 @@ public class GameConstants {
     public static final FieldPosition START_NEAR_BLUE_FOUNDATION = fieldPosition(xy(50, 54), FACING_RED_WALL);
 
 
-    public static final FieldPosition START_NEAR_BLUE_SKYSTONES_WALL = fieldPosition(xy(-39, 54), FACING_RED_WALL);
-    public static final FieldPosition START_NEAR_BLUE_SKYSTONES_BRIDGE = fieldPosition(xy(-15, 54), FACING_RED_WALL);
+    public static final FieldPosition START_NEAR_BLUE_SKYSTONES_WALL = fieldPosition(xy(-39, 54), FACING_RED_WALL);//BLUE OUTER
+    public static final FieldPosition START_NEAR_BLUE_SKYSTONES_BRIDGE = fieldPosition(xy(-15, 54), FACING_RED_WALL);//BLUE INNER
     public static final FieldPosition NEAR_BLUE_SKYSTONES = fieldPosition(xy(-39, 20), FACING_RED_WALL);
     public static final FieldPosition MIDDLE_BLUE_SKYSTONES = fieldPosition(xy(-39, 30), FACING_RED_WALL);
 
@@ -54,8 +54,8 @@ public class GameConstants {
     public static final FieldPosition START_NEAR_RED_BUILD_WALL = fieldPosition(xy(39, -54), FACING_BLUE_WALL);
 
 
-    public static final FieldPosition START_NEAR_RED_SKYSTONES_WALL = fieldPosition(xy(-39, -54), FACING_BLUE_WALL);
-    public static final FieldPosition START_NEAR_RED_SKYSTONES_BRIDGE = fieldPosition(xy(-15, -54), FACING_BLUE_WALL);
+    public static final FieldPosition START_NEAR_RED_SKYSTONES_WALL = fieldPosition(xy(-39, -54), FACING_BLUE_WALL);//RED OUTER
+    public static final FieldPosition START_NEAR_RED_SKYSTONES_BRIDGE = fieldPosition(xy(-15, -54), FACING_BLUE_WALL);//RED INNER
     public static final FieldPosition START_NEAR_RED_FOUNDATION = fieldPosition(xy(50, -54), FACING_BLUE_WALL);
 
     public static final FieldPosition FACING_FOUNDATION_RED_CENTER = fieldPosition(xy(50, -18), FACING_BLUE_WALL);

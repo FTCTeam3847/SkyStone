@@ -2,7 +2,20 @@ package org.firstinspires.ftc.teamcode.action;
 
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
 
-import static org.firstinspires.ftc.teamcode.GameConstants.*;
+import static org.firstinspires.ftc.teamcode.GameConstants.FACING_BLUE_WALL;
+import static org.firstinspires.ftc.teamcode.GameConstants.FACING_FOUNDATION_BLUE_CENTER;
+import static org.firstinspires.ftc.teamcode.GameConstants.FACING_FOUNDATION_RED_CENTER;
+import static org.firstinspires.ftc.teamcode.GameConstants.FACING_RED_WALL;
+import static org.firstinspires.ftc.teamcode.GameConstants.START_NEAR_BLUE_BUILD_WALL;
+import static org.firstinspires.ftc.teamcode.GameConstants.START_NEAR_BLUE_FOUNDATION;
+import static org.firstinspires.ftc.teamcode.GameConstants.START_NEAR_BLUE_SKYSTONES_BRIDGE;
+import static org.firstinspires.ftc.teamcode.GameConstants.START_NEAR_BLUE_SKYSTONES_WALL;
+import static org.firstinspires.ftc.teamcode.GameConstants.START_NEAR_RED_BUILD_WALL;
+import static org.firstinspires.ftc.teamcode.GameConstants.START_NEAR_RED_FOUNDATION;
+import static org.firstinspires.ftc.teamcode.GameConstants.START_NEAR_RED_SKYSTONES_BRIDGE;
+import static org.firstinspires.ftc.teamcode.GameConstants.START_NEAR_RED_SKYSTONES_WALL;
+import static org.firstinspires.ftc.teamcode.GameConstants.UNDER_BLUE_BRIDGE;
+import static org.firstinspires.ftc.teamcode.GameConstants.UNDER_RED_BRIDGE;
 import static org.firstinspires.ftc.teamcode.controller.FieldPosition.fieldPosition;
 import static org.firstinspires.ftc.teamcode.polar.CartesianCoord.xy;
 
@@ -321,60 +334,22 @@ public class SkystoneScripts {
     }
 
 
-
-//never tested, bad
-    public SkystoneActions redSideSkystoneOuter2() {
+//SKYSTONE DETECTION
+    public SkystoneActions detectRedSkystones()
+    {
         return emptyScript()
-                .run(() -> bot.getLocalizer().calibrate(fieldPosition(xy(-39, -54), FACING_BLUE_WALL)))
+                .run(() -> bot.getLocalizer().calibrate(fieldPosition(xy(48,-18), FACING_BLUE_WALL))) //Right in front of sixth red stone
                 .run(() -> bot.stop())
-                .grabTower(0.65)
-                .strafeTo(xy(-62, -54))
-                .strafeTo(xy(-62, -18))
-                .grabTower()
-                .strafeTo(xy(-61, -50))
-                .turnTo(0)
-                .strafeNoStop(0, 3100, 0.9) //Time based
-                .liftTower(0.3)
-                .turnTo(Math.PI / 2)
-                .strafeTo(xy(50, -16))
-                .grabTower(0.15)
-                //MOVES FOUNDATION -----------------------------------------------------------------
-                .lowerTower()
-                .strafeTo(xy(50, -54))
-                .liftTower(0.2)
-                //----------------------------------------------------------------------------------
-                .strafeNoStop(Math.PI /2, 1500) //Time based
-                .lowerTower()
-                .strafeNoStop( Math.PI /2, 750) //Time based
-                ;
-    }
-//doesn't work
-    public SkystoneActions blueSideSkystoneParallelAttempt() {
-        return emptyScript()
-                .run(() -> bot.getLocalizer().calibrate(START_NEAR_BLUE_SKYSTONES_WALL))
-                .run(() -> bot.stop())
-                .grabTower(.65)
-                //.strafeTo(NEAR_BLUE_SKYSTONES)
-                .strafe(0, 2400)
-                .grabTower()
-                .strafeTo(MIDDLE_BLUE_SKYSTONES)
-                .strafeTo(UNDER_BLUE_BRIDGE_CENTER)
-
-                .strafe(Math.PI / 2, 750)
-                .towerDrive(1000, Math.PI / 2, .6, .25)
-
-                .strafeTo(FACING_FOUNDATION_BLUE_CENTER)
-                .grabTower(.15)
-                .lowerTower()
-                .strafeTo(START_NEAR_BLUE_FOUNDATION)
-
-                .towerDrive(500, Math.PI, .6, .2)
-
-
-                .strafeTo(fieldPosition(xy(15, 54), FACING_RED_WALL))
-                .lowerTower()
-                .strafeTo(UNDER_BLUE_BRIDGE)
+                .detectSkystoneAction(fieldPosition(xy(30, -18), FACING_BLUE_WALL), 1, bot)//Right in front of third red stone
                 ;
     }
 
+    public SkystoneActions detectBlueSkystones()
+    {
+        return emptyScript()
+                .run(() -> bot.getLocalizer().calibrate(fieldPosition(xy(48,18), FACING_RED_WALL))) //Right in front of sixth blue stone
+                .run(() -> bot.stop())
+                .detectSkystoneAction(fieldPosition(xy(30, 18), FACING_RED_WALL), 1, bot)//Right in front of third blue stone
+                ;
+    }
 }

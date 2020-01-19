@@ -23,7 +23,6 @@ import org.firstinspires.ftc.teamcode.controller.HeadingLocalizer;
 import org.firstinspires.ftc.teamcode.controller.Localizer;
 import org.firstinspires.ftc.teamcode.controller.RangeSensor;
 import org.firstinspires.ftc.teamcode.drive.DrivePower;
-import org.firstinspires.ftc.teamcode.drive.mecanum.LocalizingMecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDriveController;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumLocalizer;
@@ -59,10 +58,12 @@ public class SkottBot implements SkystoneBot {
 
     public  Servo capstoneLifterServo;
 
-    public ColorSensor color1; //REV Color Sensor V2
+
+    public ColorSensor sensorColor; //REV Color Sensor V2
     public RangeSensor rangeSensor; //Modern Robotics Range Sensor
 
-
+    public int innerSkystone = 6;//[3-6] close to bridge, assume 6th block
+    public int outerSkystone = 3;//[1-3] close to wall, assume 3rd block
 
     private final HardwareMap hardwareMap;
     private final Telemetry telemetry;
@@ -220,10 +221,10 @@ public class SkottBot implements SkystoneBot {
 
 
         //Color Sensor 1 I2C Port 1
-        color1 = hardwareMap.colorSensor.get("color1");
+        //sensorColor = hardwareMap.colorSensor.get("sensorColor");
 
 
-        rangeSensor.init();
+        //rangeSensor.init();
     }
 
     @Override
@@ -241,7 +242,7 @@ public class SkottBot implements SkystoneBot {
         combinedLocalizer.getCurrent();
         towerBuilder.loop();
 
-        rangeSensor.getCurrent();
+        //rangeSensor.getCurrent();
 
         updateTelemetry();
     }
@@ -271,6 +272,27 @@ public class SkottBot implements SkystoneBot {
 
     private void setDrivePower(DrivePower drivePower) {
         setPower4(drivePower.leftFront, drivePower.leftBack, drivePower.rightFront, drivePower.rightBack);
+    }
+
+
+    @Override
+    public void setInnerSkystone(int innerSkystone)
+    {
+        this.innerSkystone = innerSkystone;
+        this.outerSkystone = innerSkystone-2;
+    }
+
+    @Override
+    public void setOuterSkystone(int outerSkystone)
+    {
+        this.outerSkystone = outerSkystone;
+        this.innerSkystone = outerSkystone+2;
+    }
+
+    @Override
+    public ColorSensor getColorSensor()
+    {
+        return sensorColor;
     }
 
     @Override

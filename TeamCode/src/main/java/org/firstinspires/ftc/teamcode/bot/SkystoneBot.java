@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.bot;
 
-import com.qualcomm.robotcore.hardware.I2cDevice;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 
 import org.firstinspires.ftc.teamcode.Trinkets.TowerBuilder;
 import org.firstinspires.ftc.teamcode.controller.FieldPosition;
@@ -9,6 +9,11 @@ import org.firstinspires.ftc.teamcode.controller.RangeSensor;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDrive;
 
 public interface SkystoneBot extends Bot {
+
+    void setInnerSkystone(int innerSkystone); //sets both skystone locations
+    void setOuterSkystone(int outerSkystone); //sets both skystone locations
+
+    ColorSensor getColorSensor();
 
     RangeSensor getRangeSensor();
 

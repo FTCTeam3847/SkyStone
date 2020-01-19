@@ -51,18 +51,6 @@ public class SkottOp extends OpMode {
 
     private PushButton buttonRaiseTower3 = new PushButton(() -> gamepad2.b);
 
-//    private PushButton buttonBlueSideSkystone2b = new PushButton(() -> gamepad2.b && !gamepad1.start && !gamepad2.start);
-//    private PushButton buttonBlueSideSkystone2a = new PushButton(() -> gamepad2.a && !gamepad1.start && !gamepad2.start);
-//
-//    private PushButton buttonRedSideSkystone2L = new PushButton(() -> gamepad2.left_bumper && !gamepad1.start && !gamepad2.start);
-//    private PushButton buttonRedSideSkystone2R = new PushButton(() -> gamepad2.right_bumper && !gamepad1.start && !gamepad2.start);
-//
-//    private PushButton buttonRedSideOuterNoFoundation2DpadL = new PushButton(() -> gamepad2.dpad_left && !gamepad1.start && !gamepad2.start);
-//    private PushButton buttonRedSideInnerNoFoundation2DpadR = new PushButton(() -> gamepad2.dpad_right && !gamepad1.start && !gamepad2.start);
-//    private PushButton buttonBlueSideOuterNoFoundation2DpadUp = new PushButton(() -> gamepad2.dpad_up && !gamepad1.start && !gamepad2.start);
-//    private PushButton buttonBlueSideInnerNoFoundation2DpadDown = new PushButton(() -> gamepad2.dpad_down && !gamepad1.start && !gamepad2.start);
-
-
     private PushButton addBlockToTowerBack = new PushButton(() -> gamepad1.back);
 
     private PushButton buttonStopScript = new PushButton(
@@ -166,48 +154,6 @@ public class SkottOp extends OpMode {
         if (buttonRaiseTower3.getCurrent()) {
             towerLifter.setPosition(.3);
         }
-
-//        if (buttonBlueSideSkystone2b.getCurrent()) {
-//            script.stop();
-//            script = scripts.blueSideSkystoneOuter().start();
-//        }
-//
-//        if (buttonBlueSideSkystone2a.getCurrent()) {
-//            script.stop();
-//            script = scripts.blueSideSkystoneInner().start();
-//        }
-//
-//
-//        if (buttonRedSideSkystone2L.getCurrent()) {
-//            script.stop();
-//            script = scripts.redSideSkystoneOuter().start();
-//        }
-//
-//        if (buttonRedSideSkystone2R.getCurrent()) {
-//            script.stop();
-//            script = scripts.redSideSkystoneInner().start();
-//        }
-//
-//        if (buttonRedSideOuterNoFoundation2DpadL.getCurrent()) {
-//            script.stop();
-//            script = scripts.redSideSkystoneOuterNoFoundation().start();
-//        }
-//
-//        if (buttonRedSideInnerNoFoundation2DpadR.getCurrent()) {
-//            script.stop();
-//            script = scripts.redSideSkystoneInnerNoFoundation().start();
-//        }
-//
-//        if (buttonBlueSideInnerNoFoundation2DpadDown.getCurrent()) {
-//            script.stop();
-//            script = scripts.blueSideSkystoneInnerNoFoundation().start();
-//        }
-//
-//        if (buttonBlueSideOuterNoFoundation2DpadUp.getCurrent()) {
-//            script.stop();
-//            script = scripts.blueSideSkystoneInnerNoFoundation().start();
-//        }
-
 
         if (!script.isRunning()) {
             towerGrabberButtons.apply(blockGrabber::setPosition);

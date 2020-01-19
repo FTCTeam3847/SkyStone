@@ -5,9 +5,12 @@ import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
 import java.util.Locale;
 import java.util.function.Supplier;
 
-import static java.lang.Math.*;
+import static java.lang.Math.E;
+import static java.lang.Math.PI;
+import static java.lang.Math.abs;
+import static java.lang.Math.pow;
 
-//The RangeController determines
+//The RangeController determines how to move to reach a given distance
 public class RangeController implements Controller<Double, MecanumPower>
 {
     private static final double DECELERATION_CONSTANT = 1.5; //This determines how quickly the robot will slow down as it reaches its target distance. A larger number decelerates quickly as it gets very near.

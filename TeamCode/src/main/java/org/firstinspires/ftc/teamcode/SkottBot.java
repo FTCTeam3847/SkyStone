@@ -4,6 +4,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -59,8 +60,6 @@ public class SkottBot implements SkystoneBot {
     public  Servo capstoneLifterServo;
 
 
-    public ColorSensor sensorColor; //REV Color Sensor V2
-    public RangeSensor rangeSensor; //Modern Robotics Range Sensor
 
     public int innerSkystone = 6;//[3-6] close to bridge, assume 6th block
     public int outerSkystone = 3;//[1-3] close to wall, assume 3rd block
@@ -79,6 +78,7 @@ public class SkottBot implements SkystoneBot {
 
 
     TowerBuilder towerBuilder;
+    ColorSensor sensorColor;
 
     public SkottBot(
             HardwareMap hardwareMap,
@@ -219,12 +219,11 @@ public class SkottBot implements SkystoneBot {
         towerBuilder = new TowerBuilder(towerGrabber, towerLifter, blockLifter, blockExtender, blockGrabber, capstoneLifter);
 
 
+// get a reference to the color sensor.
+        sensorColor = hardwareMap.get(ColorSensor.class, "color1");
 
-        //Color Sensor 1 I2C Port 1
-        //sensorColor = hardwareMap.colorSensor.get("sensorColor");
 
 
-        //rangeSensor.init();
     }
 
     @Override
@@ -255,8 +254,6 @@ public class SkottBot implements SkystoneBot {
     }
 
     private void updateTelemetry() {
-        telemetry.addData("Ultra Sonic", rangeSensor.range1Cache[0] & 0xFF);
-        telemetry.addData("ODS", rangeSensor.range1Cache[1] & 0xFF);
 
         telemetry.addData("heading", headingLocalizer);
         telemetry.addData("skyStoneLocalizer", skyStoneLocalizer);
@@ -293,12 +290,6 @@ public class SkottBot implements SkystoneBot {
     public ColorSensor getColorSensor()
     {
         return sensorColor;
-    }
-
-    @Override
-    public RangeSensor getRangeSensor()
-    {
-        return rangeSensor;
     }
 
     @Override

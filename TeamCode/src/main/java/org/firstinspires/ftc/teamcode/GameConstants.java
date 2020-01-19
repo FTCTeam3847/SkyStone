@@ -62,4 +62,14 @@ public class GameConstants {
 
     public static final FieldPosition UNDER_RED_BRIDGE = fieldPosition(xy(-4, -56), FACING_BLUE_WALL);
     public static final FieldPosition UNDER_RED_BRIDGE_CENTER = fieldPosition(xy(0, -48), FACING_BLUE_WALL);
+
+
+
+    //SKYSTONES
+    public static final FieldPosition INNER_RED_SKYSTONE = fieldPosition(xy(-15, -30), FACING_BLUE_WALL); //6th block
+    public static final FieldPosition INNER_BLUE_SKYSTONE = fieldPosition(xy(-15, 30), FACING_RED_WALL); //6th block
+
+    public static final FieldPosition MIDDLE_RED_SKYSTONE = fieldPosition(xy(-40, -18), FACING_BLUE_WALL); //3rd block
+    public static final FieldPosition MIDDLE_BLUE_SKYSTONE = fieldPosition(xy(-40, 18), FACING_RED_WALL); //3rd block
+
 }

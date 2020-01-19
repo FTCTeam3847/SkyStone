@@ -58,7 +58,6 @@ public class DerpyBot implements SkystoneBot {
     private BufferingLocalizer bufferingLocalizer;
 
     DistanceSensor distanceSensor;
-    public RangeSensor range1;
 
     public int innerSkystone = 6;//[3-6] close to bridge, assume 6th block
     public int outerSkystone = 3;//[1-3] close to wall, assume 3rd block
@@ -126,10 +125,6 @@ public class DerpyBot implements SkystoneBot {
 
         // get a reference to the distance sensor that shares the same name.
         sensorDistance = hardwareMap.get(DistanceSensor.class, "color1");
-
-        //modern robotics range sensor
-        range1 = new RangeSensor(hardwareMap);
-        range1.init();
     }
 
     private void updateLoopTimer() {
@@ -202,12 +197,6 @@ public class DerpyBot implements SkystoneBot {
     public ColorSensor getColorSensor()
     {
         return sensorColor;
-    }
-
-    @Override
-    public RangeSensor getRangeSensor()
-    {
-        return range1;
     }
 
     @Override

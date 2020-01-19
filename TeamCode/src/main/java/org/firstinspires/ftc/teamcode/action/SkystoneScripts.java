@@ -326,10 +326,11 @@ public class SkystoneScripts {
                 .strafeTo(xy(-15, -30))//goes to inner most block
                 .grabTower(.65)
                 .detectSkystoneAction(fieldPosition(xy(-40, -18), FACING_BLUE_WALL))//finds skystone and stops
-                .strafeTo(xy(-37, (PolarUtil.toXY(bot.getLocalizer().getCurrent().polarCoord).y)+4.5)) //drives 4 inches forwards
-                .grabTower()
-                .strafeTo(xy(-37, -28))
-                .turnTo(0)
+                .strafeTo(xy(PolarUtil.toXY(bot.getLocalizer().getCurrent().polarCoord).x,-15.5)) //drives 4.5 inches forwards
+                .grabTower()//grabs block
+                .strafeTo(xy(PolarUtil.toXY(bot.getLocalizer().getCurrent().polarCoord).x, -28))//drives backwards
+
+                .turnTo(0)//turns toward
                 .strafeNoStop(0,2400,0.9)//long drive across field
                 .liftTower(0.3)
                 .turnTo(Math.PI / 2)

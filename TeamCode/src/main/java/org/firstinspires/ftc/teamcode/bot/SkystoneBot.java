@@ -15,8 +15,6 @@ public interface SkystoneBot extends Bot {
 
     ColorSensor getColorSensor();
 
-    RangeSensor getRangeSensor();
-
     double getFieldRelativeHeading();
 
     Localizer<FieldPosition> getLocalizer();

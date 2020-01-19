@@ -5,10 +5,6 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.I2cAddr;
-import com.qualcomm.robotcore.hardware.I2cDevice;
-import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
-import com.qualcomm.robotcore.hardware.I2cDeviceSynchImpl;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -25,7 +21,9 @@ import org.firstinspires.ftc.teamcode.controller.FieldPosition;
 import org.firstinspires.ftc.teamcode.controller.HeadingController;
 import org.firstinspires.ftc.teamcode.controller.HeadingLocalizer;
 import org.firstinspires.ftc.teamcode.controller.Localizer;
+import org.firstinspires.ftc.teamcode.controller.RangeSensor;
 import org.firstinspires.ftc.teamcode.drive.DrivePower;
+import org.firstinspires.ftc.teamcode.drive.mecanum.LocalizingMecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDriveController;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumLocalizer;
@@ -61,15 +59,9 @@ public class SkottBot implements SkystoneBot {
 
     public  Servo capstoneLifterServo;
 
-//    public ColorSensor color1;
-//    public ColorSensor color2;
-//    public I2cDevice range1;
-//
-//    byte[] range1Cache; //The read will return an array of bytes. They are stored in this variable
-//    I2cAddr range1Address = new I2cAddr(0x14); //Default I2C address for MR Range (7-bit)
-//    public static final int RANGE1_REG_START = 0x04; //Register to start reading
-//    public static final int RANGE1_READ_LENGTH = 2; //Number of byte to read
-//    public I2cDeviceSynch range1Reader;
+    public ColorSensor color1; //REV Color Sensor V2
+    public RangeSensor rangeSensor; //Modern Robotics Range Sensor
+
 
 
     private final HardwareMap hardwareMap;
@@ -174,17 +166,6 @@ public class SkottBot implements SkystoneBot {
         rightTowerLifter.setZeroPowerBehavior(BRAKE);
         rightTowerLifter.setMode(RUN_WITHOUT_ENCODER);
 
-
-//        range1 = hardwareMap.i2cDevice.get("range1");
-//        range1Reader = new I2cDeviceSynchImpl(range1, range1Address, false);
-//        range1Reader.engage();
-
-        //Color Sensor 1 I2C Port 1
-        //color1 = hardwareMap.colorSensor.get("color1");
-
-        //Color Sensor 2 I2C Port 2
-        //color2 = hardwareMap.colorSensor.get("color2");
-
         TowerLifter towerLifter =
                 new TowerLifter(
                         leftTowerLifter::setPower,
@@ -235,6 +216,14 @@ public class SkottBot implements SkystoneBot {
                 );
 
         towerBuilder = new TowerBuilder(towerGrabber, towerLifter, blockLifter, blockExtender, blockGrabber, capstoneLifter);
+
+
+
+        //Color Sensor 1 I2C Port 1
+        color1 = hardwareMap.colorSensor.get("color1");
+
+
+        rangeSensor.init();
     }
 
     @Override
@@ -252,7 +241,7 @@ public class SkottBot implements SkystoneBot {
         combinedLocalizer.getCurrent();
         towerBuilder.loop();
 
-//        range1Cache = range1Reader.read(RANGE1_REG_START, RANGE1_READ_LENGTH);
+        rangeSensor.getCurrent();
 
         updateTelemetry();
     }
@@ -265,8 +254,8 @@ public class SkottBot implements SkystoneBot {
     }
 
     private void updateTelemetry() {
-//        telemetry.addData("Ultra Sonic", range1Cache[0] & 0xFF);
-//        telemetry.addData("ODS", range1Cache[1] & 0xFF);
+        telemetry.addData("Ultra Sonic", rangeSensor.range1Cache[0] & 0xFF);
+        telemetry.addData("ODS", rangeSensor.range1Cache[1] & 0xFF);
 
         telemetry.addData("heading", headingLocalizer);
         telemetry.addData("skyStoneLocalizer", skyStoneLocalizer);
@@ -282,6 +271,12 @@ public class SkottBot implements SkystoneBot {
 
     private void setDrivePower(DrivePower drivePower) {
         setPower4(drivePower.leftFront, drivePower.leftBack, drivePower.rightFront, drivePower.rightBack);
+    }
+
+    @Override
+    public RangeSensor getRangeSensor()
+    {
+        return rangeSensor;
     }
 
     @Override

@@ -1,11 +1,15 @@
 package org.firstinspires.ftc.teamcode.drive.mecanum;
 
 import org.firstinspires.ftc.teamcode.polar.PolarCoord;
+import org.firstinspires.ftc.teamcode.polar.PolarUtil;
 
 import java.util.Locale;
 import java.util.Objects;
 
 import static java.lang.Math.PI;
+import static java.lang.Math.abs;
+import static java.lang.Math.min;
+import static java.lang.Math.signum;
 import static java.lang.String.format;
 import static org.firstinspires.ftc.teamcode.polar.PolarCoord.polar;
 import static org.firstinspires.ftc.teamcode.polar.PolarUtil.fromXY;
@@ -56,5 +60,22 @@ public class MecanumPower {
     @Override
     public int hashCode() {
         return Objects.hash(strafe, turn);
+    }
+
+    public MecanumPower add(MecanumPower mecanumPower) //adds two mecanumPowers
+    {
+        PolarCoord strafe = PolarUtil.add(this.strafe, mecanumPower.strafe);
+        if(abs(strafe.radius) > 1) // [-1 to 1]
+        {
+            strafe = polar(signum(strafe.radius), strafe.theta);
+        }
+
+        double turn = this.turn + mecanumPower.turn;
+        if(abs(turn) > 1) //[-1 to 1]
+        {
+            turn = signum(turn);
+        }
+
+        return mecanumPower(strafe, turn);
     }
 }

@@ -187,31 +187,11 @@ public class SkystoneActions extends SequentialAction {
         return this;
     }
 
-//    public SkystoneActions parallel(RoboAction... actions) {
-//        ParallelAction parallelAction = new ParallelAction();
-//        for (RoboAction action : actions) {
-//            parallelAction.addAction(action);
-//        }
-//        addAction(parallelAction);
-//        return this;
-//    }
-//
-//    public SkystoneActions all() {
-//        ParallelAction script = new ParallelAction();
-//        script.addAction(releaseTower());
-//        script.addAction(grabTower());
-//        script.addAction(liftTower());
-//        script.addAction(liftBlock());
-//        script.addAction(extendBlock());
-//        script.addAction(releaseBlock());
-//        script.addAction(retractBlock());
-//        script.addAction(lowerBlock());
-//        script.addAction(lowerTower(0.5));
-//        script.addAction(releaseTower());
-//
-//        addAction(script);
-//        return this;
-//    }
+    public SkystoneActions detectSkystoneAction(FieldPosition targetFieldPosition, double targetDistance, SkystoneBot bot)
+    {
+        addAction(new DetectSkystoneActionMoveTo(targetFieldPosition, targetDistance, bot));
+        return this;
+    }
 
 
 }

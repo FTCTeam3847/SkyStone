@@ -1,10 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.lynx.LynxI2cColorRangeSensor;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcontroller.external.samples.SensorREVColorDistance;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
@@ -40,7 +43,9 @@ public class DerpyBot implements SkystoneBot {
     private long loopEndTime;
     private double loopDuration;
 
-    public ColorSensor color1;
+    ColorSensor sensorColor;
+
+    DistanceSensor sensorDistance;
 
     private MecanumDrive mecanum;
     private BNO055IMU imu;
@@ -113,8 +118,11 @@ public class DerpyBot implements SkystoneBot {
         rightBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         loopEndTime = nanoTime.get();
 
-        //Color Sensor 1 I2C Port 0
-        color1 = hardwareMap.colorSensor.get("color1");
+        // get a reference to the color sensor.
+        sensorColor = hardwareMap.get(ColorSensor.class, "sensor_color_distance");
+
+        // get a reference to the distance sensor that shares the same name.
+        sensorDistance = hardwareMap.get(DistanceSensor.class, "sensor_color_distance");
     }
 
     private void updateLoopTimer() {

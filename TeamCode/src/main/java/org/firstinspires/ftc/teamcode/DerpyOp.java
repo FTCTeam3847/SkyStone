@@ -2,7 +2,9 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.I2cAddr;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.action.SkystoneActions;
 import org.firstinspires.ftc.teamcode.action.SequentialAction;
 import org.firstinspires.ftc.teamcode.action.SkystoneScripts;
@@ -171,8 +173,30 @@ public class DerpyOp extends OpMode {
             script = newScript().turnToLocate().start();
         }
 
-        telemetry.addData("Color 1:", "r: %d g: %d b: %d a: %d", bot.color1.red(), bot.color1.green(), bot.color1.blue(), bot.color1.alpha());
+        boolean skystone = false;
+        double red = bot.sensorColor.red();
+        double blue = bot.sensorColor.blue();
+        double alpha = bot.sensorColor.alpha();
+        double green = bot.sensorColor.green();
+        double tolerence = 0.25;
+        double distance = bot.sensorDistance.getDistance(DistanceUnit.CM);
+        I2cAddr i2cAddress = bot.sensorColor.getI2cAddress();
+
+
+        if (blue/red > 0.5) {
+            skystone = true;
+        }
+
+//        if ((red/alpha) - (blue/alpha) > tolerence) {
+////            skystone = false
+////        } else {
+////            skystone = true;
+//        }
+
+        telemetry.addData("Color 1:", "r: %d g: %d b: %d a: %d", bot.sensorColor.red(), bot.sensorColor.green(), bot.sensorColor.blue(), bot.sensorColor.alpha());
         telemetry.addData("script", script);
+        telemetry.addData("distance", distance);
+        telemetry.addData("Skystone found", skystone);
         telemetry.update();
     }
 

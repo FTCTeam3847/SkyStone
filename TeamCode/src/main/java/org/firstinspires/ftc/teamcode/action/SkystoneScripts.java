@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.action;
 
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
+import org.firstinspires.ftc.teamcode.polar.PolarUtil;
 
 import static org.firstinspires.ftc.teamcode.GameConstants.FACING_BLUE_WALL;
 import static org.firstinspires.ftc.teamcode.GameConstants.FACING_FOUNDATION_BLUE_CENTER;
@@ -288,14 +289,44 @@ public class SkystoneScripts {
                 ;
     }//BLUE INNER
 
+//    public SkystoneActions redSideSkystoneInner() {
+//        return emptyScript()
+//                .run(() -> bot.getLocalizer().calibrate(START_NEAR_RED_SKYSTONES_BRIDGE))
+//                .run(() -> bot.stop())
+//                .strafeTo(xy(-15, -30))
+//                .strafeTo(xy(-37, -30))
+//                .grabTower(0.65)
+//                .strafeTo(xy(-37, -15.5))
+//                .grabTower()
+//                .strafeTo(xy(-37, -28))
+//                .turnTo(0)
+//                .strafeNoStop(0,2400,0.9)//long drive across field
+//                .liftTower(0.3)
+//                .turnTo(Math.PI / 2)
+//                .strafeTo(xy(50, -14)) //drive to foundation
+//
+//                //Foundation
+//                .grabTower(0.15)
+//                .lowerTower()
+//                .strafeTo(xy(50, -54))
+//                .liftTower(0.2)
+//
+//                .strafeTo(xy(15, -54))
+//                .strafeTo(xy(15, -30))
+//                .lowerTower()
+//                .strafeTo(xy(-5,-30))
+//                ;
+//    }//RED INNER
+
+//SKYSTONE DETECTION TEST
     public SkystoneActions redSideSkystoneInner() {
         return emptyScript()
                 .run(() -> bot.getLocalizer().calibrate(START_NEAR_RED_SKYSTONES_BRIDGE))
                 .run(() -> bot.stop())
-                .strafeTo(xy(-15, -30))
-                .strafeTo(xy(-37, -30))
-                .grabTower(0.65)
-                .strafeTo(xy(-37, -15.5))
+                .strafeTo(xy(-15, -30))//goes to inner most block
+                .grabTower(.65)
+                .detectSkystoneAction(fieldPosition(xy(-40, -18), FACING_BLUE_WALL))//finds skystone and stops
+                .strafeTo(xy(-37, (PolarUtil.toXY(bot.getLocalizer().getCurrent().polarCoord).y)+4.5)) //drives 4 inches forwards
                 .grabTower()
                 .strafeTo(xy(-37, -28))
                 .turnTo(0)
@@ -315,8 +346,7 @@ public class SkystoneScripts {
                 .lowerTower()
                 .strafeTo(xy(-5,-30))
                 ;
-    }//RED INNER
-
+    }
 
 //BLOCK
     public SkystoneActions addBlockToTower() {
@@ -338,18 +368,22 @@ public class SkystoneScripts {
     public SkystoneActions detectRedSkystones()
     {
         return emptyScript()
-                .run(() -> bot.getLocalizer().calibrate(fieldPosition(xy(48,-18), FACING_BLUE_WALL))) //Right in front of sixth red stone
+                .run(() -> bot.getLocalizer().calibrate(fieldPosition(xy(-15,-18), FACING_RED_WALL))) //Right in front of sixth red stone
                 .run(() -> bot.stop())
-                .detectSkystoneAction(fieldPosition(xy(30, -18), FACING_BLUE_WALL), 1, bot)//Right in front of third red stone
+                .detectSkystoneAction(fieldPosition(xy(-40, -18), FACING_RED_WALL))//Right in front of third red stone
                 ;
     }
 
     public SkystoneActions detectBlueSkystones()
     {
         return emptyScript()
-                .run(() -> bot.getLocalizer().calibrate(fieldPosition(xy(48,18), FACING_RED_WALL))) //Right in front of sixth blue stone
+                .run(() -> bot.getLocalizer().calibrate(fieldPosition(xy(-15,18), FACING_RED_WALL))) //Right in front of sixth blue stone
                 .run(() -> bot.stop())
-                .detectSkystoneAction(fieldPosition(xy(30, 18), FACING_RED_WALL), 1, bot)//Right in front of third blue stone
+                .detectSkystoneAction(fieldPosition(xy(-40, 18), FACING_RED_WALL))//Right in front of third blue stone
                 ;
     }
+
+
+
+
 }

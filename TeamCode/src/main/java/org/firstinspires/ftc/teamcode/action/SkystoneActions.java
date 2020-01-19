@@ -42,6 +42,7 @@ public class SkystoneActions extends SequentialAction {
         return this;
     }
 
+    //openness of 1 is fully closed, 0 fully open
     public SkystoneActions grabTower(double openness) {
         addAction(new TowerGrabAction(msecTime, openness, bot));
         return this;
@@ -187,9 +188,9 @@ public class SkystoneActions extends SequentialAction {
         return this;
     }
 
-    public SkystoneActions detectSkystoneAction(FieldPosition targetFieldPosition, double targetDistance, SkystoneBot bot)
+    public SkystoneActions detectSkystoneAction(FieldPosition targetFieldPosition)
     {
-        addAction(new DetectSkystoneActionMoveTo(targetFieldPosition, targetDistance, bot));
+        addAction(new DetectSkystoneActionMoveTo(targetFieldPosition, bot));
         return this;
     }
 

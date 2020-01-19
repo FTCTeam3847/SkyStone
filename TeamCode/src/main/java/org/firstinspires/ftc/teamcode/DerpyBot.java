@@ -122,10 +122,10 @@ public class DerpyBot implements SkystoneBot {
         loopEndTime = nanoTime.get();
 
         // get a reference to the color sensor.
-        sensorColor = hardwareMap.get(ColorSensor.class, "sensor_color_distance");
+        sensorColor = hardwareMap.get(ColorSensor.class, "color1");
 
         // get a reference to the distance sensor that shares the same name.
-        sensorDistance = hardwareMap.get(DistanceSensor.class, "sensor_color_distance");
+        sensorDistance = hardwareMap.get(DistanceSensor.class, "color1");
 
         //modern robotics range sensor
         range1 = new RangeSensor(hardwareMap);

@@ -26,7 +26,6 @@ import org.firstinspires.ftc.teamcode.controller.HeadingController;
 import org.firstinspires.ftc.teamcode.controller.HeadingLocalizer;
 import org.firstinspires.ftc.teamcode.controller.Localizer;
 import org.firstinspires.ftc.teamcode.drive.DrivePower;
-import org.firstinspires.ftc.teamcode.drive.mecanum.LocalizingMecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDriveController;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumLocalizer;
@@ -62,15 +61,15 @@ public class SkottBot implements SkystoneBot {
 
     public  Servo capstoneLifterServo;
 
-    public ColorSensor color1;
-    public ColorSensor color2;
-    public I2cDevice range1;
-
-    byte[] range1Cache; //The read will return an array of bytes. They are stored in this variable
-    I2cAddr range1Address = new I2cAddr(0x14); //Default I2C address for MR Range (7-bit)
-    public static final int RANGE1_REG_START = 0x04; //Register to start reading
-    public static final int RANGE1_READ_LENGTH = 2; //Number of byte to read
-    public I2cDeviceSynch range1Reader;
+//    public ColorSensor color1;
+//    public ColorSensor color2;
+//    public I2cDevice range1;
+//
+//    byte[] range1Cache; //The read will return an array of bytes. They are stored in this variable
+//    I2cAddr range1Address = new I2cAddr(0x14); //Default I2C address for MR Range (7-bit)
+//    public static final int RANGE1_REG_START = 0x04; //Register to start reading
+//    public static final int RANGE1_READ_LENGTH = 2; //Number of byte to read
+//    public I2cDeviceSynch range1Reader;
 
 
     private final HardwareMap hardwareMap;
@@ -176,9 +175,9 @@ public class SkottBot implements SkystoneBot {
         rightTowerLifter.setMode(RUN_WITHOUT_ENCODER);
 
 
-        range1 = hardwareMap.i2cDevice.get("range1");
-        range1Reader = new I2cDeviceSynchImpl(range1, range1Address, false);
-        range1Reader.engage();
+//        range1 = hardwareMap.i2cDevice.get("range1");
+//        range1Reader = new I2cDeviceSynchImpl(range1, range1Address, false);
+//        range1Reader.engage();
 
         //Color Sensor 1 I2C Port 1
         //color1 = hardwareMap.colorSensor.get("color1");
@@ -253,7 +252,7 @@ public class SkottBot implements SkystoneBot {
         combinedLocalizer.getCurrent();
         towerBuilder.loop();
 
-        range1Cache = range1Reader.read(RANGE1_REG_START, RANGE1_READ_LENGTH);
+//        range1Cache = range1Reader.read(RANGE1_REG_START, RANGE1_READ_LENGTH);
 
         updateTelemetry();
     }
@@ -266,8 +265,8 @@ public class SkottBot implements SkystoneBot {
     }
 
     private void updateTelemetry() {
-        telemetry.addData("Ultra Sonic", range1Cache[0] & 0xFF);
-        telemetry.addData("ODS", range1Cache[1] & 0xFF);
+//        telemetry.addData("Ultra Sonic", range1Cache[0] & 0xFF);
+//        telemetry.addData("ODS", range1Cache[1] & 0xFF);
 
         telemetry.addData("heading", headingLocalizer);
         telemetry.addData("skyStoneLocalizer", skyStoneLocalizer);

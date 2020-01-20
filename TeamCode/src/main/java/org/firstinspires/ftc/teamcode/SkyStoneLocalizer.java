@@ -66,11 +66,6 @@ public class SkyStoneLocalizer implements Localizer<FieldPosition> {
     private VuforiaTrackable lastMeasuredVisibleTarget;
     private double lastMeasuredDistanceFromTarget;
 
-    private FieldPosition lastTrustedFieldPosition;
-    private VuforiaTrackable lastTrustedVisibleTarget;
-    private double lastTrustedDistanceFromTarget;
-
-
     public SkyStoneLocalizer(VuforiaLocalizer vuforiaLocalizer) {
         this.vuforiaLocalizer = vuforiaLocalizer;
 
@@ -268,15 +263,7 @@ public class SkyStoneLocalizer implements Localizer<FieldPosition> {
                     imageTranslation.get(1) / mmPerInch
             );
             lastMeasuredDistanceFromTarget = subtract(lastMeasuredFieldPosition.polarCoord, imageLocation).radius;
-            //only use the field position if the image is within a trustable range
-            //if (lastMeasuredDistanceFromTarget < 36) {
-                lastTrustedVisibleTarget = lastMeasuredVisibleTarget;
-                lastTrustedDistanceFromTarget = lastMeasuredDistanceFromTarget;
-                lastTrustedFieldPosition = lastMeasuredFieldPosition;
-                currentFieldPosition = lastTrustedFieldPosition;
-            //} else {
-                //currentFieldPosition = FieldPosition.UNKNOWN;
-            //}
+            currentFieldPosition = lastMeasuredFieldPosition;
         } else {
             currentFieldPosition = FieldPosition.UNKNOWN;
         }
@@ -302,9 +289,8 @@ public class SkyStoneLocalizer implements Localizer<FieldPosition> {
     public String toString() {
         return String.format(
                 Locale.US,
-                "%s\nt:%s %s@%.1f\nm:%s %s@%.1f",
+                "%s\nm:%s %s@%.1f",
                 currentFieldPosition,
-                lastTrustedFieldPosition, null == lastTrustedVisibleTarget ? "None" : lastTrustedVisibleTarget.getName(), lastTrustedDistanceFromTarget,
                 lastMeasuredFieldPosition, null == lastMeasuredVisibleTarget ? "None" : lastMeasuredVisibleTarget.getName(), lastMeasuredDistanceFromTarget
         );
     }

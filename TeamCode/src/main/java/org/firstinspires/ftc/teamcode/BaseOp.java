@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.action.SequentialAction;
 import org.firstinspires.ftc.teamcode.action.SkystoneScripts;
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
+import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
 
 
 public abstract class BaseOp extends OpMode {
@@ -39,11 +40,15 @@ public abstract class BaseOp extends OpMode {
     public void loop() {
         if (gamepad1.x || gamepad2.x) {
             script.stop();
+            bot.stop();
+            bot.getMecanumDrive().setPower(MecanumPower.ZERO);
+            bot.getTowerBuilder().stop();
         } else {
             script.loop();
         }
         bot.loop();
         script.loop();
+        telemetry.addData("script", script);
     }
 
     @Override

@@ -9,40 +9,23 @@ import org.firstinspires.ftc.teamcode.action.SkystoneScripts;
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
 
+import static org.firstinspires.ftc.teamcode.GameConstants.FACING_BLUE_WALL;
+import static org.firstinspires.ftc.teamcode.GameConstants.FACING_REAR_WALL;
+import static org.firstinspires.ftc.teamcode.controller.FieldPosition.fieldPosition;
+import static org.firstinspires.ftc.teamcode.polar.CartesianCoord.xy;
+
 @Autonomous
 public class RedSideTestingScratch extends BaseOp {
 
-    private SkystoneBot bot;
-
-    SequentialAction script;
-    private SkystoneScripts scripts;
-
-
-    @Override
-    public void init() {
-        bot = new SkottBot(hardwareMap, telemetry);
-        bot.init();
-        scripts = new SkystoneScripts(bot);
-
-    }
-
     @Override
     public void start() {
-        script = scripts.redSideTestScratch().start();
-    }
-
-
-    @Override
-    public void loop() {
-        script.loop();
-        bot.loop();
-    }
-
-    @Override
-    public void stop() {
+        super.start();
         script.stop();
-        bot.stop();
-        bot.getMecanumDrive().setPower(MecanumPower.ZERO);
+        script = scripts.emptyScript()
+                .run(() -> bot.getLocalizer().calibrate(fieldPosition(xy(-39, -54), FACING_BLUE_WALL)))
+                .run(() -> bot.stop())
+                .strafeTo(xy(-39, -24))
+                .start()
+        ;
     }
-
 }

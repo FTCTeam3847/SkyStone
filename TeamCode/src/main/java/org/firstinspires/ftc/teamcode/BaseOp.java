@@ -25,6 +25,7 @@ public abstract class BaseOp extends OpMode {
         bot = new SkottBot(hardwareMap, telemetry);
         bot.init();
         scripts = new SkystoneScripts(bot);
+        script = scripts.emptyScript();
     }
 
     @Override
@@ -40,6 +41,12 @@ public abstract class BaseOp extends OpMode {
 
     @Override
     public void loop() {
+        if (gamepad1.x || gamepad2.x) {
+            script.stop();
+            script = scripts.emptyScript();
+        } else {
+            script.loop();
+        }
         bot.loop();
         script.loop();
     }

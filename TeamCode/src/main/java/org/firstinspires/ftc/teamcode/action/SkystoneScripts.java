@@ -318,20 +318,32 @@ public class SkystoneScripts {
 //                ;
 //    }//RED INNER
 
-//SKYSTONE DETECTION TEST
+    public SkystoneActions redSideTestScratch() {
+        return emptyScript()
+                .run(() -> bot.getLocalizer().calibrate(START_NEAR_RED_SKYSTONES_WALL))
+                .run(() -> bot.stop())
+                .grabTower(.85)
+                .strafeTo(xy(-15, -30))//goes to inner most block
+                ;
+    }
+
+
+//SKYSTONE DETECTION TEST, this is actually outer starting spot, oops, commented out one above is old one
     public SkystoneActions redSideSkystoneInner() {
         return emptyScript()
-                .run(() -> bot.getLocalizer().calibrate(START_NEAR_RED_SKYSTONES_BRIDGE))
+                .run(() -> bot.getLocalizer().calibrate(START_NEAR_RED_SKYSTONES_WALL))
                 .run(() -> bot.stop())
                 .strafeTo(xy(-15, -30))//goes to inner most block
                 .grabTower(.65)
                 .detectSkystoneAction(fieldPosition(xy(-40, -18), FACING_BLUE_WALL))//finds skystone and stops
-                .strafeTo(xy(PolarUtil.toXY(bot.getLocalizer().getCurrent().polarCoord).x,-15.5)) //drives 4.5 inches forwards
+                .strafeTo(xy(PolarUtil.toXY(bot.getLocalizer().getCurrent().polarCoord).x,-10)) //drives super far forwars not 4.5 inches forwards
                 .grabTower()//grabs block
                 .strafeTo(xy(PolarUtil.toXY(bot.getLocalizer().getCurrent().polarCoord).x, -28))//drives backwards
 
-                .turnTo(0)//turns toward
-                .strafeNoStop(0,2400,0.9)//long drive across field
+                //.turnTo(0)//turns toward
+                //.strafeNoStop(0,600,1)//long drive across field
+                .strafeTo(xy(50,-28))
+
                 .liftTower(0.3)
                 .turnTo(Math.PI / 2)
                 .strafeTo(xy(50, -14)) //drive to foundation

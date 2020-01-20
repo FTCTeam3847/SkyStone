@@ -24,6 +24,7 @@ import org.firstinspires.ftc.teamcode.controller.HeadingLocalizer;
 import org.firstinspires.ftc.teamcode.controller.Localizer;
 import org.firstinspires.ftc.teamcode.controller.RangeSensor;
 import org.firstinspires.ftc.teamcode.drive.DrivePower;
+import org.firstinspires.ftc.teamcode.drive.mecanum.LocalizingMecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDriveController;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumLocalizer;
@@ -70,6 +71,7 @@ public class SkottBot implements SkystoneBot {
     private HeadingController headingController;
     private HeadingLocalizer headingLocalizer;
     private MecanumDrive mecanum;
+    private MecanumDriveController mDrive;
     private VuforiaLocalizer vuforiaLocalizer;
     private SkyStoneLocalizer skyStoneLocalizer;
     private BufferingLocalizer bufferingLocalizer;
@@ -103,9 +105,10 @@ public class SkottBot implements SkystoneBot {
         MecanumLocalizer mecanumLocalizer = new MecanumLocalizer(
                 System::nanoTime,
                 headingLocalizer::getLast,
-                28.0
+                54.0
         );
-        mecanum = new MecanumDriveController(headingController, this::setDrivePower);
+        mDrive = new MecanumDriveController(headingController, this::setDrivePower);
+        mecanum = new LocalizingMecanumDrive(mDrive, mecanumLocalizer);
         vuforiaLocalizer = initVuforia(hardwareMap);
         skyStoneLocalizer = new SkyStoneLocalizer(vuforiaLocalizer);
 

@@ -173,7 +173,11 @@ public class SkystoneActions extends SequentialAction {
 
     public SkystoneActions strafeTo(FieldPosition fieldPosition) {
         addAction(new StrafeToAction(fieldPosition, bot));
+        return this;
+    }
 
+    public SkystoneActions strafeTo(Supplier<FieldPosition> fieldPosition) {
+        addAction(new StrafeToAction(fieldPosition, bot));
         return this;
     }
 
@@ -199,6 +203,12 @@ public class SkystoneActions extends SequentialAction {
     public SkystoneActions detectSkystoneAction(FieldPosition targetFieldPosition)
     {
         addAction(new DetectSkystoneActionMoveTo(targetFieldPosition, bot));
+        return this;
+    }
+
+    public SkystoneActions goToInnerSkystone(boolean redTeam)
+    {
+        addAction(new GoToInnerSkyStone(redTeam, bot));
         return this;
     }
 

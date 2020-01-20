@@ -19,6 +19,7 @@ import static org.firstinspires.ftc.teamcode.GameConstants.START_NEAR_RED_SKYSTO
 import static org.firstinspires.ftc.teamcode.GameConstants.START_NEAR_RED_SKYSTONES_WALL;
 import static org.firstinspires.ftc.teamcode.GameConstants.UNDER_BLUE_BRIDGE;
 import static org.firstinspires.ftc.teamcode.GameConstants.UNDER_RED_BRIDGE;
+import static org.firstinspires.ftc.teamcode.GameConstants.redSkystoneLocations;
 import static org.firstinspires.ftc.teamcode.controller.FieldPosition.fieldPosition;
 import static org.firstinspires.ftc.teamcode.polar.CartesianCoord.xy;
 
@@ -209,33 +210,33 @@ public class SkystoneScripts {
 
 
 //OUTER
-    public SkystoneActions redSideSkystoneOuter() {
-        return emptyScript()
-                .run(() -> bot.getLocalizer().calibrate(START_NEAR_RED_SKYSTONES_WALL))
-                .run(() -> bot.stop())
-                .grabTower(0.65)
-                .strafeTo(xy(-62, -54))
-                .strafeTo(xy(-62, -15.5))
-                .grabTower()
-                .strafeTo(xy(-61, -50))
-                .turnTo(0)
-                .strafeNoStop(0, 3100, 0.9) //Time based
-                .liftTower(0.3)
-                .turnTo(Math.PI / 2)
-                .strafeTo(xy(50, -18))
-                .grabTower(0.15)
-
-                //MOVES FOUNDATION -----------------------------------------------------------------
-                .lowerTower()
-                .strafeTo(xy(50, -54))
-                .liftTower(0.2)
-                //----------------------------------------------------------------------------------
-                .strafeTo(xy(50, -54)) //Time based
-                .strafeNoStop(Math.PI /2, 1500) //Time based
-                .lowerTower()
-                .strafe( Math.PI /2, 1250) //Time based
-                ;
-    }//RED OUTER
+//    public SkystoneActions redSideSkystoneOuter() {
+//        return emptyScript()
+//                .run(() -> bot.getLocalizer().calibrate(START_NEAR_RED_SKYSTONES_WALL))
+//                .run(() -> bot.stop())
+//                .grabTower(0.65)
+//                .strafeTo(xy(-62, -54))
+//                .strafeTo(xy(-62, -15.5))
+//                .grabTower()
+//                .strafeTo(xy(-61, -50))
+//                .turnTo(0)
+//                .strafeNoStop(0, 3100, 0.9) //Time based
+//                .liftTower(0.3)
+//                .turnTo(Math.PI / 2)
+//                .strafeTo(xy(50, -18))
+//                .grabTower(0.15)
+//
+//                //MOVES FOUNDATION -----------------------------------------------------------------
+//                .lowerTower()
+//                .strafeTo(xy(50, -54))
+//                .liftTower(0.2)
+//                //----------------------------------------------------------------------------------
+//                .strafeTo(xy(50, -54)) //Time based
+//                .strafeNoStop(Math.PI /2, 1500) //Time based
+//                .lowerTower()
+//                .strafe( Math.PI /2, 1250) //Time based
+//                ;
+//    }//RED OUTER
 
     public SkystoneActions blueSideSkystoneOuter() {
         return emptyScript()
@@ -291,63 +292,18 @@ public class SkystoneScripts {
                 ;
     }//BLUE INNER
 
-//    public SkystoneActions redSideSkystoneInner() {
-//        return emptyScript()
-//                .run(() -> bot.getLocalizer().calibrate(START_NEAR_RED_SKYSTONES_BRIDGE))
-//                .run(() -> bot.stop())
-//                .strafeTo(xy(-15, -30))
-//                .strafeTo(xy(-37, -30))
-//                .grabTower(0.65)
-//                .strafeTo(xy(-37, -15.5))
-//                .grabTower()
-//                .strafeTo(xy(-37, -28))
-//                .turnTo(0)
-//                .strafeNoStop(0,2400,0.9)//long drive across field
-//                .liftTower(0.3)
-//                .turnTo(Math.PI / 2)
-//                .strafeTo(xy(50, -14)) //drive to foundation
-//
-//                //Foundation
-//                .grabTower(0.15)
-//                .lowerTower()
-//                .strafeTo(xy(50, -54))
-//                .liftTower(0.2)
-//
-//                .strafeTo(xy(15, -54))
-//                .strafeTo(xy(15, -30))
-//                .lowerTower()
-//                .strafeTo(xy(-5,-30))
-//                ;
-//    }//RED INNER
-
-    public SkystoneActions redSideTestScratch() {
-        return emptyScript()
-                .run(() -> bot.getLocalizer().calibrate(fieldPosition(xy(-39, -54), FACING_REAR_WALL)))
-                .run(() -> bot.stop())
-                .strafeToNoStop(xy(24, -52)) // past the bridge
-                .liftTower(0.3)
-                .strafeTo(xy(48, -52))
-                .liftTower(0.0)
-                ;
-    }
-
-
-//SKYSTONE DETECTION TEST, this is actually outer starting spot, oops, commented out one above is old one
     public SkystoneActions redSideSkystoneInner() {
         return emptyScript()
-                .run(() -> bot.getLocalizer().calibrate(START_NEAR_RED_SKYSTONES_WALL))
+                .run(() -> bot.getLocalizer().calibrate(START_NEAR_RED_SKYSTONES_BRIDGE))
                 .run(() -> bot.stop())
-                .strafeTo(xy(-15, -30))//goes to inner most block
-                .grabTower(.65)
-                .detectSkystoneAction(fieldPosition(xy(-40, -18), FACING_BLUE_WALL))//finds skystone and stops
-                .strafeTo(xy(PolarUtil.toXY(bot.getLocalizer().getCurrent().polarCoord).x,-10)) //drives super far forwars not 4.5 inches forwards
-                .grabTower()//grabs block
-                .strafeTo(xy(PolarUtil.toXY(bot.getLocalizer().getCurrent().polarCoord).x, -28))//drives backwards
-
-                //.turnTo(0)//turns toward
-                //.strafeNoStop(0,600,1)//long drive across field
-                .strafeTo(xy(50,-28))
-
+                .strafeTo(xy(-15, -30))
+                .strafeTo(xy(-37, -30))
+                .grabTower(0.65)
+                .strafeTo(xy(-37, -15.5))
+                .grabTower()
+                .strafeTo(xy(-37, -28))
+                .turnTo(0)
+                .strafeNoStop(0,2400,0.9)//long drive across field
                 .liftTower(0.3)
                 .turnTo(Math.PI / 2)
                 .strafeTo(xy(50, -14)) //drive to foundation
@@ -362,6 +318,65 @@ public class SkystoneScripts {
                 .strafeTo(xy(15, -30))
                 .lowerTower()
                 .strafeTo(xy(-5,-30))
+                ;
+    }//RED INNER
+
+    public SkystoneActions redSideTestScratch() {
+        return emptyScript()
+                .run(() -> bot.getLocalizer().calibrate(fieldPosition(xy(-39, -54), FACING_REAR_WALL)))
+                .run(() -> bot.stop())
+                .strafeToNoStop(xy(24, -52)) // past the bridge
+                .liftTower(0.3)
+                .strafeTo(xy(48, -52))
+                .liftTower(0.0)
+                ;
+    }
+
+
+//SKYSTONE DETECTION TEST, this is actually outer starting spot, oops, commented out one above is old one
+    public SkystoneActions redSideSkystoneOuter() {
+        return emptyScript()
+                .run(() -> bot.getLocalizer().calibrate(START_NEAR_RED_SKYSTONES_WALL))
+                .run(() -> bot.stop())
+                .grabTower(.9)
+                .strafeTo(xy(-20, -27)) //goes to inner most block
+                .pause()
+                .detectSkystoneAction(fieldPosition(xy(-40, -27), FACING_BLUE_WALL))//finds skystone and stops
+                .pause(500)
+                .grabTower(.65)
+
+                //.goToInnerSkystone(true) //aligns
+                .pause()
+                .strafeTo(() -> redSkystoneLocations.get(bot.getInnerSkystone()).get(0))
+                .pause(500)
+                .strafeTo(() -> redSkystoneLocations.get(bot.getInnerSkystone()).get(1))//drives forwards
+
+                .pause(500)
+
+                .grabTower()//grabs block
+                .pause(500)
+
+                .strafeTo(xy(-36,-46))//drives backwards
+                .pause(10000)
+
+
+                .turnTo(0)//turns toward build zone
+                .strafeToNoStop(xy(30, -46))//long drive across field
+                .strafeTo(xy(45, -46))
+                .liftTower(0.3)
+
+                .turnTo(Math.PI / 2)
+                .strafeTo(xy(50, -14)) //drive to foundation
+
+                //Foundation
+                .grabTower(0.15)
+                .lowerTower()
+                .strafeTo(xy(50, -54))
+                .liftTower(0.2)
+
+                .strafeTo(xy(15, -54))
+                .lowerTower()
+                .strafeTo(xy(-8,-54))
                 ;
     }
 
@@ -385,22 +400,33 @@ public class SkystoneScripts {
     public SkystoneActions detectRedSkystones()
     {
         return emptyScript()
-                .run(() -> bot.getLocalizer().calibrate(fieldPosition(xy(-15,-18), FACING_RED_WALL))) //Right in front of sixth red stone
+                .run(() -> bot.getLocalizer().calibrate(fieldPosition(xy(-20,-30), FACING_BLUE_WALL))) //Right in front of sixth red stone
                 .run(() -> bot.stop())
-                .detectSkystoneAction(fieldPosition(xy(-40, -18), FACING_RED_WALL))//Right in front of third red stone
+                .detectSkystoneAction(fieldPosition(xy(-40, -30), FACING_BLUE_WALL))//Right in front of third red stone
                 ;
     }
 
     public SkystoneActions detectBlueSkystones()
     {
         return emptyScript()
-                .run(() -> bot.getLocalizer().calibrate(fieldPosition(xy(-15,18), FACING_RED_WALL))) //Right in front of sixth blue stone
+                .run(() -> bot.getLocalizer().calibrate(fieldPosition(xy(-20,30), FACING_RED_WALL))) //Right in front of sixth blue stone
                 .run(() -> bot.stop())
-                .detectSkystoneAction(fieldPosition(xy(-40, 18), FACING_RED_WALL))//Right in front of third blue stone
+                .detectSkystoneAction(fieldPosition(xy(-40, 30), FACING_RED_WALL))//Right in front of third blue stone
                 ;
     }
 
 
 
+    public SkystoneActions moveAroundField()
+    {
+        return emptyScript()
+                .run(() -> bot.getLocalizer().calibrate(fieldPosition(xy(-36,-48), FACING_BLUE_WALL))) //Right in front of sixth blue stone
+                .run(() -> bot.stop())
+                .strafeTo(xy(-48, 48))
+                .strafeTo(xy(48, 48))
+                .strafeTo(xy(48, -48))
+                .strafeTo(xy(-48, -48))
+                ;
+    }
 
 }

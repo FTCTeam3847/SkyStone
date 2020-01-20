@@ -2,7 +2,13 @@ package org.firstinspires.ftc.teamcode;
 
 import org.firstinspires.ftc.teamcode.controller.FieldPosition;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import static java.lang.Math.PI;
+import static java.util.Arrays.asList;
 import static org.firstinspires.ftc.teamcode.controller.FieldPosition.fieldPosition;
 import static org.firstinspires.ftc.teamcode.polar.CartesianCoord.xy;
 
@@ -64,12 +70,23 @@ public class GameConstants {
     public static final FieldPosition UNDER_RED_BRIDGE_CENTER = fieldPosition(xy(0, -48), FACING_BLUE_WALL);
 
 
+    public static final Map<Integer, List<FieldPosition>> redSkystoneLocations = new HashMap<Integer, List<FieldPosition>>(){{
+        put(1, asList(fieldPosition(xy(-64, -30), FACING_BLUE_WALL), fieldPosition(xy(-64, -8), FACING_BLUE_WALL)));
+        put(2, asList(fieldPosition(xy(-56, -30), FACING_BLUE_WALL), fieldPosition(xy(-56, -8), FACING_BLUE_WALL)));
+        put(3, asList(fieldPosition(xy(-48, -30), FACING_BLUE_WALL), fieldPosition(xy(-48, -8), FACING_BLUE_WALL)));
+        put(4, asList(fieldPosition(xy(-40, -30), FACING_BLUE_WALL), fieldPosition(xy(-40, -8), FACING_BLUE_WALL)));
+        put(5, asList(fieldPosition(xy(-32, -30), FACING_BLUE_WALL), fieldPosition(xy(-32, -8), FACING_BLUE_WALL)));
+        put(6, asList(fieldPosition(xy(-25, -30), FACING_BLUE_WALL), fieldPosition(xy(-24, -8), FACING_BLUE_WALL)));
+    }};
 
-    //SKYSTONES
-    public static final FieldPosition INNER_RED_SKYSTONE = fieldPosition(xy(-15, -30), FACING_BLUE_WALL); //6th block
-    public static final FieldPosition INNER_BLUE_SKYSTONE = fieldPosition(xy(-15, 30), FACING_RED_WALL); //6th block
+    public static final Map<Integer, List<FieldPosition>> blueSkystoneLocations = new HashMap<Integer, List<FieldPosition>>(){{
+        put(1, asList(fieldPosition(xy(-64, 30), FACING_RED_WALL), fieldPosition(xy(-64, 8), FACING_RED_WALL)));
+        put(2, asList(fieldPosition(xy(-56, 30), FACING_RED_WALL), fieldPosition(xy(-56, 8), FACING_RED_WALL)));
+        put(3, asList(fieldPosition(xy(-48, 30), FACING_RED_WALL), fieldPosition(xy(-48, 8), FACING_RED_WALL)));
+        put(4, asList(fieldPosition(xy(-40, 30), FACING_RED_WALL), fieldPosition(xy(-40, 8), FACING_RED_WALL)));
+        put(5, asList(fieldPosition(xy(-32, 30), FACING_RED_WALL), fieldPosition(xy(-32, 8), FACING_RED_WALL)));
+        put(6, asList(fieldPosition(xy(-24, 30), FACING_RED_WALL), fieldPosition(xy(-24, 8), FACING_RED_WALL)));
+    }};
 
-    public static final FieldPosition MIDDLE_RED_SKYSTONE = fieldPosition(xy(-40, -18), FACING_BLUE_WALL); //3rd block
-    public static final FieldPosition MIDDLE_BLUE_SKYSTONE = fieldPosition(xy(-40, 18), FACING_RED_WALL); //3rd block
 
 }

@@ -76,7 +76,10 @@ public class FieldPosition {
 
     public double distance(FieldPosition targetFieldPosition)
     {
-        return PolarUtil.subtract(this.polarCoord, targetFieldPosition.polarCoord).radius;
+        CartesianCoord thisCart = PolarUtil.toXY(this.polarCoord);
+        CartesianCoord thatCart = PolarUtil.toXY(targetFieldPosition.polarCoord);
+
+        return Math.sqrt(Math.pow((thatCart.y - thisCart.y),2) + Math.pow(thatCart.x-thisCart.x,2));
     }
 
     @Override

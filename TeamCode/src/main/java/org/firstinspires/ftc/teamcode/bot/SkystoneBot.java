@@ -12,6 +12,9 @@ public interface SkystoneBot extends Bot {
     void setInnerSkystone(int innerSkystone); //sets both skystone locations
     void setOuterSkystone(int outerSkystone); //sets both skystone locations
 
+    int getInnerSkystone(); //gets inner skystone location
+    int getOuterSkystone(); //gets outer skystone location
+
     ColorSensor getColorSensor();
 
     double getFieldRelativeHeading();

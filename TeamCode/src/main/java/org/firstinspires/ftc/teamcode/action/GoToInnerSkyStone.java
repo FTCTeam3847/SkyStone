@@ -1,40 +1,45 @@
 package org.firstinspires.ftc.teamcode.action;
 
+import org.firstinspires.ftc.teamcode.GameConstants;
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
-import org.firstinspires.ftc.teamcode.controller.FieldPosition;
 import org.firstinspires.ftc.teamcode.controller.FieldPositionController;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
 import org.firstinspires.ftc.teamcode.polar.PolarCoord;
 
 import java.util.Locale;
-import java.util.function.Supplier;
 
 import static java.lang.String.format;
+import static org.firstinspires.ftc.teamcode.GameConstants.blueSkystoneLocations;
+import static org.firstinspires.ftc.teamcode.GameConstants.redSkystoneLocations;
 import static org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower.mecanumPower;
 
-public class StrafeToAction implements RoboAction {
+public class GoToInnerSkyStone implements RoboAction {
 
     private boolean started = false;
     private boolean isDone = false;
-    private final Supplier<FieldPosition> targetFieldPosition;
+    boolean redTeam;
     FieldPositionController fieldPositionController;
 
     private SkystoneBot bot;
 
-    public StrafeToAction(Supplier<FieldPosition> targetFieldPosition, SkystoneBot bot) {
-        this.targetFieldPosition = targetFieldPosition;
+    public GoToInnerSkyStone(boolean redTeam, SkystoneBot bot) {
+        this.redTeam = redTeam;
         this.bot = bot;
     }
 
-    public StrafeToAction(FieldPosition targetFieldPosition, SkystoneBot bot) {
-        this(() -> targetFieldPosition, bot);
-    }
-
     @Override
-    public StrafeToAction start() {
+    public GoToInnerSkyStone start() {
         started = true;
         fieldPositionController = new FieldPositionController(bot.getLocalizer()::getCurrent, bot.getAutonomousSpeed());
-        fieldPositionController.setTarget(targetFieldPosition.get());
+
+        if(redTeam)
+        {
+            fieldPositionController.setTarget(redSkystoneLocations.get(bot.getInnerSkystone()).get(0));
+        }
+        else
+        {
+            fieldPositionController.setTarget(blueSkystoneLocations.get(bot.getInnerSkystone()).get(0));
+        }
         return this;
     }
 

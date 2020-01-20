@@ -255,6 +255,9 @@ public class SkottBot implements SkystoneBot {
     }
 
     private void updateTelemetry() {
+        telemetry.addData("inner", innerSkystone);
+        telemetry.addData("outer", outerSkystone);
+
 
         telemetry.addData("heading", headingLocalizer);
         telemetry.addData("skyStoneLocalizer", skyStoneLocalizer);
@@ -277,14 +280,24 @@ public class SkottBot implements SkystoneBot {
     public void setInnerSkystone(int innerSkystone)
     {
         this.innerSkystone = innerSkystone;
-        this.outerSkystone = innerSkystone-2;
+        this.outerSkystone = innerSkystone-3;
     }
 
     @Override
     public void setOuterSkystone(int outerSkystone)
     {
         this.outerSkystone = outerSkystone;
-        this.innerSkystone = outerSkystone+2;
+        this.innerSkystone = outerSkystone+3;
+    }
+
+    @Override
+    public int getInnerSkystone() {
+        return innerSkystone;
+    }
+
+    @Override
+    public int getOuterSkystone() {
+        return outerSkystone;
     }
 
     @Override

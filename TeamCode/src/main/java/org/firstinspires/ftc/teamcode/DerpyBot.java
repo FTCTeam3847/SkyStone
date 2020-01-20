@@ -58,8 +58,8 @@ public class DerpyBot implements SkystoneBot {
 
     DistanceSensor distanceSensor;
 
-    public int innerSkystone = 6;//[3-6] close to bridge, assume 6th block
-    public int outerSkystone = 3;//[1-3] close to wall, assume 3rd block
+    public int innerSkystone = 1;//[3-6] close to bridge, assume 6th block
+    public int outerSkystone = 4;//[1-3] close to wall, assume 3rd block
 
     public DerpyBot(
             HardwareMap hardwareMap,
@@ -182,14 +182,24 @@ public class DerpyBot implements SkystoneBot {
     public void setInnerSkystone(int innerSkystone)
     {
         this.innerSkystone = innerSkystone;
-        this.outerSkystone = innerSkystone-2;
+        this.outerSkystone = innerSkystone-3;
     }
 
     @Override
     public void setOuterSkystone(int outerSkystone)
     {
         this.outerSkystone = outerSkystone;
-        this.innerSkystone = outerSkystone+2;
+        this.innerSkystone = outerSkystone+3;
+    }
+
+    @Override
+    public int getInnerSkystone() {
+        return innerSkystone;
+    }
+
+    @Override
+    public int getOuterSkystone() {
+        return outerSkystone;
     }
 
     @Override

@@ -33,11 +33,11 @@ public class DetectSkystoneActionMoveTo implements RoboAction
     @Override
     public RoboAction start()
     {
-        //Position Controller
-        fieldPositionController = new FieldPositionController(bot.getLocalizer()::getCurrent, bot.getAutonomousSpeed());
+        //Position Controller, drives at half speed
+        fieldPositionController = new FieldPositionController(bot.getLocalizer()::getCurrent, bot.getAutonomousSpeed()/2);
         fieldPositionController.setTarget(targetFieldPosition);
 
-        startingLocation = fieldPositionController.getCurrent();//where the bot is on start
+        startingLocation = bot.getLocalizer().getCurrent();//where the bot is on start
 
 
         isStarted = true;
@@ -58,12 +58,12 @@ public class DetectSkystoneActionMoveTo implements RoboAction
             bot.getMecanumDrive().setPower(MecanumPower.ZERO);//stop
 
 
-            double distanceTraveled = fieldPositionController.getCurrent().distance(startingLocation); //distance from start
-            if(distanceTraveled <= 6)//starts at most inner stone
+            double distanceTraveled = bot.getLocalizer().getCurrent().distance(startingLocation); //distance from start
+            if(distanceTraveled <= 4.0)//starts at most inner stone
             {
                 bot.setInnerSkystone(6); //sets inner and outer
             }
-            else if(distanceTraveled <= 12)
+            else if(distanceTraveled <= 10.0)
             {
                 bot.setInnerSkystone(5); //sets inner and outer
             }

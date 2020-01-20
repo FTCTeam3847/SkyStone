@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.action;
 
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
+import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
 import org.firstinspires.ftc.teamcode.polar.PolarUtil;
 
 import static org.firstinspires.ftc.teamcode.GameConstants.FACING_BLUE_WALL;
 import static org.firstinspires.ftc.teamcode.GameConstants.FACING_FOUNDATION_BLUE_CENTER;
 import static org.firstinspires.ftc.teamcode.GameConstants.FACING_FOUNDATION_RED_CENTER;
+import static org.firstinspires.ftc.teamcode.GameConstants.FACING_REAR_WALL;
 import static org.firstinspires.ftc.teamcode.GameConstants.FACING_RED_WALL;
 import static org.firstinspires.ftc.teamcode.GameConstants.START_NEAR_BLUE_BUILD_WALL;
 import static org.firstinspires.ftc.teamcode.GameConstants.START_NEAR_BLUE_FOUNDATION;
@@ -320,10 +322,12 @@ public class SkystoneScripts {
 
     public SkystoneActions redSideTestScratch() {
         return emptyScript()
-                .run(() -> bot.getLocalizer().calibrate(START_NEAR_RED_SKYSTONES_WALL))
+                .run(() -> bot.getLocalizer().calibrate(fieldPosition(xy(-39, -54), FACING_REAR_WALL)))
                 .run(() -> bot.stop())
-                .grabTower(.85)
-                .strafeTo(xy(-15, -30))//goes to inner most block
+                .strafeToNoStop(xy(24, -52)) // past the bridge
+                .liftTower(0.3)
+                .strafeTo(xy(48, -52))
+                .liftTower(0.0)
                 ;
     }
 

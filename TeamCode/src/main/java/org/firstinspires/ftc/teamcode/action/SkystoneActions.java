@@ -177,8 +177,16 @@ public class SkystoneActions extends SequentialAction {
         return this;
     }
 
+    public SkystoneActions strafeToNoStop(CartesianCoord destination) {
+        return strafeToNoStop(fromCartesian(destination));
+    }
+
+    private SkystoneActions strafeToNoStop(PolarCoord destination) {
+        return strafeToNoStop(new FieldPosition(destination, 0));
+    }
+
     public SkystoneActions strafeToNoStop(FieldPosition fieldPosition) {
-        addAction(new StrafeToNoStopAction(fieldPosition, bot));
+        addAction(new StrafeToNoStopAction2(fieldPosition, bot));
         return this;
     }
 

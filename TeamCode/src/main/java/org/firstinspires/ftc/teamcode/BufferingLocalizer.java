@@ -11,7 +11,7 @@ import static java.lang.String.format;
 import static org.firstinspires.ftc.teamcode.polar.PolarUtil.subtract;
 
 public class BufferingLocalizer implements Localizer<FieldPosition> {
-    private final int RECENTS_MAX_SIZE = 15;
+    private final int RECENTS_MAX_SIZE = 30;
     private final Localizer<FieldPosition> delegate;
     private final List<FieldPosition> recents;
     private FieldPosition lastFieldPosition = FieldPosition.UNKNOWN;

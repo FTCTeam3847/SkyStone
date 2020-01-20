@@ -15,8 +15,6 @@ public class CombinedLocalizer implements Localizer<FieldPosition> {
     private final Localizer<FieldPosition> mecanumLocalizer;
     private final Localizer<FieldPosition> skyStoneLocalizer;
 
-    private long loopCount = 0;
-
     public CombinedLocalizer(Localizer<Double> headingLocalizer, Localizer<FieldPosition> mecanumLocalizer, Localizer<FieldPosition> skyStoneLocalizer) {
         this.headingLocalizer = headingLocalizer;
         this.mecanumLocalizer = mecanumLocalizer;
@@ -30,8 +28,7 @@ public class CombinedLocalizer implements Localizer<FieldPosition> {
 
         FieldPosition mecanumGuess = mecanumLocalizer.getCurrent();
 
-        // don't read from vuforia every time since it's CPU intensive
-        FieldPosition skyStoneGuess = (loopCount % 10 == 0) ? FieldPosition.UNKNOWN : skyStoneLocalizer.getCurrent();
+        FieldPosition skyStoneGuess = skyStoneLocalizer.getCurrent();
 
         FieldPosition bestGuess;
 
@@ -44,7 +41,6 @@ public class CombinedLocalizer implements Localizer<FieldPosition> {
 
         currentPosition = bestGuess;
 
-        loopCount++;
         return bestGuess;
     }
 

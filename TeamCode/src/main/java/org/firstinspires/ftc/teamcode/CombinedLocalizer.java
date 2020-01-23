@@ -1,11 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
 import org.firstinspires.ftc.teamcode.controller.FieldPosition;
-import org.firstinspires.ftc.teamcode.controller.HeadingLocalizer;
 import org.firstinspires.ftc.teamcode.controller.Localizer;
-import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumLocalizer;
 
 import java.util.Locale;
+import java.util.function.Supplier;
 
 public class CombinedLocalizer implements Localizer<FieldPosition> {
 
@@ -14,11 +13,13 @@ public class CombinedLocalizer implements Localizer<FieldPosition> {
     private final Localizer<Double> headingLocalizer;
     private final Localizer<FieldPosition> mecanumLocalizer;
     private final Localizer<FieldPosition> skyStoneLocalizer;
+    private final Supplier<Boolean> isBotInMotion;
 
-    public CombinedLocalizer(Localizer<Double> headingLocalizer, Localizer<FieldPosition> mecanumLocalizer, Localizer<FieldPosition> skyStoneLocalizer) {
+    public CombinedLocalizer(Localizer<Double> headingLocalizer, Localizer<FieldPosition> mecanumLocalizer, Localizer<FieldPosition> skyStoneLocalizer, Supplier<Boolean> isBotInMotion) {
         this.headingLocalizer = headingLocalizer;
         this.mecanumLocalizer = mecanumLocalizer;
         this.skyStoneLocalizer = skyStoneLocalizer;
+        this.isBotInMotion = isBotInMotion;
     }
 
     @Override
@@ -28,13 +29,17 @@ public class CombinedLocalizer implements Localizer<FieldPosition> {
 
         FieldPosition mecanumGuess = mecanumLocalizer.getCurrent();
 
-        FieldPosition skyStoneGuess = skyStoneLocalizer.getCurrent();
-
         FieldPosition bestGuess;
 
-        if (!skyStoneGuess.equals(FieldPosition.UNKNOWN)) {
-            calibrate(skyStoneGuess);
-            bestGuess = skyStoneGuess;
+        if (!isBotInMotion.get()) { //determines if the bot is moving
+            FieldPosition skyStoneGuess = skyStoneLocalizer.getCurrent();
+            if(!skyStoneGuess.equals(FieldPosition.UNKNOWN))//determines if vuforia thinks it knows where the bot is
+            {
+                calibrate(skyStoneGuess);
+                bestGuess = skyStoneGuess;
+            }else {
+                bestGuess = mecanumGuess;
+            }
         } else {
             bestGuess = mecanumGuess;
         }

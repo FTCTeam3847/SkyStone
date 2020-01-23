@@ -9,6 +9,8 @@ import java.util.function.Consumer;
 import static java.lang.Math.PI;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
+import static org.firstinspires.ftc.teamcode.drive.DrivePower.ZERO;
+import static org.firstinspires.ftc.teamcode.drive.DrivePower.combine;
 import static org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower.mecanumPower;
 import static org.firstinspires.ftc.teamcode.polar.PolarCoord.polar;
 import static org.firstinspires.ftc.teamcode.polar.PolarUtil.addRadians;
@@ -18,6 +20,7 @@ import static org.firstinspires.ftc.teamcode.polar.PolarUtil.subtractRadians;
 public class MecanumDriveController implements MecanumDrive {
     private final HeadingController headingController;
     private final Consumer<DrivePower> drive;
+    private DrivePower currentDrive;
 
     public MecanumDriveController(HeadingController headingController, Consumer<DrivePower> drive) {
         this.headingController = headingController;
@@ -29,8 +32,8 @@ public class MecanumDriveController implements MecanumDrive {
     private double lastTurn;
 
     public void setPower(MecanumPower target) {
-        DrivePower drivePower = calculateDrivePower(target);
-        drive.accept(drivePower);
+        currentDrive = calculateDrivePower(target);
+        drive.accept(currentDrive);
     }
 
     public void setPower(double strafe_x, double strafe_y, double turn) {
@@ -43,7 +46,7 @@ public class MecanumDriveController implements MecanumDrive {
         if (Double.isFinite(turn)) {
             return new DrivePower(-turn, -turn, turn, turn);
         } else {
-            return DrivePower.ZERO;
+            return ZERO;
         }
     }
 
@@ -62,7 +65,7 @@ public class MecanumDriveController implements MecanumDrive {
         if (mecanumPower.strafe.radius == 0.0d && mecanumPower.turn == 0.0d) {
             // we're stopped
             headingController.setTarget(currentAngle);
-            drivePower = DrivePower.ZERO;
+            drivePower = ZERO;
         } else {
             // we're moving
             if (mecanumPower.turn == 0.0d && lastTurn != 0.0d) {
@@ -80,10 +83,15 @@ public class MecanumDriveController implements MecanumDrive {
                 turnPower = turnPower(mecanumPower.turn);
             }
 
-            drivePower = DrivePower.combine(strafePower, turnPower);
+            drivePower = combine(strafePower, turnPower);
         }
         lastTurn = mecanumPower.turn;
         return drivePower;
     }
 
+    //If last set drive power is ZERO, returns false
+    public boolean isMoving()
+    {
+        return !(currentDrive.equals(ZERO));
+    }
 }

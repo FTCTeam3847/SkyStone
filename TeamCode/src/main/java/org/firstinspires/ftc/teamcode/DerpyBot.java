@@ -13,7 +13,6 @@ import org.firstinspires.ftc.teamcode.controller.FieldPosition;
 import org.firstinspires.ftc.teamcode.controller.HeadingController;
 import org.firstinspires.ftc.teamcode.controller.HeadingLocalizer;
 import org.firstinspires.ftc.teamcode.controller.Localizer;
-import org.firstinspires.ftc.teamcode.controller.RangeSensor;
 import org.firstinspires.ftc.teamcode.drive.DrivePower;
 import org.firstinspires.ftc.teamcode.drive.mecanum.LocalizingMecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDrive;
@@ -92,7 +91,7 @@ public class DerpyBot implements SkystoneBot {
         bufferingLocalizer = new BufferingLocalizer(skyStoneLocalizer);
 
 
-        combinedLocalizer = new CombinedLocalizer(headingLocalizer, mecanumLocalizer, bufferingLocalizer);
+        combinedLocalizer = new CombinedLocalizer(headingLocalizer, mecanumLocalizer, bufferingLocalizer, this::isInMotion);
 
 
         //Primary Port 3
@@ -217,5 +216,11 @@ public class DerpyBot implements SkystoneBot {
     @Override
     public double getAutonomousSpeed() {
         return 0.6;
+    }
+
+    @Override
+    public boolean isInMotion()
+    {
+        return getMecanumDrive().equals(DrivePower.ZERO);
     }
 }

@@ -44,7 +44,7 @@ public class SkottOp extends OpMode {
     private BlockGrabber blockGrabber;
 
     {
-        msStuckDetectInit = 10_000;
+        msStuckDetectInit = 12_000;
     }
 
     private PushButton buttonAddBlockToTower2y = new PushButton(() -> gamepad2.y);

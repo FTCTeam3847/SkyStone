@@ -5,12 +5,11 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.action.SequentialAction;
 import org.firstinspires.ftc.teamcode.action.SkystoneScripts;
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
-import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
 
 
 public abstract class BaseOp extends OpMode {
     {
-        msStuckDetectInit = 10_000;
+        msStuckDetectInit = 12_000;
     }
 
     protected SkystoneBot bot;

@@ -59,11 +59,11 @@ public class DetectSkystoneActionMoveTo implements RoboAction
 
 
             double distanceTraveled = bot.getLocalizer().getCurrent().distance(startingLocation); //distance from start
-            if(distanceTraveled <= 4.0)//starts at most inner stone
+            if(distanceTraveled <= 3)//starts at most inner stone
             {
                 bot.setInnerSkystone(6); //sets inner and outer
             }
-            else if(distanceTraveled <= 10.0)
+            else if(distanceTraveled <= 12)
             {
                 bot.setInnerSkystone(5); //sets inner and outer
             }

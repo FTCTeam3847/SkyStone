@@ -339,47 +339,113 @@ public class SkystoneScripts {
                 .run(() -> bot.getLocalizer().calibrate(START_NEAR_RED_SKYSTONES_WALL))
                 .run(() -> bot.getMecanumDrive().stop())
                 .grabTower(.9)
-                .strafeTo(xy(-20, -27)) //goes to inner most block
+
+                //.strafeTo(xy(-35, -44))//looks at vuforia
+                //.pause(1500)
+                //.turnTo(FACING_BLUE_WALL)
+                //.pause()
+                .strafeTo(xy(-22, -28)) //goes to inner most block
                 .pause()
-                .detectSkystoneAction(fieldPosition(xy(-40, -27), FACING_BLUE_WALL))//finds skystone and stops
-                .pause(500)
+                .detectSkystoneAction(fieldPosition(xy(-40, -28), FACING_BLUE_WALL))//finds skystone and stops
+                .pause()
                 .grabTower(.65)
 
-                //.goToInnerSkystone(true) //aligns
-                .pause()
+                //GET A BLOCK
                 .strafeTo(() -> redSkystoneLocations.get(bot.getInnerSkystone()).get(0))
-                .pause(500)
+                .pause()
                 .strafeTo(() -> redSkystoneLocations.get(bot.getInnerSkystone()).get(1))//drives forwards
-
-                .pause(500)
-
+                .pause()
                 .grabTower()//grabs block
-                .pause(500)
+                .strafeTo(() -> redSkystoneLocations.get(bot.getInnerSkystone()).get(2))//drives backwards
+                .pause()
 
-                .strafeTo(xy(-36,-46))//drives backwards
-                .pause(10000)
+                //.strafeTo(xy(-35, -44))//looks at vuforia
+                //.pause(1000)
 
-
-                .turnTo(0)//turns toward build zone
-                .strafeToNoStop(xy(30, -46))//long drive across field
-                .strafeTo(xy(45, -46))
+                .turnTo(.05)//turns toward build zone
+                .strafeToNoStop(xy(35, -46))//long drive across field
+                .strafeTo(xy(40, -46))//keeps going
                 .liftTower(0.3)
 
-                .turnTo(Math.PI / 2)
+                .turnTo(FACING_BLUE_WALL)//face foundation
                 .strafeTo(xy(50, -14)) //drive to foundation
 
                 //Foundation
-                .grabTower(0.15)
-                .lowerTower()
-                .strafeTo(xy(50, -54))
-                .liftTower(0.2)
+                .grabTower(0.15)//open arms a tiny bit
+                .lowerTower()//lower tower
+                .strafeTo(xy(50, -48))//strafe to wall
+                .liftTower(0.2)//raise tower
+                .strafeTo(xy(15, -48))//strafe away from foundation
+                .lowerTower()//lower tower
 
-                .strafeTo(xy(15, -54))
+                //GET ANOTHER BLOCK
+                .strafeTo(() -> redSkystoneLocations.get(bot.getOuterSkystone()).get(0))//drives to outer skystone
+                .turnTo(FACING_BLUE_WALL)
+                .grabTower(.65)
+                .strafeTo(() -> redSkystoneLocations.get(bot.getOuterSkystone()).get(1))//drives forwards
+                .grabTower()//grabs block
+                .strafeTo(() -> redSkystoneLocations.get(bot.getInnerSkystone()).get(2))//drives backwards
+
+                .turnTo(0)//facing build zone
+                .strafeTo(xy(36, -25))//drive to new foundation spot
+                .liftTower(.3)
+
+                .strafeTo(xy(36, -36))//drive to new foundation spot
+                .grabTower(.3)
+                .strafeTo(xy(36, -25))//drive to new foundation spot
                 .lowerTower()
-                .strafeTo(xy(-8,-54))
+
+
+                .strafeTo(xy(-8,-54))//park near wall
                 ;
     }
 
+//red do everything by ourselves START INNER!!
+    public SkystoneActions redSideSkystoneOuter2() {
+        return emptyScript()
+                .run(() -> bot.getLocalizer().calibrate(START_NEAR_RED_SKYSTONES_BRIDGE))//inner starting location
+                .run(() -> bot.getMecanumDrive().stop())
+                .grabTower(.9)
+                .strafeTo(xy(-20, -27)) //goes to inner most block
+                .pause()
+                .detectSkystoneAction(fieldPosition(xy(-40, -27), FACING_BLUE_WALL))//finds skystone and stops
+                .pause()
+                .grabTower(.65)
+
+                //GET A BLOCK
+                .strafeTo(() -> redSkystoneLocations.get(bot.getInnerSkystone()).get(0))
+                .strafeTo(() -> redSkystoneLocations.get(bot.getInnerSkystone()).get(1))//drives forwards
+                .grabTower()//grabs block
+                .strafeTo(() -> redSkystoneLocations.get(bot.getInnerSkystone()).get(3))//drives backwards
+
+                .strafeToNoStop(xy(30, -32))//long drive across field
+                .strafeTo(xy(45, -32))//keeps going
+                .liftTower(0.3)
+
+                .strafeTo(xy(50, -14)) //drive to foundation
+
+                //Foundation
+                .grabTower(0.15)//open arms a tiny bit
+                .lowerTower()//lower tower
+                .strafeTo(xy(50, -54))//strafe to wall
+                .liftTower(0.2)//raise tower
+                .strafeTo(xy(15, -54))//strafe away from foundation
+                .lowerTower()//lower tower
+
+                //GET ANOTHER BLOCK
+                .strafeTo(() -> redSkystoneLocations.get(bot.getOuterSkystone()).get(0))//drives to outer skystone
+                .grabTower(.65)
+                .strafeTo(() -> redSkystoneLocations.get(bot.getOuterSkystone()).get(1))//drives forwards
+                .grabTower()//grabs block
+                .strafeTo(() -> redSkystoneLocations.get(bot.getInnerSkystone()).get(3))//drives backwards
+
+                .turnTo(0)//facing build zone
+                .strafeTo(xy(36, -36))//drive to new foundation spot
+
+
+                .strafeTo(xy(-8,-54))//park near wall
+                ;
+    }
 //BLOCK
     public SkystoneActions addBlockToTower() {
         return emptyScript()

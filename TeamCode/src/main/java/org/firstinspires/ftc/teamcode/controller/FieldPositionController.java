@@ -49,7 +49,7 @@ public class FieldPositionController implements Controller<FieldPosition, Mecanu
         this.lastError = PolarUtil.subtract(getCurrent().polarCoord, targetFieldPosition.polarCoord);
 
         //tolerance
-        if (lastError.radius <= 0.25) {
+        if (lastError.radius <= 1.0) {
             return PolarCoord.ORIGIN;
         }
 

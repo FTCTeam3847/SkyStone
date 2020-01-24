@@ -98,7 +98,7 @@ public class SkottBot implements SkystoneBot {
         headingController = new HeadingController(
                 headingLocalizer::getLast,
                 0.0d,
-                4.0d,
+                2.0d,
                 0.0d
         );
         mecanumLocalizer = new MecanumLocalizer(

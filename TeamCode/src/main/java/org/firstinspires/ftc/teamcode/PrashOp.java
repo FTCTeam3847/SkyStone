@@ -10,7 +10,6 @@ import org.firstinspires.ftc.teamcode.Trinkets.TowerBuilder;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerGrabber;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerLifter;
 import org.firstinspires.ftc.teamcode.action.SequentialAction;
-import org.firstinspires.ftc.teamcode.action.SkystoneActions;
 import org.firstinspires.ftc.teamcode.action.SkystoneScripts;
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
@@ -21,20 +20,10 @@ import org.firstinspires.ftc.teamcode.gamepad.ToggleButton;
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
 import static java.lang.Math.signum;
-import static org.firstinspires.ftc.teamcode.GameConstants.FACING_BLUE_WALL;
-import static org.firstinspires.ftc.teamcode.GameConstants.FACING_FRONT_WALL;
-import static org.firstinspires.ftc.teamcode.GameConstants.FACING_IMAGE_BLUE_WALL_FRONT;
-import static org.firstinspires.ftc.teamcode.GameConstants.FACING_IMAGE_BLUE_WALL_REAR;
-import static org.firstinspires.ftc.teamcode.GameConstants.FACING_IMAGE_FRONT_WALL_BLUE;
-import static org.firstinspires.ftc.teamcode.GameConstants.FACING_IMAGE_FRONT_WALL_RED;
-import static org.firstinspires.ftc.teamcode.GameConstants.FACING_IMAGE_REAR_WALL_BLUE;
-import static org.firstinspires.ftc.teamcode.GameConstants.FACING_IMAGE_RED_WALL_FRONT;
-import static org.firstinspires.ftc.teamcode.GameConstants.FACING_REAR_WALL;
-import static org.firstinspires.ftc.teamcode.GameConstants.FACING_RED_WALL;
 import static org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower.fromGamepadXYTurn;
 
-@TeleOp(name = "SkottOp", group = "1")
-public class SkottOp extends OpMode {
+@TeleOp(name = "PrashOp", group = "1")
+public class PrashOp extends OpMode {
     private SkystoneBot bot;
     private TowerBuilder towerBuilder;
     private TowerLifter towerLifter;
@@ -44,7 +33,7 @@ public class SkottOp extends OpMode {
     private BlockGrabber blockGrabber;
 
     {
-        msStuckDetectInit = 12_000;
+        msStuckDetectInit = 10_000;
     }
 
     private PushButton buttonAddBlockToTower2y = new PushButton(() -> gamepad2.y);
@@ -58,7 +47,7 @@ public class SkottOp extends OpMode {
     );
 
 
-    private ToggleButton toggleSlowMode = new ToggleButton(() -> gamepad2.right_stick_button || gamepad1.right_stick_button);
+    private ToggleButton toggleSlowMode = new ToggleButton(() -> gamepad2.right_stick_button);
 
     private PairedButtons<Double> towerGrabberButtons = new PairedButtons<>(
             () -> gamepad1.left_bumper, 1.0d,
@@ -85,6 +74,7 @@ public class SkottOp extends OpMode {
 
     SequentialAction script;
     private SkystoneScripts scripts;
+
 
     @Override
     public void init() {
@@ -173,9 +163,9 @@ public class SkottOp extends OpMode {
             if (mecanumPower.strafe.radius < 0.0001 && abs(mecanumPower.turn) < 0.0001) {
                 // Charlie Drive
                 mecanumPower = fromGamepadXYTurn(
-                        sensitivity(gamepad1.right_stick_x, SENSITIVITY),
-                        sensitivity(-gamepad1.right_stick_y, SENSITIVITY),
-                        sensitivity(gamepad1.left_stick_x * 0.85, SENSITIVITY)
+                        sensitivity(gamepad1.left_stick_x, SENSITIVITY),
+                        sensitivity(-gamepad1.left_stick_y, SENSITIVITY),
+                        sensitivity(gamepad1.right_stick_x, SENSITIVITY)
                 );
             }
 

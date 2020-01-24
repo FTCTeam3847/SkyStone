@@ -33,8 +33,8 @@ import static org.firstinspires.ftc.teamcode.GameConstants.FACING_REAR_WALL;
 import static org.firstinspires.ftc.teamcode.GameConstants.FACING_RED_WALL;
 import static org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower.fromGamepadXYTurn;
 
-@TeleOp(name = "SkottOp", group = "1")
-public class SkottOp extends OpMode {
+@TeleOp(name = "CharlieOp", group = "1")
+public class CharlieOp extends OpMode {
     private SkystoneBot bot;
     private TowerBuilder towerBuilder;
     private TowerLifter towerLifter;
@@ -44,7 +44,7 @@ public class SkottOp extends OpMode {
     private BlockGrabber blockGrabber;
 
     {
-        msStuckDetectInit = 12_000;
+        msStuckDetectInit = 10_000;
     }
 
     private PushButton buttonAddBlockToTower2y = new PushButton(() -> gamepad2.y);
@@ -58,7 +58,7 @@ public class SkottOp extends OpMode {
     );
 
 
-    private ToggleButton toggleSlowMode = new ToggleButton(() -> gamepad2.right_stick_button || gamepad1.right_stick_button);
+    private ToggleButton toggleSlowMode = new ToggleButton(() -> gamepad1.right_stick_button);
 
     private PairedButtons<Double> towerGrabberButtons = new PairedButtons<>(
             () -> gamepad1.left_bumper, 1.0d,
@@ -86,6 +86,7 @@ public class SkottOp extends OpMode {
     SequentialAction script;
     private SkystoneScripts scripts;
 
+
     @Override
     public void init() {
         bot = new SkottBot(hardwareMap, telemetry);
@@ -105,7 +106,7 @@ public class SkottOp extends OpMode {
         return signum(base) * pow(abs(base), exp);
     }
 
-    private static final int SENSITIVITY = 2;
+    private static final int SENSITIVITY = 1;
 
     @Override
     public void init_loop() {

@@ -28,7 +28,7 @@ public class MoveAction extends TimeAction {
     @Override
     public void stop() {
         super.stop();
-        bot.getMecanumDrive().setPower(MecanumPower.ZERO);
+        bot.getMecanumDrive().stop();
     }
 
     @Override

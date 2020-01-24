@@ -39,7 +39,7 @@ public class TurnToLocateAction implements RoboAction {
 
     @Override
     public void stop() {
-        bot.getMecanumDrive().setPower(MecanumPower.ZERO);
+        bot.getMecanumDrive().stop();
         isDone = true;
     }
 

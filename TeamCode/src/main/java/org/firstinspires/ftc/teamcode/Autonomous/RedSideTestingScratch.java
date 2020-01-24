@@ -16,7 +16,7 @@ public class RedSideTestingScratch extends BaseOp {
         super.start();
         script = scripts.emptyScript()
                 .run(() -> bot.getLocalizer().calibrate(fieldPosition(xy(-39, -54), FACING_BLUE_WALL)))
-                .run(() -> bot.stop())
+                .run(() -> bot.getMecanumDrive().stop())
                 .strafeTo(xy(-39, -24))
                 .start()
         ;

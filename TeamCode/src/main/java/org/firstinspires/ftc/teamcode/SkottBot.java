@@ -70,6 +70,7 @@ public class SkottBot implements SkystoneBot {
     private HeadingLocalizer headingLocalizer;
     private MecanumDrive mecanum;
     private MecanumDriveController mDrive;
+    private MecanumLocalizer mecanumLocalizer;
     private VuforiaLocalizer vuforiaLocalizer;
     private SkyStoneLocalizer skyStoneLocalizer;
     private BufferingLocalizer bufferingLocalizer;
@@ -100,7 +101,7 @@ public class SkottBot implements SkystoneBot {
                 4.0d,
                 0.0d
         );
-        MecanumLocalizer mecanumLocalizer = new MecanumLocalizer(
+        mecanumLocalizer = new MecanumLocalizer(
                 System::nanoTime,
                 headingLocalizer::getLast,
                 54.0
@@ -249,9 +250,9 @@ public class SkottBot implements SkystoneBot {
 
     @Override
     public void stop() {
+        mecanum.stop();
         towerBuilder.stop();
-        skyStoneLocalizer.stop();
-        mecanum.setPower(MecanumPower.ZERO);
+        skyStoneLocalizer.stop(); // stops vuforia tracking until OpMode is restarted
     }
 
     private void updateTelemetry() {

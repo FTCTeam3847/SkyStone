@@ -55,7 +55,7 @@ public class DetectSkystoneActionMoveTo implements RoboAction
         if (blue/red > 0.5) {
             stop();
             isStarted = false;
-            bot.getMecanumDrive().setPower(MecanumPower.ZERO);//stop
+            bot.getMecanumDrive().stop();//stop
 
 
             double distanceTraveled = bot.getLocalizer().getCurrent().distance(startingLocation); //distance from start
@@ -83,10 +83,10 @@ public class DetectSkystoneActionMoveTo implements RoboAction
             } else {
                 stop();
                 isStarted = false;
-                bot.getMecanumDrive().setPower(MecanumPower.ZERO);//stop
+                bot.getMecanumDrive().stop();//stop
             }
         } else {
-            bot.getMecanumDrive().setPower(MecanumPower.ZERO); //stop
+            bot.getMecanumDrive().stop(); //stop
         }
     }
 

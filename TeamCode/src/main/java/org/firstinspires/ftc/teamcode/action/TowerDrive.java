@@ -67,7 +67,7 @@ public class TowerDrive extends TimeAction {
         }
 
         if (runtime() >= dur) {
-            bot.getMecanumDrive().setPower(MecanumPower.ZERO);
+            bot.getMecanumDrive().stop();
         } else {
             bot.getMecanumDrive().setPower(mecanumPower);
         }
@@ -77,7 +77,7 @@ public class TowerDrive extends TimeAction {
     public void stop() {
         isDone = true;
         towerLifter.setPower(0.0);
-        bot.getMecanumDrive().setPower(MecanumPower.ZERO);
+        bot.getMecanumDrive().stop();
     }
 
     @Override

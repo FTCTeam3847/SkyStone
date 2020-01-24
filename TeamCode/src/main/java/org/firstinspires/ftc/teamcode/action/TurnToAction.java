@@ -42,10 +42,10 @@ public class TurnToAction implements RoboAction {
             } else {
                 stop();
                 started = false;
-                bot.getMecanumDrive().setPower(MecanumPower.ZERO);
+                bot.getMecanumDrive().stop();
             }
         } else {
-            bot.getMecanumDrive().setPower(MecanumPower.ZERO);
+            bot.getMecanumDrive().stop();
         }
     }
 

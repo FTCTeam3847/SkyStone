@@ -46,7 +46,7 @@ public class StrafeToAction implements RoboAction {
             } else {
                 stop();
                 started = false;
-                bot.getMecanumDrive().setPower(MecanumPower.ZERO);
+                bot.getMecanumDrive().stop();
             }
         } else {
             bot.getMecanumDrive().setPower(mecanumPower(PolarCoord.ORIGIN, 0));

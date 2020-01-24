@@ -149,7 +149,7 @@ public class DerpyOp extends OpMode {
 
         if (pushButtonX.getCurrent()) {
             script.stop();
-            bot.getMecanumDrive().setPower(MecanumPower.ZERO);
+            bot.getMecanumDrive().stop();
         }
 
         if (pushButtonLeftStick.getCurrent() && !script.isRunning()) {

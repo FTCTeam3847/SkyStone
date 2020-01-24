@@ -143,7 +143,7 @@ public class SkottOp extends OpMode {
 
         if (buttonStopScript.getCurrent()) {
             script.stop();
-            bot.getMecanumDrive().setPower(MecanumPower.ZERO);
+            bot.getMecanumDrive().stop();
         }
 
         if (buttonAddBlockToTower2y.getCurrent()) {

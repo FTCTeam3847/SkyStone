@@ -19,7 +19,7 @@ public class PauseAction extends TimeAction{
         super.loop();
         if(!isDone())
         {
-            bot.getMecanumDrive().setPower(MecanumPower.ZERO);
+            bot.getMecanumDrive().stop();
         }
     }
 }

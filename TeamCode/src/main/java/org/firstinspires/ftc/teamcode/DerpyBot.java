@@ -153,7 +153,7 @@ public class DerpyBot implements SkystoneBot {
     @Override
     public void stop() {
         skyStoneLocalizer.stop();
-        mecanum.setPower(MecanumPower.ZERO);
+        mecanum.stop();
     }
 
     private void updateTelemetry() {

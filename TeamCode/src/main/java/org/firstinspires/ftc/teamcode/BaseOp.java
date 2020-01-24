@@ -39,8 +39,7 @@ public abstract class BaseOp extends OpMode {
     public void loop() {
         if (gamepad1.x || gamepad2.x) {
             script.stop();
-            bot.stop();
-            bot.getMecanumDrive().setPower(MecanumPower.ZERO);
+            bot.getMecanumDrive().stop();
             bot.getTowerBuilder().stop();
         } else {
             script.loop();

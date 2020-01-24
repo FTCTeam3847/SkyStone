@@ -78,7 +78,7 @@ public class SkystoneScripts {
     public SkystoneActions blueFoundation() {
         return emptyScript()
                 .run(() -> bot.getLocalizer().calibrate(START_NEAR_BLUE_FOUNDATION))
-                .run(() -> bot.stop())
+                .run(() -> bot.getMecanumDrive().stop())
                 .liftTower(.15)
                 .pause(14_000)
                 .strafeTo(FACING_FOUNDATION_BLUE_CENTER)
@@ -94,7 +94,7 @@ public class SkystoneScripts {
     public SkystoneActions redFoundation() {
         return emptyScript()
                 .run(() -> bot.getLocalizer().calibrate(START_NEAR_RED_FOUNDATION))
-                .run(() -> bot.stop())
+                .run(() -> bot.getMecanumDrive().stop())
                 .liftTower(.15)
                 .pause(14_000)
                 .strafeTo(FACING_FOUNDATION_RED_CENTER)
@@ -112,7 +112,7 @@ public class SkystoneScripts {
     public SkystoneActions redSideSkystoneInnerNoFoundation() {
         return emptyScript()
                 .run(() -> bot.getLocalizer().calibrate(START_NEAR_RED_SKYSTONES_BRIDGE))
-                .run(() -> bot.stop())
+                .run(() -> bot.getMecanumDrive().stop())
                 .strafeTo(xy(-15, -30))
                 .strafeTo(xy(-36, -30))
                 .grabTower(0.65)
@@ -138,7 +138,7 @@ public class SkystoneScripts {
     public SkystoneActions blueSideSkystoneInnerNoFoundation() {
         return emptyScript()
                 .run(() -> bot.getLocalizer().calibrate(START_NEAR_BLUE_SKYSTONES_BRIDGE))
-                .run(() -> bot.stop())
+                .run(() -> bot.getMecanumDrive().stop())
                 .strafeTo(xy(-14.5, 30))
                 .strafeTo(xy(-36, 30))
                 .grabTower(0.65)
@@ -165,7 +165,7 @@ public class SkystoneScripts {
     public SkystoneActions blueSideSkystoneOuterNoFoundation() {
         return emptyScript()
                 .run(() -> bot.getLocalizer().calibrate(START_NEAR_BLUE_SKYSTONES_WALL))
-                .run(() -> bot.stop())
+                .run(() -> bot.getMecanumDrive().stop())
                 .grabTower(0.65)
                 .strafeTo(xy(-62, 54))
                 .strafeTo(xy(-62, 15.5))
@@ -188,7 +188,7 @@ public class SkystoneScripts {
     public SkystoneActions redSideSkystoneOuterNoFoundation() {
         return emptyScript()
                 .run(() -> bot.getLocalizer().calibrate(START_NEAR_RED_SKYSTONES_WALL))
-                .run(() -> bot.stop())
+                .run(() -> bot.getMecanumDrive().stop())
                 .grabTower(0.65)
                 .strafeTo(xy(-62, -54))
                 .strafeTo(xy(-62, -15.5))
@@ -213,7 +213,7 @@ public class SkystoneScripts {
 //    public SkystoneActions redSideSkystoneOuter() {
 //        return emptyScript()
 //                .run(() -> bot.getLocalizer().calibrate(START_NEAR_RED_SKYSTONES_WALL))
-//                .run(() -> bot.stop())
+//                .run(() -> bot.getMecanumDrive().stop())
 //                .grabTower(0.65)
 //                .strafeTo(xy(-62, -54))
 //                .strafeTo(xy(-62, -15.5))
@@ -241,7 +241,7 @@ public class SkystoneScripts {
     public SkystoneActions blueSideSkystoneOuter() {
         return emptyScript()
                 .run(() -> bot.getLocalizer().calibrate(START_NEAR_BLUE_SKYSTONES_WALL))
-                .run(() -> bot.stop())
+                .run(() -> bot.getMecanumDrive().stop())
                 .grabTower(0.65)
                 .strafeTo(xy(-62, 54))
                 .strafeTo(xy(-62, 15.5))
@@ -268,7 +268,7 @@ public class SkystoneScripts {
     public SkystoneActions blueSideSkystoneInner() {
         return emptyScript()
                 .run(() -> bot.getLocalizer().calibrate(START_NEAR_BLUE_SKYSTONES_BRIDGE))
-                .run(() -> bot.stop())
+                .run(() -> bot.getMecanumDrive().stop())
                 .strafeTo(xy(-14.5, 30))
                 .strafeTo(xy(-36, 30))
                 .grabTower(0.65)
@@ -295,7 +295,7 @@ public class SkystoneScripts {
     public SkystoneActions redSideSkystoneInner() {
         return emptyScript()
                 .run(() -> bot.getLocalizer().calibrate(START_NEAR_RED_SKYSTONES_BRIDGE))
-                .run(() -> bot.stop())
+                .run(() -> bot.getMecanumDrive().stop())
                 .strafeTo(xy(-15, -30))
                 .strafeTo(xy(-37, -30))
                 .grabTower(0.65)
@@ -324,7 +324,7 @@ public class SkystoneScripts {
     public SkystoneActions redSideTestScratch() {
         return emptyScript()
                 .run(() -> bot.getLocalizer().calibrate(fieldPosition(xy(-39, -54), FACING_REAR_WALL)))
-                .run(() -> bot.stop())
+                .run(() -> bot.getMecanumDrive().stop())
                 .strafeToNoStop(xy(24, -52)) // past the bridge
                 .liftTower(0.3)
                 .strafeTo(xy(48, -52))
@@ -337,7 +337,7 @@ public class SkystoneScripts {
     public SkystoneActions redSideSkystoneOuter() {
         return emptyScript()
                 .run(() -> bot.getLocalizer().calibrate(START_NEAR_RED_SKYSTONES_WALL))
-                .run(() -> bot.stop())
+                .run(() -> bot.getMecanumDrive().stop())
                 .grabTower(.9)
                 .strafeTo(xy(-20, -27)) //goes to inner most block
                 .pause()
@@ -401,7 +401,7 @@ public class SkystoneScripts {
     {
         return emptyScript()
                 .run(() -> bot.getLocalizer().calibrate(fieldPosition(xy(-20,-30), FACING_BLUE_WALL))) //Right in front of sixth red stone
-                .run(() -> bot.stop())
+                .run(() -> bot.getMecanumDrive().stop())
                 .detectSkystoneAction(fieldPosition(xy(-40, -30), FACING_BLUE_WALL))//Right in front of third red stone
                 ;
     }
@@ -410,7 +410,7 @@ public class SkystoneScripts {
     {
         return emptyScript()
                 .run(() -> bot.getLocalizer().calibrate(fieldPosition(xy(-20,30), FACING_RED_WALL))) //Right in front of sixth blue stone
-                .run(() -> bot.stop())
+                .run(() -> bot.getMecanumDrive().stop())
                 .detectSkystoneAction(fieldPosition(xy(-40, 30), FACING_RED_WALL))//Right in front of third blue stone
                 ;
     }
@@ -421,7 +421,7 @@ public class SkystoneScripts {
     {
         return emptyScript()
                 .run(() -> bot.getLocalizer().calibrate(fieldPosition(xy(-36,-48), FACING_BLUE_WALL))) //Right in front of sixth blue stone
-                .run(() -> bot.stop())
+                .run(() -> bot.getMecanumDrive().stop())
                 .strafeTo(xy(-48, 48))
                 .strafeTo(xy(48, 48))
                 .strafeTo(xy(48, -48))

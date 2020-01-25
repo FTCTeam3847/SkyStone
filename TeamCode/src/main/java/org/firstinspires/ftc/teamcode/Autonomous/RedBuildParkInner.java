@@ -5,10 +5,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.BaseOp;
 
 @Autonomous
-public class RedDriveForward extends BaseOp {
+public class RedBuildParkInner extends BaseOp {
     @Override
     public void start() {
         super.start();
-        script = scripts.redDriveForward().start();
+        script = scripts.redBuildParkInner().start();
     }
 }

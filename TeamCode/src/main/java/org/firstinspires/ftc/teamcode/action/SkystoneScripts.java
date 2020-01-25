@@ -140,10 +140,10 @@ public class SkystoneScripts {
                 .run(() -> bot.getLocalizer().calibrate(START_RED_INNER)) //xy(-14.5, -63)
                 .run(() -> bot.getMecanumDrive().stop())
                 .grabTower(.9)//mostly closes grabber
-                .strafeTo(xy(-14.5, -37)) //goes to inner most block
-                .strafeTo(xy(-30, -37)) //goes to inner most block
+                .strafeTo(xy(-14.5, -38)) //goes to inner most block
+                .strafeTo(xy(-30, -38)) //goes to inner most block
                 .pause()
-                .detectSkystoneAction(fieldPosition(xy(-60, -37), FACING_BLUE_WALL))//FINDS SKYSTONE and stops (if the x position isn't big enough, it stops short, and the motors go weird) When this action completes, it calibrates to think its at the x position given [-60], so we need to read from vuforia right after
+                .detectSkystoneAction(fieldPosition(xy(-60, -38), FACING_BLUE_WALL))//FINDS SKYSTONE and stops (if the x position isn't big enough, it stops short, and the motors go weird) When this action completes, it calibrates to think its at the x position given [-60], so we need to read from vuforia right after
                 .pause(1000)//reads from vuforia (INCREDIBLE IMPORTANT STEP, might have to increase pause longer if motion is incredibly eratic after skystone detection)
                 .turnTo(FACING_BLUE_WALL)//faces skystones
                 .grabTower(.65)//opens grabber
@@ -216,8 +216,8 @@ public class SkystoneScripts {
                 .lowerTower()//lower tower
                 .turnTo(FACING_BLUE_WALL)
                 .pause()
-                .strafeTo(xy(28.5, -52))//drives back
-                .strafeTo(xy(28.5, -37))//drives toward inside
+                .strafeTo(xy(22, -52))//drives back
+                .strafeTo(xy(22, -37))//drives toward inside
 
                 //PARK
                 .lowerTower(0.01)//lower tower

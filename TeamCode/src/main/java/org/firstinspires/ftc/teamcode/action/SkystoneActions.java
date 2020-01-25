@@ -53,7 +53,7 @@ public class SkystoneActions extends SequentialAction {
     }
 
     public SkystoneActions lowerTower() {
-        return liftTower(0.05d);
+        return liftTower(0.025d);
     }
 
     public SkystoneActions lowerTower(double position) {
@@ -128,7 +128,7 @@ public class SkystoneActions extends SequentialAction {
     }
 
     public SkystoneActions pause() {
-        pause(250);
+        pause(100);
         return this;
     }
 

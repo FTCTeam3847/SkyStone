@@ -92,6 +92,10 @@ public class MecanumDriveController implements MecanumDrive {
     //If last set drive power is ZERO, returns false
     public boolean isMoving()
     {
-        return !(currentDrive.equals(ZERO));
+        if(currentDrive != null && !currentDrive.equals(ZERO))
+        {
+            return true;
+        }
+        return false;
     }
 }

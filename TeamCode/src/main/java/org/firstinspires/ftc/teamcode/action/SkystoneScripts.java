@@ -274,6 +274,17 @@ public class SkystoneScripts {
                 ;
     }
 
+    //DRIVE FORWARD
+    public SkystoneActions redDriveForward() {
+        return emptyScript()
+                .run(() -> bot.getLocalizer().calibrate(START_NEAR_RED_BUILD_WALL))
+                .strafeTo(xy(39, -62))
+                .strafeTo(xy(0, -62))
+                .strafeTo(xy(0, -64))
+                .strafeTo(xy(22, -64))
+                ;
+    }
+
     public SkystoneActions blueBuildParkOnly() {
         return emptyScript()
                 .run(() -> bot.getLocalizer().calibrate(START_NEAR_BLUE_BUILD_WALL))

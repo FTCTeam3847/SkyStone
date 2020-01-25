@@ -34,34 +34,21 @@ public class GameConstants {
     public static final FieldPosition FACING_IMAGE_BLUE_WALL_REAR = fieldPosition(xy(36, 48), FACING_BLUE_WALL);
 
 
-    public static final FieldPosition UNDER_BLUE_BRIDGE = fieldPosition(xy(-4, 56), FACING_RED_WALL);
-
-
-    public static final FieldPosition FACING_FOUNDATION_BLUE_CENTER = fieldPosition(xy(50, 18), FACING_RED_WALL);
-    public static final FieldPosition START_NEAR_BLUE_FOUNDATION = fieldPosition(xy(50, 54), FACING_RED_WALL);
-
-
-    public static final FieldPosition START_NEAR_BLUE_SKYSTONES_WALL = fieldPosition(xy(-39, 54), FACING_RED_WALL);//BLUE OUTER
-    public static final FieldPosition START_NEAR_BLUE_SKYSTONES_BRIDGE = fieldPosition(xy(-15, 54), FACING_RED_WALL);//BLUE INNER
-
-    public static final FieldPosition START_NEAR_BLUE_BUILD_WALL = fieldPosition(xy(39, 54), FACING_RED_WALL);
-
-    //RED
-
-    public static final FieldPosition START_NEAR_RED_BUILD_WALL = fieldPosition(xy(39, -54), FACING_BLUE_WALL);
-
-
-    public static final FieldPosition START_NEAR_RED_SKYSTONES_WALL = fieldPosition(xy(-39, -63), FACING_BLUE_WALL);//RED OUTER
-    public static final FieldPosition START_NEAR_RED_SKYSTONES_BRIDGE = fieldPosition(xy(-14.5, -63), FACING_BLUE_WALL);//RED INNER
-    public static final FieldPosition START_NEAR_RED_FOUNDATION = fieldPosition(xy(50, -63), FACING_BLUE_WALL);
-
-    public static final FieldPosition FACING_FOUNDATION_RED_CENTER = fieldPosition(xy(50, -18), FACING_BLUE_WALL);
-
-    public static final FieldPosition UNDER_RED_BRIDGE = fieldPosition(xy(-4, -56), FACING_BLUE_WALL);
-    public static final FieldPosition UNDER_RED_BRIDGE_CENTER = fieldPosition(xy(0, -48), FACING_BLUE_WALL);
+//FOUNDATION SIDE START
+    public static final FieldPosition START_NEAR_BLUE_BUILD_WALL = fieldPosition(xy(39, 63), FACING_RED_WALL);
+    public static final FieldPosition START_NEAR_RED_BUILD_WALL = fieldPosition(xy(39, -63), FACING_BLUE_WALL);
 
 
 
+
+    //STARTING LOCATIONS
+    public static final FieldPosition START_RED_OUTER = fieldPosition(xy(-39, -63), FACING_BLUE_WALL);//RED OUTER
+    public static final FieldPosition START_RED_INNER = fieldPosition(xy(-14.5, -63), FACING_BLUE_WALL);//RED INNER
+
+    public static final FieldPosition START_BLUE_OUTER = fieldPosition(xy(-39, 63), FACING_RED_WALL);//BLUE OUTER
+    public static final FieldPosition START_BLUE_INNER = fieldPosition(xy(-14.5, 63), FACING_RED_WALL);//BLUE INNER
+
+    //SKYSTONE LOCATIONS, first position is right infront of block, second is to pick it up, third is to return to inner alley
     public static final Map<Integer, List<FieldPosition>> redSkystoneLocations = new HashMap<Integer, List<FieldPosition>>(){{
         put(1, asList(fieldPosition(xy(-64, -37), FACING_BLUE_WALL), fieldPosition(xy(-64, -13), FACING_BLUE_WALL), fieldPosition(xy(-64, -40), FACING_BLUE_WALL)));
         put(2, asList(fieldPosition(xy(-56, -37), FACING_BLUE_WALL), fieldPosition(xy(-56, -13), FACING_BLUE_WALL), fieldPosition(xy(-56, -40), FACING_BLUE_WALL)));

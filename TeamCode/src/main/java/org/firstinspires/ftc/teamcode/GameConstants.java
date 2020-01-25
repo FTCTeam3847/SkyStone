@@ -60,23 +60,23 @@ public class GameConstants {
     public static final FieldPosition START_NEAR_RED_BUILD_WALL = fieldPosition(xy(39, -54), FACING_BLUE_WALL);
 
 
-    public static final FieldPosition START_NEAR_RED_SKYSTONES_WALL = fieldPosition(xy(-39, -54), FACING_BLUE_WALL);//RED OUTER
-    public static final FieldPosition START_NEAR_RED_SKYSTONES_BRIDGE = fieldPosition(xy(-15, -54), FACING_BLUE_WALL);//RED INNER
-    public static final FieldPosition START_NEAR_RED_FOUNDATION = fieldPosition(xy(50, -54), FACING_BLUE_WALL);
+    public static final FieldPosition START_NEAR_RED_SKYSTONES_WALL = fieldPosition(xy(-39, -63), FACING_BLUE_WALL);//RED OUTER
+    public static final FieldPosition START_NEAR_RED_SKYSTONES_BRIDGE = fieldPosition(xy(-14.5, -63), FACING_BLUE_WALL);//RED INNER
+    public static final FieldPosition START_NEAR_RED_FOUNDATION = fieldPosition(xy(50, -63), FACING_BLUE_WALL);
 
     public static final FieldPosition FACING_FOUNDATION_RED_CENTER = fieldPosition(xy(50, -18), FACING_BLUE_WALL);
 
     public static final FieldPosition UNDER_RED_BRIDGE = fieldPosition(xy(-4, -56), FACING_BLUE_WALL);
     public static final FieldPosition UNDER_RED_BRIDGE_CENTER = fieldPosition(xy(0, -48), FACING_BLUE_WALL);
 
-
+//old
     public static final Map<Integer, List<FieldPosition>> redSkystoneLocations = new HashMap<Integer, List<FieldPosition>>(){{
-        put(1, asList(fieldPosition(xy(-64, -30), FACING_BLUE_WALL), fieldPosition(xy(-64, -13), FACING_BLUE_WALL), fieldPosition(xy(-64, -34), FACING_BLUE_WALL)));
-        put(2, asList(fieldPosition(xy(-56, -30), FACING_BLUE_WALL), fieldPosition(xy(-56, -13), FACING_BLUE_WALL), fieldPosition(xy(-56, -34), FACING_BLUE_WALL)));
-        put(3, asList(fieldPosition(xy(-48, -30), FACING_BLUE_WALL), fieldPosition(xy(-48, -13), FACING_BLUE_WALL), fieldPosition(xy(-48, -34), FACING_BLUE_WALL)));
-        put(4, asList(fieldPosition(xy(-40, -30), FACING_BLUE_WALL), fieldPosition(xy(-40, -13), FACING_BLUE_WALL), fieldPosition(xy(-40, -34), FACING_BLUE_WALL)));
-        put(5, asList(fieldPosition(xy(-32, -30), FACING_BLUE_WALL), fieldPosition(xy(-32, -13), FACING_BLUE_WALL), fieldPosition(xy(-32, -34), FACING_BLUE_WALL)));
-        put(6, asList(fieldPosition(xy(-25, -30), FACING_BLUE_WALL), fieldPosition(xy(-24, -13), FACING_BLUE_WALL), fieldPosition(xy(-24, -34), FACING_BLUE_WALL)));
+        put(1, asList(fieldPosition(xy(-64, -37), FACING_BLUE_WALL), fieldPosition(xy(-64, -13), FACING_BLUE_WALL), fieldPosition(xy(-64, -40), FACING_BLUE_WALL)));
+        put(2, asList(fieldPosition(xy(-56, -37), FACING_BLUE_WALL), fieldPosition(xy(-56, -13), FACING_BLUE_WALL), fieldPosition(xy(-56, -40), FACING_BLUE_WALL)));
+        put(3, asList(fieldPosition(xy(-48, -37), FACING_BLUE_WALL), fieldPosition(xy(-48, -13), FACING_BLUE_WALL), fieldPosition(xy(-48, -40), FACING_BLUE_WALL)));
+        put(4, asList(fieldPosition(xy(-40, -37), FACING_BLUE_WALL), fieldPosition(xy(-40, -13), FACING_BLUE_WALL), fieldPosition(xy(-40, -40), FACING_BLUE_WALL)));
+        put(5, asList(fieldPosition(xy(-32, -37), FACING_BLUE_WALL), fieldPosition(xy(-32, -13), FACING_BLUE_WALL), fieldPosition(xy(-32, -40), FACING_BLUE_WALL)));
+        put(6, asList(fieldPosition(xy(-25, -37), FACING_BLUE_WALL), fieldPosition(xy(-24, -13), FACING_BLUE_WALL), fieldPosition(xy(-24, -40), FACING_BLUE_WALL)));
     }};
 
     public static final Map<Integer, List<FieldPosition>> blueSkystoneLocations = new HashMap<Integer, List<FieldPosition>>(){{
@@ -87,6 +87,25 @@ public class GameConstants {
         put(5, asList(fieldPosition(xy(-32, 30), FACING_RED_WALL), fieldPosition(xy(-32, 13), FACING_RED_WALL), fieldPosition(xy(-32, 34), FACING_RED_WALL)));
         put(6, asList(fieldPosition(xy(-24, 30), FACING_RED_WALL), fieldPosition(xy(-24, 13), FACING_RED_WALL), fieldPosition(xy(-24, 34), FACING_RED_WALL)));
     }};
+
+    //new
+//    public static final Map<Integer, List<FieldPosition>> redSkystoneLocations = new HashMap<Integer, List<FieldPosition>>(){{
+//        put(1, asList(fieldPosition(xy(-66, -37), FACING_BLUE_WALL), fieldPosition(xy(-66, -13), FACING_BLUE_WALL), fieldPosition(xy(-66, -40), FACING_BLUE_WALL)));
+//        put(2, asList(fieldPosition(xy(-58, -37), FACING_BLUE_WALL), fieldPosition(xy(-58, -13), FACING_BLUE_WALL), fieldPosition(xy(-58, -40), FACING_BLUE_WALL)));
+//        put(3, asList(fieldPosition(xy(-50, -37), FACING_BLUE_WALL), fieldPosition(xy(-50, -13), FACING_BLUE_WALL), fieldPosition(xy(-50, -40), FACING_BLUE_WALL)));
+//        put(4, asList(fieldPosition(xy(-42, -37), FACING_BLUE_WALL), fieldPosition(xy(-42, -13), FACING_BLUE_WALL), fieldPosition(xy(-42, -40), FACING_BLUE_WALL)));
+//        put(5, asList(fieldPosition(xy(-34, -37), FACING_BLUE_WALL), fieldPosition(xy(-34, -13), FACING_BLUE_WALL), fieldPosition(xy(-34, -40), FACING_BLUE_WALL)));
+//        put(6, asList(fieldPosition(xy(-27, -37), FACING_BLUE_WALL), fieldPosition(xy(-26, -13), FACING_BLUE_WALL), fieldPosition(xy(-26, -40), FACING_BLUE_WALL)));
+//    }};
+//
+//    public static final Map<Integer, List<FieldPosition>> blueSkystoneLocations = new HashMap<Integer, List<FieldPosition>>(){{
+//        put(1, asList(fieldPosition(xy(-68, 37), FACING_RED_WALL), fieldPosition(xy(-68, 13), FACING_RED_WALL), fieldPosition(xy(-68, 40), FACING_RED_WALL)));
+//        put(2, asList(fieldPosition(xy(-60, 37), FACING_RED_WALL), fieldPosition(xy(-60, 13), FACING_RED_WALL), fieldPosition(xy(-60, 40), FACING_RED_WALL)));
+//        put(3, asList(fieldPosition(xy(-52, 37), FACING_RED_WALL), fieldPosition(xy(-52, 13), FACING_RED_WALL), fieldPosition(xy(-52, 40), FACING_RED_WALL)));
+//        put(4, asList(fieldPosition(xy(-44, 37), FACING_RED_WALL), fieldPosition(xy(-44, 13), FACING_RED_WALL), fieldPosition(xy(-44, 40), FACING_RED_WALL)));
+//        put(5, asList(fieldPosition(xy(-36, 37), FACING_RED_WALL), fieldPosition(xy(-36, 13), FACING_RED_WALL), fieldPosition(xy(-36, 40), FACING_RED_WALL)));
+//        put(6, asList(fieldPosition(xy(-28, 37), FACING_RED_WALL), fieldPosition(xy(-28, 13), FACING_RED_WALL), fieldPosition(xy(-28, 40), FACING_RED_WALL)));
+//    }};
 
 
 }

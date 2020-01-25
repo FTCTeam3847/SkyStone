@@ -203,7 +203,7 @@ public class SkyStoneLocalizer implements Localizer<FieldPosition> {
 
         // Next, translate the camera lens to where it is on the robot.
         // In this example, it is centered (left to right), but forward of the middle of the robot, and above ground level.
-        final float CAMERA_FORWARD_DISPLACEMENT = -18f * mmPerInch;   // eg: Camera is 9 Inches behind of robot center
+        final float CAMERA_FORWARD_DISPLACEMENT = -9f * mmPerInch;   // eg: Camera is 9 Inches behind of robot center
         final float CAMERA_VERTICAL_DISPLACEMENT = 8.0f * mmPerInch;   // eg: Camera is 8 Inches above ground
         final float CAMERA_LEFT_DISPLACEMENT = -2.5f;     // eg: Camera is 2.5 inches left of the robot's center line
 

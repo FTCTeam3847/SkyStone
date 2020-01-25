@@ -41,9 +41,9 @@ public class SkystoneScripts {
                 .run(() -> bot.getMecanumDrive().stop())
                 .grabTower(.9)//mostly closes grabber
                 .strafeTo(xy(-14.5, 37)) //goes to inner most block
-                .strafeTo(xy(-35, 37)) //goes to inner most block: goes 5 inches further than red side as a guess,
+                .strafeTo(xy(-35, 37)) //goes to inner most block, 5 more inches than on red side
                 .pause()
-                .detectSkystoneAction(fieldPosition(xy(-64, 37), FACING_RED_WALL))//FINDS SKYSTONE and stops (if the x position isn't big enough, it stops short, and the motors go weird) When this action completes, it calibrates to think its at the x position given [-60], so we need to read from vuforia right after
+                .detectSkystoneAction(fieldPosition(xy(-60, 37), FACING_RED_WALL))//FINDS SKYSTONE and stops (if the x position isn't big enough, it stops short, and the motors go weird) When this action completes, it calibrates to think its at the x position given [-60], so we need to read from vuforia right after
                 .pause(1000)//reads from vuforia (INCREDIBLE IMPORTANT STEP, might have to increase pause longer if motion is incredibly eratic after skystone detection)
                 .turnTo(FACING_RED_WALL)//faces skystones
                 .grabTower(.65)//opens grabber
@@ -58,38 +58,28 @@ public class SkystoneScripts {
                 .pause()
 
                 //DRIVE ACROSS FIELD
-                .turnTo(0)//turns toward build zone
+                .turnTo(0.05)//turns toward build zone
                 .strafeToNoStop(xy(32.5, 37))//long drive across field
                 .pause()
-                .liftTower(0.3)
+                .liftTower(0.25)
                 .turnTo(FACING_RED_WALL)//face foundation
                 .pause(1000) //LOOK AT VUFORIA
                 .turnTo(FACING_RED_WALL)//face foundation
-                .strafeTo(xy(60, 37))//keeps going
+                .strafeTo(xy(60,  37))//keeps going
 
                 .strafeTo(xy(62, 21)) //drive to foundation
                 //FOUNDATION
-                .grabTower(0.15)//open arms a tiny bit
-                .lowerTower(.07)//lower tower to grab foundation
-                .strafeTo(xy(62, 62))//strafe to wall
-                .liftTower(0.2)//raise tower
-
-                .strafeTo(xy(18, 62))//strafe away from foundation
+                .grabTower(0.15)//let go of block
+                .strafeTo(xy(62, 37))//strafe away from foundation
                 .lowerTower()//lower tower
                 .turnTo(FACING_RED_WALL)
                 .pause()
 
-                .strafeTo(xy(18, 37))
-                .pause()
+                //ADD THIS CHECKPOINT IF INACCURATE/EXTRA TIME (probably not)
+                //.strafeTo(xy(35, -37))
+                //.pause(1000)//LOOK AT VUFORIA
 
-                //PARK (TEMP)
-                .strafeTo(xy(-8, 37))
-
-
-                //GET ANOTHER SKYSTONE (time permitting)
-
-                //THESE NUMBERS ARE ACCURATE TO REALITY, BUT CONSIDERING -8 PARKS UNDER THE BRIDGE, THEY MIGHT BE WRONG(MIGHT NOT GET INFRONT OF VUFORIA PROPERLY!!(next step)
-                .strafeTo(xy(-35, 37)) //very important! position to read from vuforia before continuing with more precise actions
+                .strafeTo(xy(-35, 37))
                 .pause(1000)//reads from vuforia
 
                 //DRIVE TO OTHER SKYSTONE
@@ -105,24 +95,35 @@ public class SkystoneScripts {
                 .strafeTo(() -> blueSkystoneLocations.get(bot.getInnerSkystone()).get(2))//drives backwards [back pos]
                 .pause()
 
-                //PLACE SECOND SKYSTONE
-                //assumes foundation's inner x is at +33.5 and its inner y is 42.5
-                .turnTo(0)//facing build zone
-                .strafeTo(xy(18, 37))//might have to add intermediate drive step
-                .liftTower(.3)
-                .strafeTo(xy(28.5, 52))//drive to new foundation spot
+                //DRIVE ACROSS FIELD
+                .turnTo(0.05)//turns toward build zone
+                .strafeToNoStop(xy(32.5, 37))//long drive across field
                 .pause()
-                .strafeTo(xy(36.5, 52))//drive 3 inches further onto foundation
-                .grabTower(.3)//lets go of block
+                .liftTower(0.3)
+                .turnTo(FACING_RED_WALL)//face foundation
+                .pause(1000) //LOOK AT VUFORIA
+                .turnTo(FACING_RED_WALL)//face foundation
+                .strafeTo(xy(60, 37))//keeps going
+
+                .strafeTo(xy(62, 21)) //drive to foundation
+                //FOUNDATION
+                .grabTower(0.15)//let go of block
+                .lowerTower(.07)//lower tower to grab foundation
+                .strafeTo(xy(62, 62))//strafe to wall
+                .liftTower(0.2)//raise tower
+                .strafeTo(xy(18, 62))//strafe away from foundation
+                .lowerTower()//lower tower
+                .turnTo(FACING_RED_WALL)
+                .pause()
                 .strafeTo(xy(28.5, 52))//drives back
                 .strafeTo(xy(28.5, 37))//drives toward inside
 
                 //PARK
                 .lowerTower()//lower tower
                 .pause()
-                .strafeTo(xy(18, 37))
+                .strafeTo(xy(18, 37))//drives forwards
                 .pause()
-                .strafeTo(xy(-8, 37))
+                .strafeTo(xy(-8, 37))//parks near center
                 ;
     }//BLUE INNER
 
@@ -131,94 +132,6 @@ public class SkystoneScripts {
         return emptyScript()
                 .run(() -> bot.getLocalizer().calibrate(START_RED_OUTER)) //(xy(-39, -63)
                 .run(() -> bot.getMecanumDrive().stop())
-                .grabTower(.9)//mostly closes grabber
-                .strafeTo(xy(-14.5, -37)) //goes to inner most block
-                .strafeTo(xy(-30, -37)) //goes to inner most block
-                .pause()
-                .detectSkystoneAction(fieldPosition(xy(-60, -37), FACING_BLUE_WALL))//FINDS SKYSTONE and stops (if the x position isn't big enough, it stops short, and the motors go weird) When this action completes, it calibrates to think its at the x position given [-60], so we need to read from vuforia right after
-                .pause(1000)//reads from vuforia (INCREDIBLE IMPORTANT STEP, might have to increase pause longer if motion is incredibly eratic after skystone detection)
-                .turnTo(FACING_BLUE_WALL)//faces skystones
-                .grabTower(.65)//opens grabber
-
-                //GET A BLOCK
-                .strafeTo(() -> redSkystoneLocations.get(bot.getInnerSkystone()).get(0)) //aligns horizontally (x) with detected block
-                .pause()
-                .strafeTo(() -> redSkystoneLocations.get(bot.getInnerSkystone()).get(1)) //drives forwards
-                .pause()
-                .grabTower()//grabs block
-                .strafeTo(() -> redSkystoneLocations.get(bot.getInnerSkystone()).get(2)) //drives backwards
-                .pause()
-
-
-                //OUTER PATH
-                .strafeTo(xy(-30, -60))
-
-                //DRIVE ACROSS FIELD
-                .turnTo(0.05)//turns toward build zone
-                .strafeToNoStop(xy(32.5, -60))//long drive across field
-                .pause()
-                .liftTower(0.3)
-                .turnTo(FACING_BLUE_WALL)//face foundation
-                .pause(1000) //LOOK AT VUFORIA
-                .turnTo(FACING_BLUE_WALL)//face foundation
-                .strafeTo(xy(60, -60))//keeps going
-
-                .strafeTo(xy(62, -21)) //drive to foundation
-                //FOUNDATION
-                .grabTower(0.15)//open arms a tiny bit
-                .lowerTower(.07)//lower tower to grab foundation
-                .strafeTo(xy(62, -62))//strafe to wall
-                .liftTower(0.2)//raise tower
-
-                .strafeTo(xy(18, -62))//strafe away from foundation
-                .lowerTower()//lower tower
-                .turnTo(FACING_BLUE_WALL)
-                .pause()
-
-                .strafeTo(xy(18, -37))
-                .pause()
-
-                //PARK (TEMP)
-                .strafeTo(xy(-8, -37))
-
-
-                //GET ANOTHER SKYSTONE (time permitting)
-
-                //the actual position to read from vuforia would be x=-35, added 13 inches to that due to inaccuracy(x=-8 barely parks)
-                .strafeTo(xy(-48, -37)) //very important! position to read from vuforia before continuing with more precise actions
-                .pause(1000)//reads from vuforia
-
-                //DRIVE TO OTHER SKYSTONE
-                .strafeTo(() -> redSkystoneLocations.get(bot.getOuterSkystone()).get(2))//drives to outer skystone [back pos]
-                .grabTower(.65) //open grabber
-                .pause()
-                .strafeTo(() -> redSkystoneLocations.get(bot.getOuterSkystone()).get(0))//drives to outer skystone [front pos]
-                .pause()
-                .turnTo(FACING_BLUE_WALL) //realign
-                .strafeTo(() -> redSkystoneLocations.get(bot.getOuterSkystone()).get(1))//drives forwards [pick up]
-                .pause()
-                .grabTower()//grabs block
-                .strafeTo(() -> redSkystoneLocations.get(bot.getInnerSkystone()).get(2))//drives backwards [back pos]
-                .pause()
-
-                //PLACE SECOND SKYSTONE
-                //assumes foundation's inner x is at +33.5 and its inner y is 42.5
-                .turnTo(0)//facing build zone
-                .strafeTo(xy(18, -37))//might have to add intermediate drive step
-                .liftTower(.3)
-                .strafeTo(xy(28.5, -52))//drive to new foundation spot
-                .pause()
-                .strafeTo(xy(36.5, -52))//drive 3 inches further onto foundation
-                .grabTower(.3)//lets go of block
-                .strafeTo(xy(28.5, -52))//drives back
-                .strafeTo(xy(28.5, -37))//drives toward inside
-
-                //PARK
-                .lowerTower()//lower tower
-                .pause()
-                .strafeTo(xy(18, -37))
-                .pause()
-                .strafeTo(xy(-8, -37))
                 ;
     }//RED OUTER
 
@@ -248,7 +161,7 @@ public class SkystoneScripts {
                 .turnTo(0.05)//turns toward build zone
                 .strafeToNoStop(xy(32.5, -37))//long drive across field
                 .pause()
-                .liftTower(0.3)
+                .liftTower(0.25)
                 .turnTo(FACING_BLUE_WALL)//face foundation
                 .pause(1000) //LOOK AT VUFORIA
                 .turnTo(FACING_BLUE_WALL)//face foundation
@@ -256,27 +169,17 @@ public class SkystoneScripts {
 
                 .strafeTo(xy(62, -21)) //drive to foundation
                 //FOUNDATION
-                .grabTower(0.15)//open arms a tiny bit
-                .lowerTower(.07)//lower tower to grab foundation
-                .strafeTo(xy(62, -62))//strafe to wall
-                .liftTower(0.2)//raise tower
-
-                .strafeTo(xy(18, -62))//strafe away from foundation
+                .grabTower(0.15)//let go of block
+                .strafeTo(xy(62, -37))//strafe away from foundation
                 .lowerTower()//lower tower
                 .turnTo(FACING_BLUE_WALL)
                 .pause()
 
-                .strafeTo(xy(18, -37))
-                .pause()
+                //ADD THIS CHECKPOINT IF INACCURATE/EXTRA TIME (probably not)
+                //.strafeTo(xy(35, -37))
+                //.pause(1000)//LOOK AT VUFORIA
 
-                //PARK (TEMP)
-                .strafeTo(xy(-8, -37))
-
-
-                //GET ANOTHER SKYSTONE (time permitting)
-
-                //the actual position to read from vuforia would be x=-35, added 13 inches to that due to inaccuracy(x=-8 barely parks)
-                .strafeTo(xy(-48, -37)) //very important! position to read from vuforia before continuing with more precise actions
+                .strafeTo(xy(-35, -37))
                 .pause(1000)//reads from vuforia
 
                 //DRIVE TO OTHER SKYSTONE
@@ -292,15 +195,26 @@ public class SkystoneScripts {
                 .strafeTo(() -> redSkystoneLocations.get(bot.getInnerSkystone()).get(2))//drives backwards [back pos]
                 .pause()
 
-                //PLACE SECOND SKYSTONE
-                //assumes foundation's inner x is at +33.5 and its inner y is 42.5
-                .turnTo(0)//facing build zone
-                .strafeTo(xy(18, -37))//might have to add intermediate drive step
-                .liftTower(.3)
-                .strafeTo(xy(28.5, -52))//drive to new foundation spot
+                //DRIVE ACROSS FIELD
+                .turnTo(0.05)//turns toward build zone
+                .strafeToNoStop(xy(32.5, -37))//long drive across field
                 .pause()
-                .strafeTo(xy(36.5, -52))//drive 3 inches further onto foundation
-                .grabTower(.3)//lets go of block
+                .liftTower(0.3)
+                .turnTo(FACING_BLUE_WALL)//face foundation
+                .pause(1000) //LOOK AT VUFORIA
+                .turnTo(FACING_BLUE_WALL)//face foundation
+                .strafeTo(xy(60, -37))//keeps going
+
+                .strafeTo(xy(62, -21)) //drive to foundation
+                //FOUNDATION
+                .grabTower(0.15)//let go of block
+                .lowerTower(.07)//lower tower to grab foundation
+                .strafeTo(xy(62, -62))//strafe to wall
+                .liftTower(0.2)//raise tower
+                .strafeTo(xy(18, -62))//strafe away from foundation
+                .lowerTower()//lower tower
+                .turnTo(FACING_BLUE_WALL)
+                .pause()
                 .strafeTo(xy(28.5, -52))//drives back
                 .strafeTo(xy(28.5, -37))//drives toward inside
 

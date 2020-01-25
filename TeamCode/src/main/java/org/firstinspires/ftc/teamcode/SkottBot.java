@@ -106,7 +106,7 @@ public class SkottBot implements SkystoneBot {
         mecanumLocalizer = new MecanumLocalizer(
                 System::nanoTime,
                 headingLocalizer::getLast,
-                54.0
+                52.0
         );
         mDrive = new MecanumDriveController(headingController, this::setDrivePower);
         mecanum = new LocalizingMecanumDrive(mDrive, mecanumLocalizer);

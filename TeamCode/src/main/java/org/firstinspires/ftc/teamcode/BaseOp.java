@@ -15,6 +15,7 @@ public abstract class BaseOp extends OpMode {
     protected SkystoneBot bot;
     protected SequentialAction script;
     protected SkystoneScripts scripts;
+    protected long loopEndMs;
 
     @Override
     public void init() {
@@ -22,12 +23,14 @@ public abstract class BaseOp extends OpMode {
         bot.init();
         scripts = new SkystoneScripts(bot);
         script = scripts.emptyScript();
+        loopEndMs = System.currentTimeMillis();
     }
 
     @Override
     public void init_loop() {
         super.init_loop();
         bot.init_loop();
+        loopEndMs = System.currentTimeMillis();
     }
 
     @Override
@@ -47,6 +50,9 @@ public abstract class BaseOp extends OpMode {
         bot.loop();
         script.loop();
         telemetry.addData("script", script);
+        long now = System.currentTimeMillis();
+        telemetry.addData("loopMs", now - loopEndMs);
+        loopEndMs = System.currentTimeMillis();
     }
 
     @Override

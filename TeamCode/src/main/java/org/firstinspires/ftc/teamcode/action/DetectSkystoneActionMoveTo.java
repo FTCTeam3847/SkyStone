@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.controller.FieldPositionController;
 import org.firstinspires.ftc.teamcode.controller.RangeController;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
 import org.firstinspires.ftc.teamcode.polar.PolarCoord;
+import org.firstinspires.ftc.teamcode.polar.PolarUtil;
 
 import static org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower.mecanumPower;
 
@@ -63,7 +64,7 @@ public class DetectSkystoneActionMoveTo implements RoboAction
             {
                 bot.setInnerSkystone(6); //sets inner and outer
             }
-            else if(distanceTraveled <= 12)
+            else if(distanceTraveled <= 11) //gets second block if it traveled more than three but less than eleven inches
             {
                 bot.setInnerSkystone(5); //sets inner and outer
             }
@@ -71,6 +72,21 @@ public class DetectSkystoneActionMoveTo implements RoboAction
             {
                 bot.setInnerSkystone(4); //sets inner and outer
             }
+
+
+//            double finalX = PolarUtil.toXY(bot.getLocalizer().getCurrent().polarCoord).x;
+//            if(finalX < -28)
+//            {
+//                bot.setInnerSkystone(6); //sets inner and outer
+//            }
+//            else if(finalX < -36)
+//            {
+//                bot.setInnerSkystone(5); //sets inner and outer
+//            }
+//            else
+//            {
+//                bot.setInnerSkystone(4); //sets inner and outer
+//            }
         }
 
 

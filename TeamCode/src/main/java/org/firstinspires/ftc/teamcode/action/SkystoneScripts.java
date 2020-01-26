@@ -143,7 +143,7 @@ public class SkystoneScripts {
                 .strafeTo(xy(-14.5, -38)) //goes to inner most block
                 .strafeTo(xy(-30, -38)) //goes to inner most block
                 .pause()
-                .detectSkystoneAction(fieldPosition(xy(-60, -38), FACING_BLUE_WALL))//FINDS SKYSTONE and stops (if the x position isn't big enough, it stops short, and the motors go weird) When this action completes, it calibrates to think its at the x position given [-60], so we need to read from vuforia right after
+                .detectSkystoneAction(fieldPosition(xy(-48, -38), FACING_BLUE_WALL))//FINDS SKYSTONE and stops (if the x position isn't big enough, it stops short, and the motors go weird) When this action completes, it calibrates to think its at the x position given [-60], so we need to read from vuforia right after
                 .pause(1000)//reads from vuforia (INCREDIBLE IMPORTANT STEP, might have to increase pause longer if motion is incredibly eratic after skystone detection)
                 .turnTo(FACING_BLUE_WALL)//faces skystones
                 .grabTower(.65)//opens grabber
@@ -168,7 +168,7 @@ public class SkystoneScripts {
                 .turnTo(FACING_BLUE_WALL)//face foundation
                 //.strafeTo(xy(60, -37))//keeps going
 
-                .strafeTo(xy(52, -21)) //drive to foundation
+                .strafeTo(xy(50, -21)) //drive to foundation
                 //FOUNDATION
                 .grabTower(0.15)//let go of block
 //                .strafeTo(xy(62, -37))//strafe away from foundation
@@ -216,15 +216,15 @@ public class SkystoneScripts {
                 .lowerTower()//lower tower
                 .turnTo(FACING_BLUE_WALL)
                 .pause()
-                .strafeTo(xy(22, -52))//drives back
-                .strafeTo(xy(22, -37))//drives toward inside
+                .strafeTo(xy(18, -52))//drives back
+                .strafeTo(xy(18, -37))//drives toward inside
 
                 //PARK
                 .lowerTower(0.01)//lower tower
                 .pause()
                 .strafeTo(xy(18, -37))
                 .pause()
-                .strafeTo(xy(-8, -37))
+                .strafeTo(xy(-12, -37))
                 ;
     }//RED INNER
 

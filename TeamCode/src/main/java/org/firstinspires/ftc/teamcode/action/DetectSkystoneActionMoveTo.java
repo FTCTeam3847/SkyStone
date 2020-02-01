@@ -38,9 +38,6 @@ public class DetectSkystoneActionMoveTo implements RoboAction
         fieldPositionController = new FieldPositionController(bot.getLocalizer()::getCurrent, bot.getAutonomousSpeed()/2);
         fieldPositionController.setTarget(targetFieldPosition);
 
-        startingLocation = bot.getLocalizer().getCurrent();//where the bot is on start
-
-
         isStarted = true;
         return null;
     }
@@ -58,20 +55,24 @@ public class DetectSkystoneActionMoveTo implements RoboAction
             isStarted = false;
             bot.getMecanumDrive().stop();//stop
 
-
             double distanceTraveled = bot.getLocalizer().getCurrent().distance(startingLocation); //distance from start
             if(distanceTraveled <= 3)//starts at most inner stone
             {
                 bot.setInnerSkystone(6); //sets inner and outer
             }
-            else if(distanceTraveled <= 11) //gets second block if it traveled more than three but less than eleven inches
+            else if(distanceTraveled <= 11){} //gets second block if it traveled more than three but less than eleven inches
+
+            double xPos;
+            if(PolarUtil.toXY(targetFieldPosition.polarCoord).y < 0) //red
+
             {
-                bot.setInnerSkystone(5); //sets inner and outer
+                xPos = bot.getRangeLeft();
             }
-            else
+            else//blue
             {
-                bot.setInnerSkystone(4); //sets inner and outer
+                xPos = bot.getRangeRight();
             }
+
 
 
 //            double finalX = PolarUtil.toXY(bot.getLocalizer().getCurrent().polarCoord).x;
@@ -80,6 +81,11 @@ public class DetectSkystoneActionMoveTo implements RoboAction
 //                bot.setInnerSkystone(6); //sets inner and outer
 //            }
 //            else if(finalX < -36)
+//            if(distanceTraveled <= 6)//starts at most inner stone
+//            {
+//                bot.setInnerSkystone(6); //sets inner and outer
+//            }
+//            else if(distanceTraveled <= 12)
 //            {
 //                bot.setInnerSkystone(5); //sets inner and outer
 //            }

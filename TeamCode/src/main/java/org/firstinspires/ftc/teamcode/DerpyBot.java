@@ -13,12 +13,12 @@ import org.firstinspires.ftc.teamcode.controller.FieldPosition;
 import org.firstinspires.ftc.teamcode.controller.HeadingController;
 import org.firstinspires.ftc.teamcode.controller.HeadingLocalizer;
 import org.firstinspires.ftc.teamcode.controller.Localizer;
+import org.firstinspires.ftc.teamcode.controller.RangeSensor;
 import org.firstinspires.ftc.teamcode.drive.DrivePower;
 import org.firstinspires.ftc.teamcode.drive.mecanum.LocalizingMecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDriveController;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumLocalizer;
-import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
 
 import java.util.function.Supplier;
 
@@ -60,6 +60,10 @@ public class DerpyBot implements SkystoneBot {
 
     public int innerSkystone = 1;//[3-6] close to bridge, assume 6th block
     public int outerSkystone = 4;//[1-3] close to wall, assume 3rd block
+    RangeSensor rangeLeft;
+    RangeSensor rangeRight;
+
+
 
     public DerpyBot(
             HardwareMap hardwareMap,
@@ -124,6 +128,9 @@ public class DerpyBot implements SkystoneBot {
 
         // get a reference to the distance sensor that shares the same name.
         sensorDistance = hardwareMap.get(DistanceSensor.class, "color1");
+
+        rangeLeft = new RangeSensor(hardwareMap, "distance1");
+        rangeRight = new RangeSensor(hardwareMap, "distance2");
     }
 
     private void updateLoopTimer() {
@@ -157,6 +164,9 @@ public class DerpyBot implements SkystoneBot {
     }
 
     private void updateTelemetry() {
+        telemetry.addData("rangeLeft", rangeLeft.getCurrent());
+        telemetry.addData("rangeRight", rangeRight.getCurrent());
+
         telemetry.addData("combined", combinedLocalizer);
         telemetry.addData("buffering", bufferingLocalizer);
         telemetry.addData("skystone", skyStoneLocalizer);
@@ -233,4 +243,15 @@ public class DerpyBot implements SkystoneBot {
     {
         return getMecanumDrive().equals(DrivePower.ZERO);
     }
+    public double getRangeLeft()
+    {
+        return rangeLeft.getCurrent();
+    }
+
+    @Override
+    public double getRangeRight()
+    {
+        return rangeRight.getCurrent();
+    }
+
 }

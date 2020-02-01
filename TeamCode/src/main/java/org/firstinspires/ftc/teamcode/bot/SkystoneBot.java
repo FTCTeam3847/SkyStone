@@ -10,9 +10,11 @@ import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDrive;
 public interface SkystoneBot extends Bot {
 
     void setInnerSkystone(int innerSkystone); //sets both skystone locations
+
     void setOuterSkystone(int outerSkystone); //sets both skystone locations
 
     int getInnerSkystone(); //gets inner skystone location
+
     int getOuterSkystone(); //gets outer skystone location
 
     ColorSensor getColorSensor();
@@ -32,4 +34,8 @@ public interface SkystoneBot extends Bot {
     double getAutonomousSpeed();
 
     boolean isInMotion();
+
+    double getRangeLeft();
+
+    double getRangeRight();
 }

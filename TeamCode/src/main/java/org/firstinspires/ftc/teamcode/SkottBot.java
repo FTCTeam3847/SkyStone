@@ -21,12 +21,12 @@ import org.firstinspires.ftc.teamcode.controller.FieldPosition;
 import org.firstinspires.ftc.teamcode.controller.HeadingController;
 import org.firstinspires.ftc.teamcode.controller.HeadingLocalizer;
 import org.firstinspires.ftc.teamcode.controller.Localizer;
+import org.firstinspires.ftc.teamcode.controller.RangeSensor;
 import org.firstinspires.ftc.teamcode.drive.DrivePower;
 import org.firstinspires.ftc.teamcode.drive.mecanum.LocalizingMecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDriveController;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumLocalizer;
-import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
 
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_USING_ENCODER;
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_WITHOUT_ENCODER;
@@ -56,8 +56,7 @@ public class SkottBot implements SkystoneBot {
     public CRServo leftBlockLifter;
     public CRServo rightBlockLifter;
 
-    public  Servo capstoneLifterServo;
-
+    public Servo capstoneLifterServo;
 
 
     public int innerSkystone = 6;//[3-6] close to bridge, assume 6th block
@@ -80,6 +79,9 @@ public class SkottBot implements SkystoneBot {
 
     TowerBuilder towerBuilder;
     ColorSensor sensorColor;
+
+    RangeSensor rangeLeft;
+    RangeSensor rangeRight;
 
     public SkottBot(
             HardwareMap hardwareMap,
@@ -224,7 +226,8 @@ public class SkottBot implements SkystoneBot {
 // get a reference to the color sensor.
         sensorColor = hardwareMap.get(ColorSensor.class, "color1");
 
-
+        rangeLeft = new RangeSensor(hardwareMap, "distance1");
+        rangeRight = new RangeSensor(hardwareMap, "distance2");
 
     }
 
@@ -258,6 +261,9 @@ public class SkottBot implements SkystoneBot {
     private void updateTelemetry() {
         telemetry.addData("inner", innerSkystone);
         telemetry.addData("outer", outerSkystone);
+        telemetry.addData("rangeLeft", rangeLeft.getCurrent());
+        telemetry.addData("rangeRight", rangeRight.getCurrent());
+
 
         telemetry.addData("pos", combinedLocalizer);
         telemetry.addData("mecanumLocalizer", mecanumLocalizer);
@@ -279,17 +285,15 @@ public class SkottBot implements SkystoneBot {
 
 
     @Override
-    public void setInnerSkystone(int innerSkystone)
-    {
+    public void setInnerSkystone(int innerSkystone) {
         this.innerSkystone = innerSkystone;
-        this.outerSkystone = innerSkystone-3;
+        this.outerSkystone = innerSkystone - 3;
     }
 
     @Override
-    public void setOuterSkystone(int outerSkystone)
-    {
+    public void setOuterSkystone(int outerSkystone) {
         this.outerSkystone = outerSkystone;
-        this.innerSkystone = outerSkystone+3;
+        this.innerSkystone = outerSkystone + 3;
     }
 
     @Override
@@ -303,8 +307,7 @@ public class SkottBot implements SkystoneBot {
     }
 
     @Override
-    public ColorSensor getColorSensor()
-    {
+    public ColorSensor getColorSensor() {
         return sensorColor;
     }
 
@@ -334,9 +337,17 @@ public class SkottBot implements SkystoneBot {
     }
 
     @Override
-    public boolean isInMotion()
-    {
+    public boolean isInMotion() {
         return mDrive.isMoving();
+    }
+
+    public double getRangeLeft() {
+        return rangeLeft.getCurrent();
+    }
+
+    @Override
+    public double getRangeRight() {
+        return rangeRight.getCurrent();
     }
 
 }

@@ -12,8 +12,7 @@ import org.firstinspires.ftc.teamcode.polar.PolarUtil;
 
 import static org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower.mecanumPower;
 
-public class DetectSkystoneActionMoveTo implements RoboAction
-{
+public class DetectSkystoneActionMoveTo implements RoboAction {
     private boolean isDone = false;
     private boolean isStarted = false;
 
@@ -22,20 +21,16 @@ public class DetectSkystoneActionMoveTo implements RoboAction
 
     private final SkystoneBot bot;
 
-    FieldPosition startingLocation;
 
-
-    public DetectSkystoneActionMoveTo(FieldPosition targetFieldPosition, SkystoneBot bot)
-    {
+    public DetectSkystoneActionMoveTo(FieldPosition targetFieldPosition, SkystoneBot bot) {
         this.targetFieldPosition = targetFieldPosition;
         this.bot = bot;
     }
 
     @Override
-    public RoboAction start()
-    {
+    public RoboAction start() {
         //Position Controller, drives at half speed
-        fieldPositionController = new FieldPositionController(bot.getLocalizer()::getCurrent, bot.getAutonomousSpeed()/2);
+        fieldPositionController = new FieldPositionController(bot.getLocalizer()::getCurrent, bot.getAutonomousSpeed() / 2);
         fieldPositionController.setTarget(targetFieldPosition);
 
         isStarted = true;
@@ -43,40 +38,30 @@ public class DetectSkystoneActionMoveTo implements RoboAction
     }
 
     @Override
-    public void loop()
-    {
+    public void loop() {
         ColorSensor sensorColor = bot.getColorSensor();
         double red = sensorColor.red();
         double blue = sensorColor.blue();
 
         //Determines if bot sees non-yellow(ie skystone) element based on the ratio of blue to red
-        if (blue/red > 0.5) {
+        if (blue / red > 0.5) {
             stop();
             isStarted = false;
             bot.getMecanumDrive().stop();//stop
 
             double xDist;
-            if(PolarUtil.toXY(targetFieldPosition.polarCoord).y < 0) //red
-
-            {
+            if (PolarUtil.toXY(targetFieldPosition.polarCoord).y < 0){ //red
                 xDist = bot.getRangeLeft();
-            }
-            else//blue
-            {
+            } else { //blue
                 xDist = bot.getRangeRight();
             }
 
-            if(xDist > 40)
-            {
+            if (xDist > 40) {
                 bot.setInnerSkystone(6); //sets inner and outer
-            }
-            else if(xDist > 32)
-            {
-                bot.setInnerSkystone(5); //sets inner and outer
-            }
-            else
-            {
-                bot.setInnerSkystone(4); //sets inner and outer
+            } else if (xDist > 32) {
+                bot.setInnerSkystone(5);
+            } else {
+                bot.setInnerSkystone(4);
             }
 
         }
@@ -99,20 +84,17 @@ public class DetectSkystoneActionMoveTo implements RoboAction
     }
 
     @Override
-    public void stop()
-    {
+    public void stop() {
         isDone = true;
     }
 
     @Override
-    public boolean isDone()
-    {
+    public boolean isDone() {
         return isDone;
     }
 
     @Override
-    public boolean isStarted()
-    {
+    public boolean isStarted() {
         return isStarted;
     }
 }

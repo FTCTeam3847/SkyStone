@@ -213,4 +213,16 @@ public class SkystoneActions extends SequentialAction {
     }
 
 
+    public SkystoneActions calibrateLeftRight()
+    {
+        addAction(new CalibrateLeftRight(bot));
+        return this;
+    }
+
+    public SkystoneActions strafeUntil(double direction, Supplier<Boolean> thereYet)
+    {
+        addAction(new StrafeUntil(thereYet, direction, bot));
+        return this;
+    }
+
 }

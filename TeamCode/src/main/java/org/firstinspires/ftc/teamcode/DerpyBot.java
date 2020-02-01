@@ -56,13 +56,15 @@ public class DerpyBot implements SkystoneBot {
     VuforiaLocalizer vuforiaLocalizer;
     private BufferingLocalizer bufferingLocalizer;
 
-    DistanceSensor distanceSensor;
 
     public int innerSkystone = 1;//[3-6] close to bridge, assume 6th block
     public int outerSkystone = 4;//[1-3] close to wall, assume 3rd block
+
     RangeSensor rangeLeft;
     RangeSensor rangeRight;
-
+    RangeSensor rangeBack;
+    RangeSensor rangeFront;
+    RangeSensor rangeTop;
 
 
     public DerpyBot(
@@ -131,6 +133,7 @@ public class DerpyBot implements SkystoneBot {
 
         rangeLeft = new RangeSensor(hardwareMap, "distance1");
         rangeRight = new RangeSensor(hardwareMap, "distance2");
+
     }
 
     private void updateLoopTimer() {
@@ -166,6 +169,7 @@ public class DerpyBot implements SkystoneBot {
     private void updateTelemetry() {
         telemetry.addData("rangeLeft", rangeLeft.getCurrent());
         telemetry.addData("rangeRight", rangeRight.getCurrent());
+
 
         telemetry.addData("combined", combinedLocalizer);
         telemetry.addData("buffering", bufferingLocalizer);
@@ -252,6 +256,21 @@ public class DerpyBot implements SkystoneBot {
     public double getRangeRight()
     {
         return rangeRight.getCurrent();
+    }
+
+    @Override
+    public double getRangeBack() {
+        return rangeBack.getCurrent();
+    }
+
+    @Override
+    public double getRangeFront() {
+        return rangeFront.getCurrent();
+    }
+
+    @Override
+    public double getRangeTop() {
+        return rangeTop.getCurrent();
     }
 
 }

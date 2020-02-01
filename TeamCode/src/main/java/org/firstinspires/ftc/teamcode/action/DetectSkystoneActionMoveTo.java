@@ -48,8 +48,6 @@ public class DetectSkystoneActionMoveTo implements RoboAction {
         //Determines if bot sees non-yellow(ie skystone) element based on the ratio of blue to red
         if (blue / red > 0.5) {
             stop();
-            isStarted = false;
-            bot.getMecanumDrive().stop();//stop
 
             double xDist;
             if (toXY(targetFieldPosition.polarCoord).y < 0){ //red
@@ -62,9 +60,9 @@ public class DetectSkystoneActionMoveTo implements RoboAction {
             }
 
 
-            if (xDist > 40) {
+            if (xDist > 36.5) {
                 bot.setInnerSkystone(6); //sets inner and outer
-            } else if (xDist > 32) {
+            } else if (xDist > 29.5) {
                 bot.setInnerSkystone(5);
             } else {
                 bot.setInnerSkystone(4);
@@ -92,6 +90,8 @@ public class DetectSkystoneActionMoveTo implements RoboAction {
     @Override
     public void stop() {
         isDone = true;
+        isStarted = false;
+        bot.getMecanumDrive().stop();//stop
     }
 
     @Override

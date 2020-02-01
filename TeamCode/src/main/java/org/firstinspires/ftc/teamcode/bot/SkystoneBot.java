@@ -38,4 +38,10 @@ public interface SkystoneBot extends Bot {
     double getRangeLeft();
 
     double getRangeRight();
+
+    double getRangeBack();
+
+    double getRangeFront();
+
+    double getRangeTop();
 }

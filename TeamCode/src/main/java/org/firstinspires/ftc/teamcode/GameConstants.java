@@ -14,6 +14,13 @@ import static org.firstinspires.ftc.teamcode.polar.CartesianCoord.xy;
 public class GameConstants {
     public static String VUFORIA_KEY = "AbAFBSH/////AAABmUmB2GBj3E3Lp169iJ8EyJ4HnypcGXIQtM/SzDVCHvBFnAxejLKQdmXGBS2dU+ovBkYVgj4ynnHL5A3KsUcLID46dfcQ5StAswi8YmexAA3RRc1WjNedgQ40kGVJN4pzEDPwcERn+FBPNy7V7+YGPivTGjzGnItUVSCkoujmHg19qoL5QvAy3ZGBYwkJZX8cu6Q3dNDWYpPPE+NbR6RqbGz5P+3WyTCzZTHDctBiEfolVPO8WAJivG73fdV64LelP5sH3FioYdHSG2SmhwRXsZLvhWUxyA2Yxbcgqu6HXf7T6j9VJr3iSDukvi4QpC2lq8RReMjqlsC/pkGpnJeGwgh+8OuLXPf2qESs7bjFocRb\n";
 
+    // Bot Relative
+    public static double FORWARD = 0;
+    public static double LEFT = PI/2;
+    public static double BACKWARD = PI;
+    public static double RIGHT = 3*PI/2;
+
+
     //Heading
     public static double FACING_REAR_WALL = 0;
     public static double FACING_BLUE_WALL = PI / 2;

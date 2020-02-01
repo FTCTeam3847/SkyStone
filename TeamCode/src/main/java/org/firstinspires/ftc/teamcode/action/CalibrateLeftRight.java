@@ -52,9 +52,9 @@ public class CalibrateLeftRight implements RoboAction {
                     bot.getLocalizer().calibrate(FieldPosition.fieldPosition(xy(72 - leftDist - 7, toXY(bot.getLocalizer().getCurrent().polarCoord).y), bot.getFieldRelativeHeading()));
                 }
             }
-            stop();
-            isStarted = false;
         }
+        stop();
+        isStarted = false;
     }
 
 

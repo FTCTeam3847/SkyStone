@@ -2,16 +2,9 @@ package org.firstinspires.ftc.teamcode.action;
 
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
 
-import static org.firstinspires.ftc.teamcode.GameConstants.FACING_BLUE_WALL;
-import static org.firstinspires.ftc.teamcode.GameConstants.FACING_RED_WALL;
-import static org.firstinspires.ftc.teamcode.GameConstants.START_BLUE_INNER;
-import static org.firstinspires.ftc.teamcode.GameConstants.START_BLUE_OUTER;
-import static org.firstinspires.ftc.teamcode.GameConstants.START_NEAR_BLUE_BUILD_WALL;
-import static org.firstinspires.ftc.teamcode.GameConstants.START_NEAR_RED_BUILD_WALL;
-import static org.firstinspires.ftc.teamcode.GameConstants.START_RED_INNER;
-import static org.firstinspires.ftc.teamcode.GameConstants.START_RED_OUTER;
-import static org.firstinspires.ftc.teamcode.GameConstants.blueSkystoneLocations;
-import static org.firstinspires.ftc.teamcode.GameConstants.redSkystoneLocations;
+import static java.lang.Math.PI;
+import static org.firstinspires.ftc.teamcode.GameConstants.*;
+
 import static org.firstinspires.ftc.teamcode.controller.FieldPosition.fieldPosition;
 import static org.firstinspires.ftc.teamcode.polar.CartesianCoord.xy;
 
@@ -144,31 +137,34 @@ public class SkystoneScripts {
                 .strafeTo(xy(-30, -38)) //goes to inner most block
                 .pause()
                 .detectSkystoneAction(fieldPosition(xy(-56, -38), FACING_BLUE_WALL))//FINDS SKYSTONE and stops (if the x position isn't big enough, it stops short, and the motors go weird) When this action completes, it calibrates to think its at the x position given [-60], so we need to read from vuforia right after
-                .pause(1000)//reads from vuforia (INCREDIBLE IMPORTANT STEP, might have to increase pause longer if motion is incredibly eratic after skystone detection)
+                //.pause(1000)//reads from vuforia (INCREDIBLE IMPORTANT STEP, might have to increase pause longer if motion is incredibly eratic after skystone detection)
                 .turnTo(FACING_BLUE_WALL)//faces skystones
                 .grabTower(.65)//opens grabber
-
-                .pause(1000)//vuforia
 
                 //GET A BLOCK
                 .strafeTo(() -> redSkystoneLocations.get(bot.getInnerSkystone()).get(0)) //aligns horizontally (x) with detected block
                 .strafeTo(() -> redSkystoneLocations.get(bot.getInnerSkystone()).get(1)) //drives forwards
-                .pause()
                 .grabTower()//grabs block
                 .strafeTo(() -> redSkystoneLocations.get(bot.getInnerSkystone()).get(2)) //drives backwards
                 .pause()
 
                 //DRIVE ACROSS FIELD
-                .turnTo(0.05)//turns toward build zone
-                .strafeToNoStop(xy(26, -37))//long drive across field
+                .turnTo(PI)//turns opposite build zone
+
+                .strafeUntil(BACKWARD, () -> bot.getRangeBack() < 23.25 || bot.getRangeBack() > 325)//long drive across field
+                //.strafeToNoStop(xy(20, -37))//long drive across field
+
                 .liftTower(0.25)
                 .pause()
 
                 .turnTo(FACING_BLUE_WALL)//face foundation
                 .pause(1000) //LOOK AT VUFORIA
                 .turnTo(FACING_BLUE_WALL)//face foundation
-                .strafeTo(xy(50, -37))//keeps going
 
+                .strafeTo(xy(50, -37))//aligns with center of foundation
+                .strafeUntil(BACKWARD, () -> bot.getRangeBack() < 14.25 || bot.getRangeBack() > 325)//aligns with center of foundation
+
+                .calibrateLeftRight()
                 .strafeTo(xy(50, -21)) //drive to foundation
                 //FOUNDATION
                 .grabTower(0.15)//let go of block
@@ -211,18 +207,21 @@ public class SkystoneScripts {
 //                //FOUNDATION
 //                .grabTower(0.15)//let go of block
                 .lowerTower(.1)//lower tower to grab foundation
-                .strafeTo(xy(54, -62))//strafe to wall
-                .liftTower(0.2)//raise tower
+
+                .strafeUntil(BACKWARD, () -> bot.getRangeBack() < 2 || bot.getRangeBack() > 325)//strafe to wall
+                //.strafeTo(xy(54, -62))
+
+                .liftTower(0.6)//raise tower
                 .strafeTo(xy(18, -62))//strafe away from foundation
                 .lowerTower()//lower tower
                 .turnTo(FACING_BLUE_WALL)
-                .pause()
-                .strafeTo(xy(18, -52))//drives back
                 .strafeTo(xy(18, -37))//drives toward inside
 
                 //PARK
                 .pause()
-                .strafeTo(xy(-12, -37))
+
+                //.strafeTo(xy(-12, -37))
+                .strafeUntil(LEFT, () -> bot.getRangeTop() > 3 || bot.getRangeTop() < 24)
                 ;
     }//RED INNER
 

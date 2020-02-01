@@ -82,6 +82,11 @@ public class SkottBot implements SkystoneBot {
 
     RangeSensor rangeLeft;
     RangeSensor rangeRight;
+    RangeSensor rangeBack;
+    RangeSensor rangeFront;
+    RangeSensor rangeTop;
+
+
 
     public SkottBot(
             HardwareMap hardwareMap,
@@ -228,6 +233,9 @@ public class SkottBot implements SkystoneBot {
 
         rangeLeft = new RangeSensor(hardwareMap, "rangeLeft");
         rangeRight = new RangeSensor(hardwareMap, "rangeRight");
+        rangeBack = new RangeSensor(hardwareMap, "rangeBack");
+        rangeFront = new RangeSensor(hardwareMap, "rangeFront");
+        rangeTop = new RangeSensor(hardwareMap, "rangeTop");
 
     }
 
@@ -261,15 +269,19 @@ public class SkottBot implements SkystoneBot {
     private void updateTelemetry() {
         telemetry.addData("inner", innerSkystone);
         telemetry.addData("outer", outerSkystone);
-        telemetry.addData("rangeLeft", rangeLeft.getCurrent());
-        telemetry.addData("rangeRight", rangeRight.getCurrent());
-
 
         telemetry.addData("pos", combinedLocalizer);
         telemetry.addData("mecanumLocalizer", mecanumLocalizer);
         telemetry.addData("skyStoneLocalizer", skyStoneLocalizer);
         telemetry.addData("buffering", bufferingLocalizer);
         telemetry.addData("heading", headingLocalizer);
+
+        telemetry.addData("rangeLeft", rangeLeft.getCurrent());
+        telemetry.addData("rangeRight", rangeRight.getCurrent());
+        telemetry.addData("rangeBack", rangeBack.getCurrent());
+        telemetry.addData("rangeFront", rangeFront.getCurrent());
+        telemetry.addData("rangeTop", rangeTop.getCurrent());
+
     }
 
     private void setPower4(double leftFront, double leftBack, double rightFront, double rightBack) {
@@ -348,6 +360,21 @@ public class SkottBot implements SkystoneBot {
     @Override
     public double getRangeRight() {
         return rangeRight.getCurrent();
+    }
+
+    @Override
+    public double getRangeBack() {
+        return rangeBack.getCurrent();
+    }
+
+    @Override
+    public double getRangeFront() {
+        return rangeFront.getCurrent();
+    }
+
+    @Override
+    public double getRangeTop() {
+        return rangeTop.getCurrent();
     }
 
 }

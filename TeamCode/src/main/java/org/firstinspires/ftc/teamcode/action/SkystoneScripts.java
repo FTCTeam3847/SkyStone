@@ -143,14 +143,15 @@ public class SkystoneScripts {
                 .strafeTo(xy(-14.5, -38)) //goes to inner most block
                 .strafeTo(xy(-30, -38)) //goes to inner most block
                 .pause()
-                .detectSkystoneAction(fieldPosition(xy(-48, -38), FACING_BLUE_WALL))//FINDS SKYSTONE and stops (if the x position isn't big enough, it stops short, and the motors go weird) When this action completes, it calibrates to think its at the x position given [-60], so we need to read from vuforia right after
+                .detectSkystoneAction(fieldPosition(xy(-56, -38), FACING_BLUE_WALL))//FINDS SKYSTONE and stops (if the x position isn't big enough, it stops short, and the motors go weird) When this action completes, it calibrates to think its at the x position given [-60], so we need to read from vuforia right after
                 .pause(1000)//reads from vuforia (INCREDIBLE IMPORTANT STEP, might have to increase pause longer if motion is incredibly eratic after skystone detection)
                 .turnTo(FACING_BLUE_WALL)//faces skystones
                 .grabTower(.65)//opens grabber
 
+                .pause(1000)//vuforia
+
                 //GET A BLOCK
                 .strafeTo(() -> redSkystoneLocations.get(bot.getInnerSkystone()).get(0)) //aligns horizontally (x) with detected block
-                .pause()
                 .strafeTo(() -> redSkystoneLocations.get(bot.getInnerSkystone()).get(1)) //drives forwards
                 .pause()
                 .grabTower()//grabs block
@@ -159,14 +160,14 @@ public class SkystoneScripts {
 
                 //DRIVE ACROSS FIELD
                 .turnTo(0.05)//turns toward build zone
-                .strafeToNoStop(xy(32.5, -37))//long drive across field
+                .strafeToNoStop(xy(26, -37))//long drive across field
                 .liftTower(0.25)
                 .pause()
 
                 .turnTo(FACING_BLUE_WALL)//face foundation
                 .pause(1000) //LOOK AT VUFORIA
                 .turnTo(FACING_BLUE_WALL)//face foundation
-                //.strafeTo(xy(60, -37))//keeps going
+                .strafeTo(xy(50, -37))//keeps going
 
                 .strafeTo(xy(50, -21)) //drive to foundation
                 //FOUNDATION
@@ -209,8 +210,8 @@ public class SkystoneScripts {
 //                .strafeTo(xy(56, -21)) //drive to foundation
 //                //FOUNDATION
 //                .grabTower(0.15)//let go of block
-                .lowerTower(.07)//lower tower to grab foundation
-                .strafeTo(xy(62, -62))//strafe to wall
+                .lowerTower(.1)//lower tower to grab foundation
+                .strafeTo(xy(54, -62))//strafe to wall
                 .liftTower(0.2)//raise tower
                 .strafeTo(xy(18, -62))//strafe away from foundation
                 .lowerTower()//lower tower
@@ -220,9 +221,6 @@ public class SkystoneScripts {
                 .strafeTo(xy(18, -37))//drives toward inside
 
                 //PARK
-                .lowerTower(0.01)//lower tower
-                .pause()
-                .strafeTo(xy(18, -37))
                 .pause()
                 .strafeTo(xy(-12, -37))
                 ;

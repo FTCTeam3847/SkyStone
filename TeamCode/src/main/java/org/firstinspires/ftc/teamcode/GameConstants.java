@@ -50,20 +50,20 @@ public class GameConstants {
 
     //SKYSTONE LOCATIONS, first position is right infront of block, second is to pick it up, third is to return to inner alley
     public static final Map<Integer, List<FieldPosition>> redSkystoneLocations = new HashMap<Integer, List<FieldPosition>>(){{
-        put(1, asList(fieldPosition(xy(-64, -37), FACING_BLUE_WALL), fieldPosition(xy(-64, -13), FACING_BLUE_WALL), fieldPosition(xy(-64, -40), FACING_BLUE_WALL)));
-        put(2, asList(fieldPosition(xy(-56, -37), FACING_BLUE_WALL), fieldPosition(xy(-56, -13), FACING_BLUE_WALL), fieldPosition(xy(-56, -40), FACING_BLUE_WALL)));
-        put(3, asList(fieldPosition(xy(-48, -37), FACING_BLUE_WALL), fieldPosition(xy(-48, -13), FACING_BLUE_WALL), fieldPosition(xy(-48, -40), FACING_BLUE_WALL)));
-        put(4, asList(fieldPosition(xy(-40, -37), FACING_BLUE_WALL), fieldPosition(xy(-40, -13), FACING_BLUE_WALL), fieldPosition(xy(-40, -40), FACING_BLUE_WALL)));
-        put(5, asList(fieldPosition(xy(-32, -37), FACING_BLUE_WALL), fieldPosition(xy(-32, -13), FACING_BLUE_WALL), fieldPosition(xy(-32, -40), FACING_BLUE_WALL)));
-        put(6, asList(fieldPosition(xy(-25, -37), FACING_BLUE_WALL), fieldPosition(xy(-24, -13), FACING_BLUE_WALL), fieldPosition(xy(-24, -40), FACING_BLUE_WALL)));
+        put(1, asList(fieldPosition(xy(-64, -37), FACING_BLUE_WALL), fieldPosition(xy(-64, -16), FACING_BLUE_WALL), fieldPosition(xy(-64, -40), FACING_BLUE_WALL)));
+        put(2, asList(fieldPosition(xy(-56, -37), FACING_BLUE_WALL), fieldPosition(xy(-56, -16), FACING_BLUE_WALL), fieldPosition(xy(-56, -40), FACING_BLUE_WALL)));
+        put(3, asList(fieldPosition(xy(-48, -37), FACING_BLUE_WALL), fieldPosition(xy(-48, -16), FACING_BLUE_WALL), fieldPosition(xy(-48, -40), FACING_BLUE_WALL)));
+        put(4, asList(fieldPosition(xy(-40, -37), FACING_BLUE_WALL), fieldPosition(xy(-40, -16), FACING_BLUE_WALL), fieldPosition(xy(-40, -40), FACING_BLUE_WALL)));
+        put(5, asList(fieldPosition(xy(-32, -37), FACING_BLUE_WALL), fieldPosition(xy(-32, -16), FACING_BLUE_WALL), fieldPosition(xy(-32, -40), FACING_BLUE_WALL)));
+        put(6, asList(fieldPosition(xy(-25, -37), FACING_BLUE_WALL), fieldPosition(xy(-24, -16), FACING_BLUE_WALL), fieldPosition(xy(-24, -40), FACING_BLUE_WALL)));
     }};//block 6 has -25 for the first one but -24 for the rest, unwilling to change if its currently working
 
     public static final Map<Integer, List<FieldPosition>> blueSkystoneLocations = new HashMap<Integer, List<FieldPosition>>(){{
-        put(1, asList(fieldPosition(xy(-64, 37), FACING_RED_WALL), fieldPosition(xy(-64, 13), FACING_RED_WALL), fieldPosition(xy(-64, 40), FACING_RED_WALL)));
-        put(2, asList(fieldPosition(xy(-56, 37), FACING_RED_WALL), fieldPosition(xy(-56, 13), FACING_RED_WALL), fieldPosition(xy(-56, 40), FACING_RED_WALL)));
-        put(3, asList(fieldPosition(xy(-48, 37), FACING_RED_WALL), fieldPosition(xy(-48, 13), FACING_RED_WALL), fieldPosition(xy(-48, 40), FACING_RED_WALL)));
-        put(4, asList(fieldPosition(xy(-40, 37), FACING_RED_WALL), fieldPosition(xy(-40, 13), FACING_RED_WALL), fieldPosition(xy(-40, 40), FACING_RED_WALL)));
-        put(5, asList(fieldPosition(xy(-32, 37), FACING_RED_WALL), fieldPosition(xy(-32, 13), FACING_RED_WALL), fieldPosition(xy(-32, 40), FACING_RED_WALL)));
-        put(6, asList(fieldPosition(xy(-25, 37), FACING_RED_WALL), fieldPosition(xy(-24, 13), FACING_RED_WALL), fieldPosition(xy(-24, 40), FACING_RED_WALL)));
+        put(1, asList(fieldPosition(xy(-64, 37), FACING_RED_WALL), fieldPosition(xy(-64, 16), FACING_RED_WALL), fieldPosition(xy(-64, 40), FACING_RED_WALL)));
+        put(2, asList(fieldPosition(xy(-56, 37), FACING_RED_WALL), fieldPosition(xy(-56, 16), FACING_RED_WALL), fieldPosition(xy(-56, 40), FACING_RED_WALL)));
+        put(3, asList(fieldPosition(xy(-48, 37), FACING_RED_WALL), fieldPosition(xy(-48, 16), FACING_RED_WALL), fieldPosition(xy(-48, 40), FACING_RED_WALL)));
+        put(4, asList(fieldPosition(xy(-40, 37), FACING_RED_WALL), fieldPosition(xy(-40, 16), FACING_RED_WALL), fieldPosition(xy(-40, 40), FACING_RED_WALL)));
+        put(5, asList(fieldPosition(xy(-32, 37), FACING_RED_WALL), fieldPosition(xy(-32, 16), FACING_RED_WALL), fieldPosition(xy(-32, 40), FACING_RED_WALL)));
+        put(6, asList(fieldPosition(xy(-25, 37), FACING_RED_WALL), fieldPosition(xy(-24, 16), FACING_RED_WALL), fieldPosition(xy(-24, 40), FACING_RED_WALL)));
     }};
 }

@@ -11,6 +11,8 @@ import org.firstinspires.ftc.teamcode.polar.PolarCoord;
 import org.firstinspires.ftc.teamcode.polar.PolarUtil;
 
 import static org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower.mecanumPower;
+import static org.firstinspires.ftc.teamcode.polar.CartesianCoord.xy;
+import static org.firstinspires.ftc.teamcode.polar.PolarUtil.toXY;
 
 public class DetectSkystoneActionMoveTo implements RoboAction {
     private boolean isDone = false;
@@ -50,11 +52,15 @@ public class DetectSkystoneActionMoveTo implements RoboAction {
             bot.getMecanumDrive().stop();//stop
 
             double xDist;
-            if (PolarUtil.toXY(targetFieldPosition.polarCoord).y < 0){ //red
+            if (toXY(targetFieldPosition.polarCoord).y < 0){ //red
                 xDist = bot.getRangeLeft();
+                bot.getLocalizer().calibrate(FieldPosition.fieldPosition(xy(-72+xDist+7,toXY(bot.getLocalizer().getCurrent().polarCoord).y), bot.getFieldRelativeHeading()));
+
             } else { //blue
                 xDist = bot.getRangeRight();
+                bot.getLocalizer().calibrate(FieldPosition.fieldPosition(xy(72-xDist-7,toXY(bot.getLocalizer().getCurrent().polarCoord).y), bot.getFieldRelativeHeading()));
             }
+
 
             if (xDist > 40) {
                 bot.setInnerSkystone(6); //sets inner and outer

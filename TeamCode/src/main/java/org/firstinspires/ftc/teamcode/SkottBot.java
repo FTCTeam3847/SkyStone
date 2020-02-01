@@ -226,8 +226,8 @@ public class SkottBot implements SkystoneBot {
 // get a reference to the color sensor.
         sensorColor = hardwareMap.get(ColorSensor.class, "color1");
 
-        rangeLeft = new RangeSensor(hardwareMap, "distance1");
-        rangeRight = new RangeSensor(hardwareMap, "distance2");
+        rangeLeft = new RangeSensor(hardwareMap, "rangeLeft");
+        rangeRight = new RangeSensor(hardwareMap, "rangeRight");
 
     }
 

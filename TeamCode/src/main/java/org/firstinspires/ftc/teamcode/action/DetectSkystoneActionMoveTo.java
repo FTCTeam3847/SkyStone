@@ -55,44 +55,30 @@ public class DetectSkystoneActionMoveTo implements RoboAction
             isStarted = false;
             bot.getMecanumDrive().stop();//stop
 
-            double distanceTraveled = bot.getLocalizer().getCurrent().distance(startingLocation); //distance from start
-            if(distanceTraveled <= 3)//starts at most inner stone
-            {
-                bot.setInnerSkystone(6); //sets inner and outer
-            }
-            else if(distanceTraveled <= 11){} //gets second block if it traveled more than three but less than eleven inches
-
-            double xPos;
+            double xDist;
             if(PolarUtil.toXY(targetFieldPosition.polarCoord).y < 0) //red
 
             {
-                xPos = bot.getRangeLeft();
+                xDist = bot.getRangeLeft();
             }
             else//blue
             {
-                xPos = bot.getRangeRight();
+                xDist = bot.getRangeRight();
             }
 
+            if(xDist > 40)
+            {
+                bot.setInnerSkystone(6); //sets inner and outer
+            }
+            else if(xDist > 32)
+            {
+                bot.setInnerSkystone(5); //sets inner and outer
+            }
+            else
+            {
+                bot.setInnerSkystone(4); //sets inner and outer
+            }
 
-
-//            double finalX = PolarUtil.toXY(bot.getLocalizer().getCurrent().polarCoord).x;
-//            if(finalX < -28)
-//            {
-//                bot.setInnerSkystone(6); //sets inner and outer
-//            }
-//            else if(finalX < -36)
-//            if(distanceTraveled <= 6)//starts at most inner stone
-//            {
-//                bot.setInnerSkystone(6); //sets inner and outer
-//            }
-//            else if(distanceTraveled <= 12)
-//            {
-//                bot.setInnerSkystone(5); //sets inner and outer
-//            }
-//            else
-//            {
-//                bot.setInnerSkystone(4); //sets inner and outer
-//            }
         }
 
 

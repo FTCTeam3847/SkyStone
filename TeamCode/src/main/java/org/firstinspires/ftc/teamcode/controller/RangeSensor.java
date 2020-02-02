@@ -11,6 +11,7 @@ public class RangeSensor implements Sensor
     private final MedianFilter filter;
     private final int sampleSize = 10;
     private final Supplier<Double> range;
+    private double last = Double.NaN;
 
     public RangeSensor(Supplier<Double> range)
     {
@@ -27,6 +28,15 @@ public class RangeSensor implements Sensor
     {
     }
 
+    public boolean between(double low, double high) {
+        double curr = getCurrent();
+        if (! Double.isFinite(low)) return false;
+        if (! Double.isFinite(high)) return false;
+        if (! Double.isFinite(curr)) return false;
+
+        return curr > low && curr < high;
+    }
+
     public boolean lessThan(double val) {
         double curr = getCurrent();
         if (! Double.isFinite(val)) return false;
@@ -41,7 +51,9 @@ public class RangeSensor implements Sensor
         return curr > val;
     }
 
-    public RangeSensor fill() {
+    public RangeSensor reset() {
+        filter.reset();
+        this.last = Double.NaN;
         while (filter.size() < sampleSize-1) getCurrent();
         return this;
     }
@@ -49,8 +61,18 @@ public class RangeSensor implements Sensor
     @Override
     public Double getCurrent()
     {
-        double ret = filter.calculate(range.get());
-        return (filter.size() < sampleSize) ? Double.NaN : ret;
+        double raw = range.get();
+        if (raw < 325) {
+            double ret = filter.calculate(raw);
+            this.last = (filter.size() < sampleSize) ? Double.NaN : ret;
+        } else {
+            this.last = Double.NaN;
+        }
+
+        return this.last;
     }
 
+    public double getLast() {
+        return this.last;
+    }
 }

@@ -162,66 +162,67 @@ public class SkystoneScripts {
                 .turnTo(FACING_BLUE_WALL)//face foundation
 
                 .strafeTo(xy(50, -37))//aligns with center of foundation
-                .strafeUntil(RIGHT, () -> bot.getRangeBack().lessThan(14.25) || bot.getRangeBack().greaterThan(20))//aligns with center of foundation
+                .run(() -> bot.getRangeRight().reset())
+                .strafeUntil(RIGHT, () -> bot.getRangeRight().between(14.25, 20))//aligns with center of foundation
 
-                .calibrateLeftRight()
-                .strafeTo(xy(50, -21)) //drive to foundation
-                //FOUNDATION
-                .grabTower(0.15)//let go of block
-//                .strafeTo(xy(62, -37))//strafe away from foundation
-//                .lowerTower()//lower tower
-//                .turnTo(FACING_BLUE_WALL)
-//                .pause()
-//
-//                //ADD THIS CHECKPOINT IF INACCURATE/EXTRA TIME (probably not)
-//                //.strafeTo(xy(35, -37))
-//                //.pause(1000)//LOOK AT VUFORIA
-//
-//                .strafeTo(xy(-35, -37))
-//                .pause(600)//reads from vuforia
-//
-//                //DRIVE TO OTHER SKYSTONE
-//                .strafeTo(() -> redSkystoneLocations.get(bot.getOuterSkystone()).get(2))//drives to outer skystone [back pos]
-//                .grabTower(.65) //open grabber
-//                .pause()
-//                .strafeTo(() -> redSkystoneLocations.get(bot.getOuterSkystone()).get(0))//drives to outer skystone [front pos]
-//                .pause()
-//                .turnTo(FACING_BLUE_WALL) //realign
-//                .strafeTo(() -> redSkystoneLocations.get(bot.getOuterSkystone()).get(1))//drives forwards [pick up]
-//                .pause()
-//                .grabTower()//grabs block
-//                .strafeTo(() -> redSkystoneLocations.get(bot.getInnerSkystone()).get(2))//drives backwards [back pos]
-//                .pause()
-//
-//                //DRIVE ACROSS FIELD
-//                .turnTo(0.05)//turns toward build zone
-//                .strafeToNoStop(xy(32.5, -37))//long drive across field
-//                .pause()
-//                .liftTower(0.3)
-//                .turnTo(FACING_BLUE_WALL)//face foundation
-//                .pause(600) //LOOK AT VUFORIA
-//                .turnTo(FACING_BLUE_WALL)//face foundation
-//                .strafeTo(xy(60, -37))//keeps going
-//
-//                .strafeTo(xy(56, -21)) //drive to foundation
+//                .calibrateLeftRight()
+//                .strafeTo(xy(50, -21)) //drive to foundation
 //                //FOUNDATION
 //                .grabTower(0.15)//let go of block
-                .lowerTower(.1)//lower tower to grab foundation
-
-                .strafeUntil(BACKWARD, () -> bot.getRangeBack().lessThan(2) || bot.getRangeBack().greaterThan( 325))//strafe to wall
-                //.strafeTo(xy(54, -62))
-
-                .liftTower(0.6)//raise tower
-                .strafeTo(xy(18, -62))//strafe away from foundation
-                .lowerTower()//lower tower
-                .turnTo(FACING_BLUE_WALL)
-                .strafeTo(xy(18, -37))//drives toward inside
-
-                //PARK
-                .pause()
-
-                //.strafeTo(xy(-12, -37))
-                .strafeUntil(LEFT, () -> bot.getRangeTop().greaterThan(3) && bot.getRangeTop().lessThan(24))
+////                .strafeTo(xy(62, -37))//strafe away from foundation
+////                .lowerTower()//lower tower
+////                .turnTo(FACING_BLUE_WALL)
+////                .pause()
+////
+////                //ADD THIS CHECKPOINT IF INACCURATE/EXTRA TIME (probably not)
+////                //.strafeTo(xy(35, -37))
+////                //.pause(1000)//LOOK AT VUFORIA
+////
+////                .strafeTo(xy(-35, -37))
+////                .pause(600)//reads from vuforia
+////
+////                //DRIVE TO OTHER SKYSTONE
+////                .strafeTo(() -> redSkystoneLocations.get(bot.getOuterSkystone()).get(2))//drives to outer skystone [back pos]
+////                .grabTower(.65) //open grabber
+////                .pause()
+////                .strafeTo(() -> redSkystoneLocations.get(bot.getOuterSkystone()).get(0))//drives to outer skystone [front pos]
+////                .pause()
+////                .turnTo(FACING_BLUE_WALL) //realign
+////                .strafeTo(() -> redSkystoneLocations.get(bot.getOuterSkystone()).get(1))//drives forwards [pick up]
+////                .pause()
+////                .grabTower()//grabs block
+////                .strafeTo(() -> redSkystoneLocations.get(bot.getInnerSkystone()).get(2))//drives backwards [back pos]
+////                .pause()
+////
+////                //DRIVE ACROSS FIELD
+////                .turnTo(0.05)//turns toward build zone
+////                .strafeToNoStop(xy(32.5, -37))//long drive across field
+////                .pause()
+////                .liftTower(0.3)
+////                .turnTo(FACING_BLUE_WALL)//face foundation
+////                .pause(600) //LOOK AT VUFORIA
+////                .turnTo(FACING_BLUE_WALL)//face foundation
+////                .strafeTo(xy(60, -37))//keeps going
+////
+////                .strafeTo(xy(56, -21)) //drive to foundation
+////                //FOUNDATION
+////                .grabTower(0.15)//let go of block
+//                .lowerTower(.1)//lower tower to grab foundation
+//
+//                .strafeUntil(BACKWARD, () -> bot.getRangeBack().lessThan(2) || bot.getRangeBack().greaterThan( 325))//strafe to wall
+//                //.strafeTo(xy(54, -62))
+//
+//                .liftTower(0.6)//raise tower
+//                .strafeTo(xy(18, -62))//strafe away from foundation
+//                .lowerTower()//lower tower
+//                .turnTo(FACING_BLUE_WALL)
+//                .strafeTo(xy(18, -37))//drives toward inside
+//
+//                //PARK
+//                .pause()
+//
+//                //.strafeTo(xy(-12, -37))
+//                .strafeUntil(LEFT, () -> bot.getRangeTop().greaterThan(3) && bot.getRangeTop().lessThan(24))
                 ;
     }//RED INNER
 

@@ -5,10 +5,8 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
 import org.firstinspires.ftc.teamcode.controller.FieldPosition;
 import org.firstinspires.ftc.teamcode.controller.FieldPositionController;
-import org.firstinspires.ftc.teamcode.controller.RangeController;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
 import org.firstinspires.ftc.teamcode.polar.PolarCoord;
-import org.firstinspires.ftc.teamcode.polar.PolarUtil;
 
 import static org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower.mecanumPower;
 import static org.firstinspires.ftc.teamcode.polar.CartesianCoord.xy;
@@ -51,11 +49,11 @@ public class DetectSkystoneActionMoveTo implements RoboAction {
 
             double xDist;
             if (toXY(targetFieldPosition.polarCoord).y < 0){ //red
-                xDist = bot.getRangeLeft().fill().getCurrent();
+                xDist = bot.getRangeLeft().reset().getCurrent();
                 bot.getLocalizer().calibrate(FieldPosition.fieldPosition(xy(-72+xDist+7,toXY(bot.getLocalizer().getCurrent().polarCoord).y), bot.getFieldRelativeHeading()));
 
             } else { //blue
-                xDist = bot.getRangeRight().fill().getCurrent();
+                xDist = bot.getRangeRight().reset().getCurrent();
                 bot.getLocalizer().calibrate(FieldPosition.fieldPosition(xy(72-xDist-7,toXY(bot.getLocalizer().getCurrent().polarCoord).y), bot.getFieldRelativeHeading()));
             }
 

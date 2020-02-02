@@ -33,7 +33,7 @@ public class CalibrateBack implements RoboAction {
     @Override
     public void loop() {
 
-        double backDist = bot.getRangeBack().fill().getCurrent();
+        double backDist = bot.getRangeBack().reset().getCurrent();
 
         double heading = bot.getLocalizer().getCurrent().heading;
 

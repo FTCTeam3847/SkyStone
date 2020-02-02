@@ -26,28 +26,35 @@ public class ScratchOp extends OpMode {
     private double distanceRaw;
     private LinearFilter distanceAvg;
     private MedianFilter distanceMedian;
-    private int telemetryTxMs = 250;
+    private int telemetryTxMs = 750;
     PairedButtons<Integer> telemetryMsButtons;
     private PairedButtons<Integer> sampleSizeButtons;
 
     @Override
     public void init() {
-        rangeSensor = hardwareMap.get(DistanceSensor.class, "distance1");
+        rangeSensor = hardwareMap.get(DistanceSensor.class, "rangeLeft");
         distanceRaw = rangeSensor.getDistance(DistanceUnit.INCH);
 
         loopEndMs = System.currentTimeMillis();
         measureDistance = new ToggleButton(() -> gamepad1.right_bumper && !gamepad1.start);
 
+        PushButton pushButton1B = new PushButton(() -> gamepad1.b && !gamepad1.start);
+        PushButton pushButton1A = new PushButton(() -> gamepad1.a && !gamepad1.start);
+
+        PushButton pushButton1X = new PushButton(() -> gamepad1.x && !gamepad1.start);
+        PushButton pushButton1Y = new PushButton(() -> gamepad1.y && !gamepad1.start);
+
         telemetryMsButtons = new PairedButtons<>(
-                () -> new PushButton(() -> gamepad1.b && !gamepad1.start).getCurrent(), 10,
-                () -> new PushButton(() -> gamepad1.a && !gamepad1.start).getCurrent(), -10
+                pushButton1B::getCurrent, 10,
+                pushButton1A::getCurrent, -10
         );
 
         sampleSizeButtons = new PairedButtons<>(
-                () -> new PushButton(() -> gamepad1.x && !gamepad1.start).getCurrent(), 1,
-                () -> new PushButton(() -> gamepad1.y && !gamepad1.start).getCurrent(), -1
+                pushButton1Y::getCurrent, 1,
+                pushButton1X::getCurrent, -1
         );
 
+        telemetry.setMsTransmissionInterval(telemetryTxMs);
         reinit();
     }
 
@@ -85,7 +92,7 @@ public class ScratchOp extends OpMode {
         telemetryMsButtons.apply(this::incrTelemetryTxMs);
         sampleSizeButtons.apply(this::incrSampleSize);
 
-        telemetry.addLine("cfg")
+        telemetry.addLine(" cfg: ")
                 .addData("telemMs", telemetryTxMs)
                 .addData("samples", sampleSize)
                 .addData("measuring", measureDistance)
@@ -100,7 +107,7 @@ public class ScratchOp extends OpMode {
         distAvg = distanceAvg.calculate(distanceRaw);
         distMedian = distanceMedian.calculate(distanceRaw);
 
-        telemetry.addLine("distance")
+        telemetry.addLine("dist: ")
                 .addData("raw", "%.2f", distanceRaw)
                 .addData("avg", "%.2f", distAvg)
                 .addData("median", "%.2f", distMedian)
@@ -111,9 +118,8 @@ public class ScratchOp extends OpMode {
         double loopMs = now - loopEndMs;
         double loopAvg = loopMsAvg.calculate(loopMs);
         double loopMean = loopMsMedian.calculate(loopMs);
-        telemetry.addData("measureDistance", "" + measureDistance);
 
-        telemetry.addLine("loopMs")
+        telemetry.addLine("loop: ")
                 .addData("raw", "%.2f", loopMs)
                 .addData("avg", "%.2f", loopAvg)
                 .addData("median", "%.2f", loopMean)

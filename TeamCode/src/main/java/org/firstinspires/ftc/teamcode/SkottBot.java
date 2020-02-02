@@ -279,12 +279,12 @@ public class SkottBot implements SkystoneBot {
         telemetry.addData("buffering", bufferingLocalizer);
         telemetry.addData("heading", headingLocalizer);
 
-        telemetry.addData("rangeLeft", rangeLeft.getCurrent());
-        telemetry.addData("rangeRight", rangeRight.getCurrent());
-        telemetry.addData("rangeBack", rangeBack.getCurrent());
-        telemetry.addData("rangeFront", rangeFront.getCurrent());
-        telemetry.addData("rangeTop", rangeTop.getCurrent());
-
+//        telemetry.addData("rangeLeft", rangeLeft.getCurrent());
+//        telemetry.addData("rangeRight", rangeRight.getCurrent());
+//        telemetry.addData("rangeBack", rangeBack.getCurrent());
+//        telemetry.addData("rangeFront", rangeFront.getCurrent());
+//        telemetry.addData("rangeTop", rangeTop.getCurrent());
+//
     }
 
     private void setPower4(double leftFront, double leftBack, double rightFront, double rightBack) {

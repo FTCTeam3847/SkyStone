@@ -115,7 +115,7 @@ public class SkottOp extends OpMode {
     public void init_loop() {
         super.init_loop();
         bot.init_loop();
-        loopEndMs = System.currentTimeMillis();
+        updateTelemetry();
     }
 
     @Override
@@ -192,6 +192,10 @@ public class SkottOp extends OpMode {
         telemetry.addData("slowMode", slowMode);
         telemetry.addData("tower", towerBuilder);
         telemetry.addData("script", script);
+        updateTelemetry();
+    }
+
+    private void updateTelemetry() {
         long now = System.currentTimeMillis();
         telemetry.addData("loopMs", now - loopEndMs);
         loopEndMs = System.currentTimeMillis();

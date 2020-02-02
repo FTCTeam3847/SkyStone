@@ -86,6 +86,8 @@ public class SkottOp extends OpMode {
     SequentialAction script;
     private SkystoneScripts scripts;
 
+    protected long loopEndMs;
+
     @Override
     public void init() {
         bot = new SkottBot(hardwareMap, telemetry);
@@ -99,6 +101,8 @@ public class SkottOp extends OpMode {
 
         scripts = new SkystoneScripts(bot);
         script = scripts.emptyScript();
+
+        loopEndMs = System.currentTimeMillis();
     }
 
     private static double sensitivity(double base, double exp) {
@@ -111,6 +115,7 @@ public class SkottOp extends OpMode {
     public void init_loop() {
         super.init_loop();
         bot.init_loop();
+        loopEndMs = System.currentTimeMillis();
     }
 
     @Override
@@ -187,6 +192,9 @@ public class SkottOp extends OpMode {
         telemetry.addData("slowMode", slowMode);
         telemetry.addData("tower", towerBuilder);
         telemetry.addData("script", script);
+        long now = System.currentTimeMillis();
+        telemetry.addData("loopMs", now - loopEndMs);
+        loopEndMs = System.currentTimeMillis();
         telemetry.update();
     }
 

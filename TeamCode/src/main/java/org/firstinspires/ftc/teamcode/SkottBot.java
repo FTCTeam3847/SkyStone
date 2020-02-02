@@ -56,7 +56,7 @@ public class SkottBot implements SkystoneBot {
     public CRServo leftBlockLifter;
     public CRServo rightBlockLifter;
 
-    public Servo capstoneLifterServo;
+    public CRServo capstoneLifterServo;
 
 
     public int innerSkystone = 6;//[3-6] close to bridge, assume 6th block
@@ -217,20 +217,23 @@ public class SkottBot implements SkystoneBot {
                         grabber::getPosition
                 );
 
-        capstoneLifterServo = hardwareMap.get(Servo.class, "capstone-lifter");
+        capstoneLifterServo = hardwareMap.get(CRServo.class, "capstone-lifter");
+
+        capstoneLifterServo.setPower(0.0d);
 
         CapstoneLifter capstoneLifter =
                 new CapstoneLifter(
-                        capstoneLifterServo::setPosition,
-                        capstoneLifterServo::getPosition
+                        capstoneLifterServo::setPower,
+                        capstoneLifterServo::getPower
                 );
+//        capstoneLifter.setPosition(0.01);
+
 
         towerBuilder = new TowerBuilder(towerGrabber, towerLifter, blockLifter, blockExtender, blockGrabber, capstoneLifter);
 
 
 // get a reference to the color sensor.
         sensorColor = hardwareMap.get(ColorSensor.class, "color1");
-
         rangeLeft = new RangeSensor(hardwareMap, "rangeLeft");
         rangeRight = new RangeSensor(hardwareMap, "rangeRight");
         rangeBack = new RangeSensor(hardwareMap, "rangeBack");

@@ -152,7 +152,7 @@ public class SkystoneScripts {
                 .turnTo(PI)//turns opposite build zone
 
                 .strafeToNoStop(xy(15, -37))//long drive across field
-                .strafeUntil(BACKWARD, () -> bot.getRangeBack() < 15.25)//long drive across field
+                .strafeUntil(BACKWARD, () -> bot.getRangeBack().lessThan(15.25))//long drive across field
 
                 .liftTower(0.25)
                 .pause()
@@ -162,7 +162,7 @@ public class SkystoneScripts {
                 .turnTo(FACING_BLUE_WALL)//face foundation
 
                 .strafeTo(xy(50, -37))//aligns with center of foundation
-                .strafeUntil(RIGHT, () -> bot.getRangeBack() < 14.25 || bot.getRangeBack() > 20)//aligns with center of foundation
+                .strafeUntil(RIGHT, () -> bot.getRangeBack().lessThan(14.25) || bot.getRangeBack().greaterThan(20))//aligns with center of foundation
 
                 .calibrateLeftRight()
                 .strafeTo(xy(50, -21)) //drive to foundation
@@ -208,7 +208,7 @@ public class SkystoneScripts {
 //                .grabTower(0.15)//let go of block
                 .lowerTower(.1)//lower tower to grab foundation
 
-                .strafeUntil(BACKWARD, () -> bot.getRangeBack() < 2 || bot.getRangeBack() > 325)//strafe to wall
+                .strafeUntil(BACKWARD, () -> bot.getRangeBack().lessThan(2) || bot.getRangeBack().greaterThan( 325))//strafe to wall
                 //.strafeTo(xy(54, -62))
 
                 .liftTower(0.6)//raise tower
@@ -221,7 +221,7 @@ public class SkystoneScripts {
                 .pause()
 
                 //.strafeTo(xy(-12, -37))
-                .strafeUntil(LEFT, () -> bot.getRangeTop() > 3 || bot.getRangeTop() < 24)
+                .strafeUntil(LEFT, () -> bot.getRangeTop().greaterThan(3) && bot.getRangeTop().lessThan(24))
                 ;
     }//RED INNER
 

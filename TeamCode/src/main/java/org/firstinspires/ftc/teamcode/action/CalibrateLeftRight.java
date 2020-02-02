@@ -33,8 +33,8 @@ public class CalibrateLeftRight implements RoboAction {
     @Override
     public void loop() {
 
-        double leftDist = bot.getRangeLeft();
-        double rightDist = bot.getRangeRight();
+        double leftDist = bot.getRangeLeft().fill().getCurrent();
+        double rightDist = bot.getRangeRight().fill().getCurrent();
 
         double heading = bot.getLocalizer().getCurrent().heading;
 

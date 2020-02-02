@@ -4,10 +4,12 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.Trinkets.BlockExtender;
 import org.firstinspires.ftc.teamcode.Trinkets.BlockGrabber;
@@ -234,12 +236,21 @@ public class SkottBot implements SkystoneBot {
 
 // get a reference to the color sensor.
         sensorColor = hardwareMap.get(ColorSensor.class, "color1");
-        rangeLeft = new RangeSensor(hardwareMap, "rangeLeft");
-        rangeRight = new RangeSensor(hardwareMap, "rangeRight");
-        rangeBack = new RangeSensor(hardwareMap, "rangeBack");
-        rangeFront = new RangeSensor(hardwareMap, "rangeFront");
-        rangeTop = new RangeSensor(hardwareMap, "rangeTop");
 
+        DistanceSensor rangeSensorLeft = hardwareMap.get(DistanceSensor.class, "rangeLeft");
+        rangeLeft = new RangeSensor(() -> rangeSensorLeft.getDistance(DistanceUnit.INCH));
+
+        DistanceSensor rangeSensorRight = hardwareMap.get(DistanceSensor.class, "rangeRight");
+        rangeRight = new RangeSensor(() -> rangeSensorRight.getDistance(DistanceUnit.INCH));
+
+        DistanceSensor rangeSensorBack = hardwareMap.get(DistanceSensor.class, "rangeBack");
+        rangeBack = new RangeSensor(() -> rangeSensorBack.getDistance(DistanceUnit.INCH));
+
+        DistanceSensor rangeSensorFront = hardwareMap.get(DistanceSensor.class, "rangeFront");
+        rangeFront = new RangeSensor(() -> rangeSensorFront.getDistance(DistanceUnit.INCH));
+
+        DistanceSensor rangeSensorTop = hardwareMap.get(DistanceSensor.class, "rangeTop");
+        rangeTop = new RangeSensor(() -> rangeSensorTop.getDistance(DistanceUnit.INCH));
     }
 
     @Override
@@ -356,28 +367,28 @@ public class SkottBot implements SkystoneBot {
         return mDrive.isMoving();
     }
 
-    public double getRangeLeft() {
-        return rangeLeft.getCurrent();
+    public RangeSensor getRangeLeft() {
+        return rangeLeft;
     }
 
     @Override
-    public double getRangeRight() {
-        return rangeRight.getCurrent();
+    public RangeSensor getRangeRight() {
+        return rangeRight;
     }
 
     @Override
-    public double getRangeBack() {
-        return rangeBack.getCurrent();
+    public RangeSensor getRangeBack() {
+        return rangeBack;
     }
 
     @Override
-    public double getRangeFront() {
-        return rangeFront.getCurrent();
+    public RangeSensor getRangeFront() {
+        return rangeFront;
     }
 
     @Override
-    public double getRangeTop() {
-        return rangeTop.getCurrent();
+    public RangeSensor getRangeTop() {
+        return rangeTop;
     }
 
 }

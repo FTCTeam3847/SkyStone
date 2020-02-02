@@ -1,35 +1,56 @@
 package org.firstinspires.ftc.teamcode.controller;
 
-import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
-import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.SensorREVColorDistance;
+import org.firstinspires.ftc.teamcode.wpilib.MedianFilter;
+
+import java.util.function.Supplier;
 
 
 public class RangeSensor implements Sensor
 {
-    public DistanceSensor rangeSensor;
+    private final MedianFilter filter;
+    private final int sampleSize = 10;
+    private final Supplier<Double> range;
 
-    public RangeSensor(HardwareMap hardwareMap, String deviceName)
+    public RangeSensor(Supplier<Double> range)
     {
-        rangeSensor = hardwareMap.get(DistanceSensor.class, deviceName);
+        this.range = range;
+        this.filter = new MedianFilter(sampleSize);
     }
 
     public void init()
     {
+        filter.reset();
     }
 
     public void stop()
     {
     }
 
+    public boolean lessThan(double val) {
+        double curr = getCurrent();
+        if (! Double.isFinite(val)) return false;
+        if (! Double.isFinite(curr)) return false;
+        return curr < val;
+    }
+
+    public boolean greaterThan(double val) {
+        double curr = getCurrent();
+        if (! Double.isFinite(val)) return false;
+        if (! Double.isFinite(curr)) return false;
+        return curr > val;
+    }
+
+    public RangeSensor fill() {
+        while (filter.size() < sampleSize-1) getCurrent();
+        return this;
+    }
+
     @Override
     public Double getCurrent()
     {
-        return rangeSensor.getDistance(DistanceUnit.INCH);
+        double ret = filter.calculate(range.get());
+        return (filter.size() < sampleSize) ? Double.NaN : ret;
     }
 
 }

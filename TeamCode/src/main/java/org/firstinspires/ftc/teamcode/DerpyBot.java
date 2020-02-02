@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.bot.SkystoneBot;
 import org.firstinspires.ftc.teamcode.controller.FieldPosition;
@@ -90,7 +91,7 @@ public class DerpyBot implements SkystoneBot {
                 0.0d);
         MecanumDriveController drive = new MecanumDriveController(headingController, this::move);
         mecanumLocalizer = new MecanumLocalizer(nanoTime, headingLocalizer::getLast, 28.6); //derpy-28.6, 25.6
-        mecanum= new LocalizingMecanumDrive(drive, mecanumLocalizer);
+        mecanum = new LocalizingMecanumDrive(drive, mecanumLocalizer);
 
         vuforiaLocalizer = initVuforia(hardwareMap);
         skyStoneLocalizer = new SkyStoneLocalizer(vuforiaLocalizer);
@@ -131,14 +132,26 @@ public class DerpyBot implements SkystoneBot {
         // get a reference to the distance sensor that shares the same name.
         sensorDistance = hardwareMap.get(DistanceSensor.class, "color1");
 
-        rangeLeft = new RangeSensor(hardwareMap, "distance1");
-        rangeRight = new RangeSensor(hardwareMap, "distance2");
+        DistanceSensor rangeSensorLeft = hardwareMap.get(DistanceSensor.class, "rangeLeft");
+        rangeLeft = new RangeSensor(() -> rangeSensorLeft.getDistance(DistanceUnit.INCH));
+
+        DistanceSensor rangeSensorRight = hardwareMap.get(DistanceSensor.class, "rangeRight");
+        rangeRight = new RangeSensor(() -> rangeSensorRight.getDistance(DistanceUnit.INCH));
+
+        DistanceSensor rangeSensorBack = hardwareMap.get(DistanceSensor.class, "rangeBack");
+        rangeBack = new RangeSensor(() -> rangeSensorBack.getDistance(DistanceUnit.INCH));
+
+        DistanceSensor rangeSensorFront = hardwareMap.get(DistanceSensor.class, "rangeFront");
+        rangeFront = new RangeSensor(() -> rangeSensorFront.getDistance(DistanceUnit.INCH));
+
+        DistanceSensor rangeSensorTop = hardwareMap.get(DistanceSensor.class, "rangeTop");
+        rangeTop = new RangeSensor(() -> rangeSensorTop.getDistance(DistanceUnit.INCH));
 
     }
 
     private void updateLoopTimer() {
         long endTime = nanoTime.get();
-        loopDuration = (double)(endTime - loopEndTime) / (double)NANOS_PER_SEC;
+        loopDuration = (double) (endTime - loopEndTime) / (double) NANOS_PER_SEC;
         loopEndTime = endTime;
     }
 
@@ -193,17 +206,15 @@ public class DerpyBot implements SkystoneBot {
     }
 
     @Override
-    public void setInnerSkystone(int innerSkystone)
-    {
+    public void setInnerSkystone(int innerSkystone) {
         this.innerSkystone = innerSkystone;
-        this.outerSkystone = innerSkystone-3;
+        this.outerSkystone = innerSkystone - 3;
     }
 
     @Override
-    public void setOuterSkystone(int outerSkystone)
-    {
+    public void setOuterSkystone(int outerSkystone) {
         this.outerSkystone = outerSkystone;
-        this.innerSkystone = outerSkystone+3;
+        this.innerSkystone = outerSkystone + 3;
     }
 
     @Override
@@ -217,8 +228,7 @@ public class DerpyBot implements SkystoneBot {
     }
 
     @Override
-    public ColorSensor getColorSensor()
-    {
+    public ColorSensor getColorSensor() {
         return sensorColor;
     }
 
@@ -243,34 +253,32 @@ public class DerpyBot implements SkystoneBot {
     }
 
     @Override
-    public boolean isInMotion()
-    {
+    public boolean isInMotion() {
         return getMecanumDrive().equals(DrivePower.ZERO);
     }
-    public double getRangeLeft()
-    {
-        return rangeLeft.getCurrent();
+
+    public RangeSensor getRangeLeft() {
+        return rangeLeft;
     }
 
     @Override
-    public double getRangeRight()
-    {
-        return rangeRight.getCurrent();
+    public RangeSensor getRangeRight() {
+        return rangeRight;
     }
 
     @Override
-    public double getRangeBack() {
-        return rangeBack.getCurrent();
+    public RangeSensor getRangeBack() {
+        return rangeBack;
     }
 
     @Override
-    public double getRangeFront() {
-        return rangeFront.getCurrent();
+    public RangeSensor getRangeFront() {
+        return rangeFront;
     }
 
     @Override
-    public double getRangeTop() {
-        return rangeTop.getCurrent();
+    public RangeSensor getRangeTop() {
+        return rangeTop;
     }
 
 }

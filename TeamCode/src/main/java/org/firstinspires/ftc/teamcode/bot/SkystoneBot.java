@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import org.firstinspires.ftc.teamcode.Trinkets.TowerBuilder;
 import org.firstinspires.ftc.teamcode.controller.FieldPosition;
 import org.firstinspires.ftc.teamcode.controller.Localizer;
+import org.firstinspires.ftc.teamcode.controller.RangeSensor;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumDrive;
 
 public interface SkystoneBot extends Bot {
@@ -35,13 +36,13 @@ public interface SkystoneBot extends Bot {
 
     boolean isInMotion();
 
-    double getRangeLeft();
+    RangeSensor getRangeLeft();
 
-    double getRangeRight();
+    RangeSensor getRangeRight();
 
-    double getRangeBack();
+    RangeSensor getRangeBack();
 
-    double getRangeFront();
+    RangeSensor getRangeFront();
 
-    double getRangeTop();
+    RangeSensor getRangeTop();
 }

@@ -51,11 +51,11 @@ public class DetectSkystoneActionMoveTo implements RoboAction {
 
             double xDist;
             if (toXY(targetFieldPosition.polarCoord).y < 0){ //red
-                xDist = bot.getRangeLeft();
+                xDist = bot.getRangeLeft().fill().getCurrent();
                 bot.getLocalizer().calibrate(FieldPosition.fieldPosition(xy(-72+xDist+7,toXY(bot.getLocalizer().getCurrent().polarCoord).y), bot.getFieldRelativeHeading()));
 
             } else { //blue
-                xDist = bot.getRangeRight();
+                xDist = bot.getRangeRight().fill().getCurrent();
                 bot.getLocalizer().calibrate(FieldPosition.fieldPosition(xy(72-xDist-7,toXY(bot.getLocalizer().getCurrent().polarCoord).y), bot.getFieldRelativeHeading()));
             }
 

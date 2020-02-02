@@ -74,6 +74,10 @@ public class MedianFilter {
     }
   }
 
+  public int size() {
+    return m_orderedValues.size();
+  }
+
   /**
    * Resets the filter, clearing the window of all elements.
    */

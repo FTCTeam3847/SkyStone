@@ -165,7 +165,7 @@ public class DerpyOp extends OpMode {
         }
 
         if (pushButtonB.getCurrent() && !script.isRunning()) {
-            script = scripts.blueDepotParkOnly().start();
+            script = scripts.blueDepotParkOuter().start();
         }
 
         if (pushButtonLeftBumper.getCurrent()) {

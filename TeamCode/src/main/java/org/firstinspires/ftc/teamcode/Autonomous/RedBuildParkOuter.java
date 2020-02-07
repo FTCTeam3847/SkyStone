@@ -5,10 +5,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.BaseOp;
 
 @Autonomous
-public class BlueBuildParkOnly extends BaseOp {
+public class RedBuildParkOuter extends BaseOp {
     @Override
     public void start() {
         super.start();
-        script = scripts.blueBuildParkOnly().start();
+        script = scripts.redBuildParkOuter().start();
     }
 }

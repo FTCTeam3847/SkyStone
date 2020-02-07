@@ -284,11 +284,11 @@ public class SkottBot implements SkystoneBot {
         telemetry.addData("inner", innerSkystone);
         telemetry.addData("outer", outerSkystone);
 
-        telemetry.addData("pos", combinedLocalizer);
-        telemetry.addData("mecanumLocalizer", mecanumLocalizer);
-        telemetry.addData("skyStoneLocalizer", skyStoneLocalizer);
-        telemetry.addData("buffering", bufferingLocalizer);
-        telemetry.addData("heading", headingLocalizer);
+//        telemetry.addData("pos", combinedLocalizer);
+//        telemetry.addData("mecanumLocalizer", mecanumLocalizer);
+//        telemetry.addData("skyStoneLocalizer", skyStoneLocalizer);
+//        telemetry.addData("buffering", bufferingLocalizer);
+//        telemetry.addData("heading", headingLocalizer);
 
         telemetry.addLine("range: ")
                 .addData("l", "%.2f", rangeLeft.getLast())

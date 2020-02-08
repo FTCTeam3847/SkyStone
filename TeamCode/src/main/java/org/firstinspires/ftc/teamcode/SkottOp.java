@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.drive.mecanum.MecanumPower;
 import org.firstinspires.ftc.teamcode.gamepad.PairedButtons;
 import org.firstinspires.ftc.teamcode.gamepad.PushButton;
 import org.firstinspires.ftc.teamcode.gamepad.ToggleButton;
+import org.firstinspires.ftc.teamcode.Trinkets.CapstoneLifter;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
@@ -42,6 +43,7 @@ public class SkottOp extends OpMode {
     private TowerGrabber towerGrabber;
     private BlockExtender blockExtender;
     private BlockGrabber blockGrabber;
+    private CapstoneLifter capstoneLifter;
 
     {
         msStuckDetectInit = 12_000;
@@ -82,6 +84,11 @@ public class SkottOp extends OpMode {
             () -> gamepad1.dpad_down, -1.0d,
             0.0d
     );
+    private PairedButtons<Double> capstoneLifterButtons = new PairedButtons<>(
+            () -> gamepad1.dpad_left, 1.0d,
+            () -> gamepad1.dpad_right, -1.0d,
+            0.0d
+    );
 
     SequentialAction script;
     private SkystoneScripts scripts;
@@ -98,6 +105,7 @@ public class SkottOp extends OpMode {
         towerGrabber = towerBuilder.towerGrabber;
         blockExtender = towerBuilder.blockExtender;
         blockGrabber = towerBuilder.blockGrabber;
+        capstoneLifter = towerBuilder.capstoneLifter;
 
         scripts = new SkystoneScripts(bot);
         script = scripts.emptyScript();
@@ -144,6 +152,7 @@ public class SkottOp extends OpMode {
             towerLifterButtons.apply(towerLifter::setPower);
             blockLifterButtons.apply(blockLifter::setPower);
             blockExtenderButtons.apply(blockExtender::setPower);
+            capstoneLifterButtons.apply(capstoneLifter::setPower);
 
             double tehSpeeds = 0.1;
 

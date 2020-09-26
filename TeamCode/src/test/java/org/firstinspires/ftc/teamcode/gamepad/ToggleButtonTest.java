@@ -68,7 +68,7 @@ class ToggleButtonTest {
         final FakeDerpyOp derpyOp = new FakeDerpyOp();
 
         // user hasn't pushed the A button yet - testMode should
-        // remain false through multiple getLast() iterations.
+        // remain false through multiple loop() iterations.
         derpyOp.loop();
         assertFalse(derpyOp.testMode);
         derpyOp.loop();

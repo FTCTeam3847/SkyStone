@@ -60,8 +60,8 @@ class ToggleButtonTest {
 
     /**
      * In this test, we simulate an iterative OpMode. We control the
-     * gamepad as though we are the user. We invoke the OpMode's getLast()
-     * many times just as a real OpMode's getLast() is called iteratively.
+     * gamepad as though we are the user. We invoke the OpMode's loop()
+     * many times just as a real OpMode's loop() is called iteratively.
      */
     @Test
     void get() {
